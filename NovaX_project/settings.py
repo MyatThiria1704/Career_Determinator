@@ -30,11 +30,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+huusil_g^&(@ja9%483-+6)8ofivff^j_blcdl74gzgrvd1mu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
+DEBUG = False
 
 
+ALLOWED_HOSTS = [
+    "career-ladder-production.up.railway.app",
+    "127.0.0.1",  # optional for local testing
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://career-ladder-production.up.railway.app",
+]
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 # Application definition
 
 INSTALLED_APPS = [
