@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - Career Ladder{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section contact-hero">
+    <div class="container">
+        <div class="hero-content text-center translation-content">
+            <div class="hero-badge fade-in-up">
+                <i class="bi bi-chat-dots"></i> <span data-en="Get In Touch" data-mm="ဆက်သွယ်ရန်">Get In Touch</span>
+            </div>
+            <h1 class="fade-in-up" data-en="Contact Us" data-mm="ဆက်သွယ်ရန်">Contact Us</h1>
+            <p class="subtext mx-auto fade-in-up delay-1" data-en="Have questions? We're here to help! Reach out to our team for any inquiries about our services." data-mm="မေးခွန်းများရှိပါသလား? ကျွန်ုပ်တို့ ကူညီရန် အသင့်ရှိပါသည်! ကျွန်ုပ်တို့၏ ၀န်ဆောင်မှုများနှင့် ပတ်သက်သည့် မေးမြန်းချက်များအတွက် ကျွန်ုပ်တို့၏ အဖွဲ့သို့ ဆက်သွယ်ပါ။">
+                Have questions? We're here to help! Reach out to our team for any inquiries about our services.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="feature-card">
+                    <h2 class="text-center mb-4" data-en="Send us a Message" data-mm="မက်ဆေ့ပို့ရန်">Send us a Message</h2>
+                    <form method="POST" action="{% url 'contact' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label" data-en="First Name" data-mm="အမည်၏အစ">First Name</label>
+                                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="Your first name" required style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary);">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label" data-en="Last Name" data-mm="အမည်၏အဆုံး">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Your last name" required style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary);">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label" data-en="Email Address" data-mm="အီးမေးလ်လိပ်စာ">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="your.email@example.com" required style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary);">
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label" data-en="Subject" data-mm="ခေါင်းစဉ်">Subject</label>
+                            <select class="form-select" id="subject" name="subject" required style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary);">
+                                <option value="" selected data-en="Choose a topic..." data-mm="ခေါင်းစဉ်ရွေးချယ်ပါ...">Choose a topic...</option>
+                                <option value="general" data-en="General Inquiry" data-mm="ယေဘုယျမေးမြန်းချက်">General Inquiry</option>
+                                <option value="support" data-en="Technical Support" data-mm="နည်းပညာအကူအညီ">Technical Support</option>
+                                <option value="partnership" data-en="Partnership" data-mm="ပူးပေါင်းဆောင်ရွက်မှု">Partnership</option>
+                                <option value="careers" data-en="Careers" data-mm="အလုပ်အခွင့်အလမ်းများ">Careers</option>
+                                <option value="feedback" data-en="Feedback" data-mm="အကြံပြုချက်">Feedback</option>
+                                <option value="investment" data-en="Investment Opportunity" data-mm="ရင်းနှီးမြှုပ်နှံမှုအခွင့်အလမ်း">Investment Opportunity</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label" data-en="Message" data-mm="မက်ဆေ့">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us how we can help you..." required style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary);"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary-custom btn-lg" data-en="Send Message" data-mm="မက်ဆေ့ပို့ရန်">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Investment Opportunity Section -->
+<section class="section" style="background: linear-gradient(135deg, var(--primary-color) 0%, #764ba2 100%); color: white;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 data-en="Investment Opportunity" data-mm="ရင်းနှီးမြှုပ်နှံမှုအခွင့်အလမ်း" style="color: #764ba2;">Investment Opportunity</h2>
+                <p class="mb-4" style="color: #764ba2;" data-en="Join us in revolutionizing career guidance and empowering millions of users worldwide. Career Ladder is seeking strategic investors to accelerate our growth and expand our market reach." data-mm="အသက်မွေးဝမ်းကြောင်းလမ်းညွှန်မှုကို တော်လှန်ပြောင်းလဲကာ ကမ္ဘာတစ်ဝှမ်းရှိ သန်းပေါင်းများစွာသောအသုံးပြုသူများအား စွမ်းဆောင်ရည်မြှင့်တင်ရာတွင် ကျွန်ုပ်တို့နှင့်အတူ ပါဝင်ပါ။ Career Ladder သည် ကျွန်ုပ်တို့၏ကြီးထွားမှုကို အရှိန်မြှင့်တင်ရန်နှင့် ဈေးကွက်ရောက်ရှိမှုကို ချဲ့ထွင်ရန် နည်းဗျူဟာကျသော ရင်းနှီးမြှုပ်နှံသူများကို ရှာဖွေနေပါသည်။">
+                    Join us in revolutionizing career guidance and empowering millions of users worldwide. 
+                    Career Ladder is seeking strategic investors to accelerate our growth and expand our market reach.
+                </p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="investment-feature">
+                            <i class="bi bi-graph-up-arrow"></i>
+                            <span data-en="Rapid User Growth" data-mm="မြန်ဆန်သောအသုံးပြုသူတိုးတက်မှု">Rapid User Growth</span>
+                        </div>
+                        <div class="investment-feature">
+                            <i class="bi bi-globe"></i>
+                            <span data-en="Global Market Potential" data-mm="ကမ္ဘာလုံးဆိုင်ရာဈေးကွက်အလားအလာ">Global Market Potential</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="investment-feature">
+                            <i class="bi bi-cpu"></i>
+                            <span data-en="AI-Powered Technology" data-mm="AI နည်းပညာအခြေပြု">AI-Powered Technology</span>
+                        </div>
+                        <div class="investment-feature">
+                            <i class="bi bi-people"></i>
+                            <span data-en="Proven Team" data-mm="စွမ်းဆောင်ရည်သက်သေပြအဖွဲ့">Proven Team</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="investment-cta">
+                    <h4 data-en="Interested in Investing?" data-mm="ရင်းနှီးမြှုပ်နှံရန် စိတ်ဝင်စားပါသလား?" style="color: #764ba2;">Interested in Investing?</h4>
+                    <p data-en="Contact us for our investor deck and business plan" data-mm="ကျွန်ုပ်တို့၏ ရင်းနှီးမြှုပ်နှံသူအချက်အလက်နှင့် စီးပွားရေးအစီအစဉ်အတွက် ဆက်သွယ်ပါ" style="color: #764ba2;">Contact us for our investor deck and business plan</p>
+                    <a href="https://www.linkedin.com/in/khin-myat-thu-837892352" class="btn btn-light btn-lg mt-3" data-en="Get Investor Info" data-mm="ရင်းနှီးမြှုပ်နှံသူအချက်အလက်ရယူရန်">Get Investor Info</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Info Section -->
+<section class="section" style="background: var(--secondary-bg);">
+    <div class="container">
+        <h2 class="section-title" data-en="Other Ways to Reach Us" data-mm="ဆက်သွယ်ရန် အခြားနည်းလမ်းများ">Other Ways to Reach Us</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto mb-3">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                    <h4 data-en="Email Us" data-mm="အီးမေးလ်ပို့ရန်">Email Us</h4>
+                    <p style="color: var(--text-secondary);" data-en="Send us an email and we'll get back to you within 24 hours." data-mm="ကျွန်ုပ်တို့ထံ အီးမေးလ်ပို့ပါ၊ ၂၄ နာရီအတွင်း ပြန်လည်ဆက်သွယ်ပါမည်။">
+                        Send us an email and we'll get back to you within 24 hours.
+                    </p>
+                    <a href="mailto:khinmyatthu2193@gmail.com" class="btn btn-secondary-custom">khinmyatthu2193@gmail.com</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto mb-3">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+                    <h4 data-en="Call Us" data-mm="ဖုန်းဆက်ရန်">Call Us</h4>
+                    <p style="color: var(--text-secondary);" data-en="Available Monday to Friday, 9AM - 6PM EST." data-mm="တနင်္လာမှ သောကြာ၊ နံနက် ၉နာရီမှ ညနေ ၆နာရီအထိ ရရှိနိုင်ပါသည်။">
+                        Available Monday to Friday, 9AM - 6PM EST.
+                    </p>
+                    <a href="tel:+95-912345678" class="btn btn-secondary-custom">+95 912 345 678</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto mb-3">
+                        <i class="bi bi-chat"></i>
+                    </div>
+                    <h4 data-en="Live Chat" data-mm="တိုက်ရိုက်ချက်တင်စကားပြောရန်">Live Chat</h4>
+                    <p style="color: var(--text-secondary);" data-en="Chat with our support team in real-time." data-mm="ကျွန်ုပ်တို့၏ အကူအညီအဖွဲ့နှင့် တိုက်ရိုက်ချက်တင်စကားပြောပါ။">
+                        Chat with our support team in real-time.
+                    </p>
+                    <button class="btn btn-secondary-custom" data-en="Start Chat" data-mm="စကားပြောရန် စတင်ပါ">Start Chat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section">
+    <div class="container">
+        <h2 class="section-title" data-en="Frequently Asked Questions" data-mm="အမေးများသောမေးခွန်းများ">Frequently Asked Questions</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="feature-card">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background: var(--card-bg); color: var(--text-primary);" data-en="How accurate is the career assessment?" data-mm="အသက်မွေးဝမ်းကြောင်းအကဲဖြတ်ချက် ဘယ်လောက်တိကျပါသလဲ?">
+                                    How accurate is the career assessment?
+                                </button>
+                            </h3>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body" style="color: var(--text-secondary);" data-en="Our career assessment is built on extensive psychological research and has shown 94% accuracy in matching users with suitable career paths based on follow-up surveys." data-mm="ကျွန်ုပ်တို့၏ အသက်မွေးဝမ်းကြောင်းအကဲဖြတ်ချက်သည် ကျယ်ပြန့်သော စိတ်ပညာသုတေသနအပေါ် အခြေခံထားပြီး နောက်ဆက်တွဲစစ်တမ်းများအရ အသုံးပြုသူများအား သင့်လျော်သော အသက်မွေးဝမ်းကြောင်းလမ်းကြောင်းများနှင့် ကိုက်ညီမှု ၉၄% တိကျမှုရှိကြောင်း ပြသထားသည်။">
+                                    Our career assessment is built on extensive psychological research and has shown 94% accuracy in matching users with suitable career paths based on follow-up surveys.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background: var(--card-bg); color: var(--text-primary);" data-en="Is my personal data secure?" data-mm="ကျွန်ုပ်၏ ကိုယ်ရေးကိုယ်တာဒေတာများ လုံခြုံပါသလား?">
+                                    Is my personal data secure?
+                                </button>
+                            </h3>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body" style="color: var(--text-secondary);" data-en="Yes, we take data privacy seriously. All personal information is encrypted and stored securely. We never share your data with third parties without your explicit consent." data-mm="ဟုတ်ကဲ့၊ ကျွန်ုပ်တို့သည် ဒေတာကိုယ်ရေးကိုယ်တာကို အလေးအနက်ထားပါသည်။ ကိုယ်ရေးကိုယ်တာအချက်အလက်အားလုံးကို လျှို့ဝှက်ကုဒ်ဖြင့် သိမ်းဆည်းထားပြီး လုံခြုံစွာသိမ်းဆည်းထားသည်။ သင့်ထံမှ ရှင်းလင်းသောခွင့်ပြုချက်မရှိဘဲ သင့်ဒေတာကို တတိယပါတီများနှင့် ဘယ်သောအခါမျှ မျှဝေခြင်းမရှိပါ။">
+                                    Yes, we take data privacy seriously. All personal information is encrypted and stored securely. We never share your data with third parties without your explicit consent.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background: var(--card-bg); color: var(--text-primary);" data-en="Do you offer personalized career coaching?" data-mm="ပုဂ္ဂိုလ်ရေးဆိုင်ရာ အသက်မွေးဝမ်းကြောင်းလမ်းညွှန်မှု ၀န်ဆောင်မှုပေးပါသလား?">
+                                    Do you offer personalized career coaching?
+                                </button>
+                            </h3>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body" style="color: var(--text-secondary);" data-en="Yes, we offer premium one-on-one career coaching sessions with certified career counselors who can provide personalized guidance based on your assessment results." data-mm="ဟုတ်ကဲ့၊ ကျွန်ုပ်တို့သည် အသိအမှတ်ပြု အသက်မွေးဝမ်းကြောင်းအကြံပေးများနှင့် ပုဂ္ဂိုလ်ရေးဆိုင်ရာ တစ်ဦးချင်းအသက်မွေးဝမ်းကြောင်းလမ်းညွှန်မှုဆိုင်ရာ ၀န်ဆောင်မှုများကို ပေးဆောင်ပါသည်။ ၎င်းတို့သည် သင့်အကဲဖြတ်ချက်ရလဒ်များအပေါ် အခြေခံ၍ ပုဂ္ဂိုလ်ရေးဆိုင်ရာလမ်းညွှန်မှုများကို ပေးနိုင်ပါသည်။">
+                                    Yes, we offer premium one-on-one career coaching sessions with certified career counselors who can provide personalized guidance based on your assessment results.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+
+    
+    .contact-hero .hero-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .contact-hero .subtext {
+        font-size: 1.1rem;
+        max-width: 600px;
+    }
+    
+    /* Investment Section Styles */
+    .investment-feature {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        color : blueviolet;
+    }
+    
+    .investment-feature i {
+        font-size: 1.5rem;
+        margin-right: 12px;
+    }
+    
+    .investment-cta {
+
+        padding: 30px;
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .investment-cta h4 {
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    /* Form Styles */
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(74, 58, 148, 0.25);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .contact-hero {
+            padding: 60px 0 40px 0;
+        }
+        
+        .contact-hero .hero-content h1 {
+            font-size: 2rem;
+        }
+        
+        .investment-cta {
+            margin-top: 30px;
+        }
+    }
+</style>
+
+<script>
+    // Language Switcher Functionality for page content
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to update page content based on language
+        function updatePageLanguage(lang) {
+            // Update all elements with data attributes
+            document.querySelectorAll('[data-en]').forEach(element => {
+                if (lang === 'en') {
+                    element.textContent = element.getAttribute('data-en');
+                } else {
+                    element.textContent = element.getAttribute('data-mm');
+                }
+            });
+            
+            // Update placeholder texts for form inputs
+            const placeholders = {
+                'firstName': { en: 'Your first name', mm: 'သင့်အမည်၏အစ' },
+                'lastName': { en: 'Your last name', mm: 'သင့်အမည်၏အဆုံး' },
+                'email': { en: 'your.email@example.com', mm: 'သင့်အီးမေးလ်လိပ်စာ' },
+                'message': { en: 'Tell us how we can help you...', mm: 'ကျွန်ုပ်တို့အား မည်သို့ကူညီနိုင်သည်ကို ပြောပြပါ...' }
+            };
+            
+            Object.keys(placeholders).forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.placeholder = placeholders[id][lang];
+                }
+            });
+            
+            // Update select options
+            const subjectSelect = document.getElementById('subject');
+            if (subjectSelect) {
+                const firstOption = subjectSelect.options[0];
+                if (firstOption) {
+                    firstOption.textContent = lang === 'en' ? 'Choose a topic...' : 'ခေါင်းစဉ်ရွေးချယ်ပါ...';
+                }
+            }
+        }
+        
+        // Listen for language changes from header
+        window.addEventListener('languageChanged', function(e) {
+            updatePageLanguage(e.detail.language);
+        });
+        
+        // Initialize page with current language
+        const currentLang = document.getElementById('currentLanguage')?.textContent?.toLowerCase() || 'en';
+        updatePageLanguage(currentLang);
+        
+        // Form submission handling
+        const contactForm = document.querySelector('form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                // You can add form validation here
+                console.log('Form submitted - this would send to khinmyatthu2193@gmail.com');
+                // In a real implementation, you would use Django's email functionality
+                // or connect to a service like SendGrid, Mailgun, etc.
+            });
+        }
+    });
+</script>
+{% endblock %}

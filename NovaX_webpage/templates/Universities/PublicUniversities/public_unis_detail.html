@@ -1,0 +1,946 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ university.display_name }} - {% if current_language == 'my' %}အသေးစိတ်{% else %}Details{% endif %} | Career Ladder
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container text-center">
+    <div class="hero-content">
+      <div class="hero-badge fade-in-up">
+        <i class="bi bi-building"></i> 
+        {% if current_language == 'my' %}အစိုးရ တက္ကသိုလ်{% else %}Public University{% endif %}
+      </div>
+      <h1 class="fade-in-up">{{ university.display_name }}</h1>
+      <p class="subtext mx-auto fade-in-up delay-1">
+        {% if current_language == 'my' %}
+        {{ university.display_abbreviation }} ၏ ပညာရေးဆိုင်ရာ ပံ့ပိုးမှုများအကြောင်း ပိုမိုလေ့လာပါ။
+        {% else %}
+        Learn more about {{ university.display_abbreviation }} and its contributions to education in Myanmar.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- University Detail Section -->
+<section class="section">
+  <div class="container">
+    <!-- Back Link with Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'public_unis' %}">{% if current_language == 'my' %}တက္ကသိုလ်များ{% else %}Universities{% endif %}</a></li>
+        <li class="breadcrumb-item" aria-current="page">{{ university.display_name }}</li>
+      </ol>
+    </nav>
+
+    <!-- Quick Action Bar -->
+    <div class="quick-action-bar d-flex justify-content-between align-items-center mb-4 p-3 rounded">
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-primary btn-sm" id="shareBtn">
+          <i class="bi bi-share"></i> {% if current_language == 'my' %}မျှဝေရန်{% else %}Share{% endif %}
+        </button>
+        <button class="btn btn-outline-primary btn-sm" id="printBtn">
+          <i class="bi bi-printer"></i> {% if current_language == 'my' %}ပရင့်ထုတ်ရန်{% else %}Print{% endif %}
+        </button>
+        <button class="btn btn-outline-primary btn-sm" id="favoriteBtn">
+          <i class="bi bi-bookmark"></i> {% if current_language == 'my' %}စိတ်ကြိုက်သိမ်းရန်{% else %}Save{% endif %}
+        </button>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+          <small class="">{% if current_language == 'my' %}နောက်ဆုံးမွမ်းမံမှု:{% else %}Last updated:{% endif %}</small>
+           <span class="badge last-updated-badge" style="color: #0d6efd" id="lastUpdatedBadge" 
+                data-timestamp="{{ university.last_updated_timestamp }}"
+                data-update-source="{% if university.data_updated_at %}populate_script{% else %}system{% endif %}">
+              {% if university.last_updated %}
+                  {{ university.last_updated|timesince }} ago
+              {% else %}
+                  {% if current_language == 'my' %}မသိရသေး{% else %}Never updated{% endif %}
+              {% endif %}
+          </span>
+      </div>
+    </div>
+
+    <!-- University Header with Stats -->
+    <div class="university-header-card mb-4 " >
+      <div class="row g-0">
+        <div class="col-md-8" >
+          <div class="p-4">
+            <div class="d-flex align-items-center mb-3">
+              <h4 class="mb-2" style="color: var(--text-primary);">
+                {{ university.display_name }} ({{ university.display_abbreviation }})
+              </h4>
+            </div>
+            
+            <div class="university-meta d-flex flex-wrap gap-4 mb-3" style="color: var(--text-secondary);">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-geo-alt "></i>
+                <span>{{ university.display_location }}</span>
+              </div>
+              <div class="d-flex align-items-center">
+                <i class="bi bi-calendar "></i>
+                <span>{% if current_language == 'my' %}တည်ထောင်သည့် ခုနှစ်{% else %}Established{% endif %} {{ university.established }}</span>
+              </div>
+              <div class="d-flex align-items-center">
+                <i class="bi bi-building "></i>
+                <span>{% if current_language == 'my' %}အစိုးရ{% else %}Public{% endif %}</span>
+              </div>
+            </div>
+
+           <p style="text-align: left;">{{ university.display_about|truncatewords:25 }}</p>
+
+            <div class="d-flex gap-2 flex-wrap">
+              {% if university.website %}
+              <a href="{{ university.website }}" target="_blank" class="btn btn-primary btn-sm">
+                <i class="bi bi-box-arrow-up-right me-1"></i> {% if current_language == 'my' %}ဝဘ်ဆိုဒ်{% else %}Website{% endif %}
+              </a>
+              {% endif %}
+              {% if university.campus_map_url %}
+              <a href="{{ university.campus_map_url }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-map me-1"></i> {% if current_language == 'my' %}မြေပုံ{% else %}Campus Map{% endif %}
+              </a>
+              {% endif %}
+              <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal">
+                <i class="bi bi-envelope me-1"></i> {% if current_language == 'my' %}ဆက်သွယ်ရန်{% else %}Contact{% endif %}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-center" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color:#fff; border-top-right-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius);">
+          <div class="h-100 p-4 d-flex flex-column justify-content-center ranking-section" >
+            <div class="text-center ranking-content">
+              <div class="mb-3">
+                <i class="bi bi-trophy display-6"></i>
+              </div>
+              <h4 class="mb-2">{% if current_language == 'my' %}အဆင့်သတ်မှတ်ချက်များ{% else %}Rankings{% endif %}</h4>
+              <div class="d-flex justify-content-around mt-3">
+                <div>
+                  <div class="fw-bold fs-5 ranking-number">{{ university.national_ranking|default:"N/A" }}</div>
+                  <small>{% if current_language == 'my' %}ပြည်တွင်း{% else %}National{% endif %}</small>
+                </div>
+                <div>
+                  <div class="fw-bold fs-5 ranking-number">{{ university.international_ranking|default:"N/A" }}</div>
+                  <small>{% if current_language == 'my' %}ပြည်ပ{% else %}International{% endif %}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="navigation-tabs mb-4">
+      <ul class="nav nav-tabs" id="universityTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
+            <i class="bi bi-house me-1"></i> {% if current_language == 'my' %}အခြေခံအချက်အလက်{% else %}Overview{% endif %}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="academics-tab" data-bs-toggle="tab" data-bs-target="#academics" type="button" role="tab">
+            <i class="bi bi-book me-1"></i> {% if current_language == 'my' %}ပညာရေး{% else %}Academics{% endif %}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="campus-tab" data-bs-toggle="tab" data-bs-target="#campus" type="button" role="tab">
+            <i class="bi bi-building me-1"></i> {% if current_language == 'my' %}ကျောင်းဝန်း{% else %}Campus{% endif %}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="admissions-tab" data-bs-toggle="tab" data-bs-target="#admissions" type="button" role="tab">
+            <i class="bi bi-clipboard-check me-1"></i> {% if current_language == 'my' %}တက်ရောက်ခွင့်{% else %}Admissions{% endif %}
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="universityTabContent">
+      <!-- Overview Tab -->
+      <div class="tab-pane fade show active" id="overview" role="tabpanel">
+        <div class="row g-4">
+          <!-- Key Highlights -->
+          <!-- Key Highlights -->
+          <div class="col-lg-4">
+              <div class="feature-card h-100">
+                  <h5 class="mb-3">
+                      <i class="bi bi-star-fill text-warning me-2"></i>
+                      {% if current_language == 'my' %}အဓိကအချက်များ{% else %}Key Highlights{% endif %}
+                  </h5>
+                  <div class="highlight-list">
+                      {% if university.display_highlights %}
+                          {% for highlight in university.display_highlights %}
+                              <div class="highlight-item d-flex align-items-center mb-3">
+                                  <div class="highlight-icon bg-{{ highlight.color|default:'primary' }}-subtle rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                      <i class="bi bi-{{ highlight.icon|default:'star' }} text-{{ highlight.color|default:'primary' }}"></i>
+                                  </div>
+                                  <div>
+                                      <h6 class="mb-1" style="text-align: left">{{ highlight.title }}</h6>
+                                      <p class="mb-0 small" style="text-align: left">{{ highlight.description }}</p>
+                                  </div>
+                              </div>
+                          {% endfor %}
+                      {% else %}
+                          <!-- Fallback highlights if none are defined -->
+                          <div class="highlight-item d-flex align-items-center mb-3">
+                              <div class="highlight-icon bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                  <i class="bi bi-award text-primary"></i>
+                              </div>
+                              <div>
+                                  <h6 class="mb-1">{% if current_language == 'my' %}အရည်အသွေးမြင့်ပညာရေး{% else %}Quality Education{% endif %}</h6>
+                                  <p class="mb-0 text-muted small">{% if current_language == 'my' %}အဆင့်မြင့်သင်ရိုးညွှန်းတမ်းများ{% else %}Advanced curriculum and teaching methods{% endif %}</p>
+                              </div>
+                          </div>
+                          <div class="highlight-item d-flex align-items-center mb-3">
+                              <div class="highlight-icon bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                  <i class="bi bi-people text-success"></i>
+                              </div>
+                              <div>
+                                  <h6 class="mb-1">{% if current_language == 'my' %}ကျွမ်းကျင်ဆရာများ{% else %}Expert Faculty{% endif %}</h6>
+                                  <p class="mb-0 text-muted small">{% if current_language == 'my' %}အတွေ့အကြုံရှင်ဆရာများ{% else %}Experienced and qualified teaching staff{% endif %}</p>
+                              </div>
+                          </div>
+                          <div class="highlight-item d-flex align-items-center">
+                              <div class="highlight-icon bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                  <i class="bi bi-briefcase text-info"></i>
+                              </div>
+                              <div>
+                                  <h6 class="mb-1">{% if current_language == 'my' %}အလုပ်အကိုင်အခွင့်အလမ်းများ{% else %}Career Opportunities{% endif %}</h6>
+                                  <p class="mb-0 text-muted small">{% if current_language == 'my' %}ဘွဲ့ရပြီးနောက်အလုပ်အကိုင်အခွင့်အလမ်းကောင်းများ{% else %}Excellent post-graduation employment rates{% endif %}</p>
+                              </div>
+                          </div>
+                      {% endif %}
+                  </div>
+              </div>
+          </div>
+
+          <!-- About University -->
+          <div class="col-lg-8" >
+            <div class="feature-card">
+              <h5 class="mb-3"><i class="bi bi-info-circle text-primary me-2"></i>{% if current_language == 'my' %}တက္ကသိုလ်အကြောင်း{% else %}About the University{% endif %}</h5>
+              <div class="read-more-container">
+                <div class="read-more-content" data-max-height="200">
+                  <p>{{ university.display_description }}</p>
+                </div>
+                <button class="btn btn-link read-more-btn p-0 mt-2 d-none">
+                  {% if current_language == 'my' %}ဆက်လက်ဖတ်ရန်{% else %}Read more{% endif %} <i class="bi bi-chevron-down"></i>
+                </button>
+              </div>
+
+              <!-- Stats Grid -->
+            <div class="row g-3 mt-3">
+              <div class="col-md-4">
+                  <div class="stat-card text-center p-3 rounded">
+                      <div class="stat-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                          <i class="bi bi-people-fill text-primary fs-5"></i>
+                      </div>
+                      <h4 class="fw-bold text-primary">{{ university.total_students|default:"15,000+" }}</h4>
+                      <p class="mb-0 small text-muted">{% if current_language == 'my' %}ကျောင်းသားများ{% else %}Students{% endif %}</p>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="stat-card text-center p-3 rounded">
+                      <div class="stat-icon bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                          <i class="bi bi-person-badge text-success fs-5"></i>
+                      </div>
+                      <h4 class="fw-bold text-success">{{ university.faculty_members|default:"800+" }}</h4>
+                      <p class="mb-0 small text-muted">{% if current_language == 'my' %}ဆရာများ{% else %}Faculty Members{% endif %}</p>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="stat-card text-center p-3 rounded">
+                      <div class="stat-icon bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                          <i class="bi bi-journals text-info fs-5"></i>
+                      </div>
+                      <h4 class="fw-bold text-info">{{ university.total_programs|default:"50+" }}</h4>
+                      <p class="mb-0 small text-muted">{% if current_language == 'my' %}ပရိုဂရမ်များ{% else %}Programs{% endif %}</p>
+                  </div>
+              </div>
+            </div>
+          </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Academics Tab -->
+      <div class="tab-pane fade" id="academics" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="feature-card h-100">
+              <h5 class="mb-3"><i class="bi bi-building text-purple me-2"></i>{% if current_language == 'my' %}ဠာနများနှင့်ဌာနများ{% else %}Faculties & Departments{% endif %}</h5>
+              <div class="faculties-list">
+                {{ university.display_faculties_departments }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="feature-card h-100">
+              <h5 class="mb-3"><i class="bi bi-star text-warning me-2"></i>{% if current_language == 'my' %}နာမည်ကြီးသော ပရိုဂရမ်များ{% else %}Popular Programs{% endif %}</h5>
+              <div class="programs-list">
+                {{ university.display_popular_programs }}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Degree Programs Section -->
+        <div class="feature-card mt-4">
+          <div class="degree-programs-section">
+            <h5 class="mb-4"><i class="bi bi-award text-success me-2"></i>
+                {% if current_language == 'my' %}ဒီဂရီအမျိုးအစားများ{% else %}Degree Programs Offered{% endif %}
+            </h5>
+            
+            <!-- Degree Level Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="degree-card p-3 text-center rounded clickable-degree" 
+                         data-degree-type="undergraduate"
+                         data-bs-toggle="collapse" 
+                         data-bs-target="#undergraduateMajors"
+                         aria-expanded="false" 
+                         aria-controls="undergraduateMajors">
+                        <i class="bi bi-mortarboard-fill text-primary display-6 mb-2"></i>
+                        <h6>{% if current_language == 'my' %}ဘွဲ့ကြိုများ{% else %}Undergraduate{% endif %}</h6>
+                        <p class="small text-muted mb-0">{% if current_language == 'my' %}ဘက်ချလား၊ ဘွဲ့များ{% else %}Bachelor's Degrees{% endif %}</p>
+                        <div class="mt-2">
+                            <span class="badge bg-primary">
+                                {{ university.display_undergraduate_majors|length|default:0 }} 
+                                {% if current_language == 'my' %}မေဂျာများ{% else %}Majors{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="degree-card p-3 text-center rounded clickable-degree" 
+                         data-degree-type="graduate"
+                         data-bs-toggle="collapse" 
+                         data-bs-target="#graduateMajors"
+                         aria-expanded="false" 
+                         aria-controls="graduateMajors">
+                        <i class="bi bi-journal-text text-success display-6 mb-2"></i>
+                        <h6>{% if current_language == 'my' %}ဘွဲ့လွန်များ{% else %}Graduate{% endif %}</h6>
+                        <p class="small text-muted mb-0">{% if current_language == 'my' %}မဟာဘွဲ့များ{% else %}Master's Degrees{% endif %}</p>
+                        <div class="mt-2">
+                            <span class="badge bg-success">
+                                {{ university.display_graduate_majors|length|default:0 }} 
+                                {% if current_language == 'my' %}မေဂျာများ{% else %}Majors{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="degree-card p-3 text-center rounded clickable-degree" 
+                         data-degree-type="doctoral"
+                         data-bs-toggle="collapse" 
+                         data-bs-target="#doctoralMajors"
+                         aria-expanded="false" 
+                         aria-controls="doctoralMajors">
+                        <i class="bi bi-person-badge text-info display-6 mb-2"></i>
+                        <h6>{% if current_language == 'my' %}ဒေါက်တာဘွဲ့များ{% else %}Doctoral{% endif %}</h6>
+                        <p class="small text-muted mb-0">{% if current_language == 'my' %}PhD ဘွဲ့များ{% else %}PhD Programs{% endif %}</p>
+                        <div class="mt-2">
+                            <span class="badge bg-info">
+                                {{ university.display_doctoral_majors|length|default:0 }} 
+                                {% if current_language == 'my' %}မေဂျာများ{% else %}Majors{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Majors Display Area -->
+            <div class="majors-display-area">
+                <!-- Undergraduate Majors -->
+                <div class="collapse" id="undergraduateMajors">
+                    <div class="majors-container">
+                        <h6 class="mb-3 text-primary">
+                            <i class="bi bi-mortarboard-fill me-2"></i>
+                            {% if current_language == 'my' %}ဘွဲ့ကြိုမေဂျာများ{% else %}Undergraduate Majors{% endif %}
+                        </h6>
+                        {% if university.display_undergraduate_majors %}
+                            <div class="row g-2">
+                                {% for major in university.display_undergraduate_majors %}
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="major-item p-2 rounded">
+                                            <i class="bi bi-bookmark-check text-primary me-2"></i>
+                                            <span>{{ major }}</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-muted text-center py-4">
+                                <i class="bi bi-info-circle display-6"></i>
+                                <p class="mt-2">{% if current_language == 'my' %}ဘွဲ့ကြိုမေဂျာများ မရှိသေးပါ{% else %}No undergraduate majors available{% endif %}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Graduate Majors -->
+                <div class="collapse" id="graduateMajors">
+                    <div class="majors-container">
+                        <h6 class="mb-3 text-success">
+                            <i class="bi bi-journal-text me-2"></i>
+                            {% if current_language == 'my' %}ဘွဲ့လွန်မေဂျာများ{% else %}Graduate Majors{% endif %}
+                        </h6>
+                        {% if university.display_graduate_majors %}
+                            <div class="row g-2">
+                                {% for major in university.display_graduate_majors %}
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="major-item p-2 rounded">
+                                            <i class="bi bi-bookmark-check text-success me-2"></i>
+                                            <span>{{ major }}</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-muted text-center py-4">
+                                <i class="bi bi-info-circle display-6"></i>
+                                <p class="mt-2">{% if current_language == 'my' %}ဘွဲ့လွန်မေဂျာများ မရှိသေးပါ{% else %}No graduate majors available{% endif %}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Doctoral Majors -->
+                <div class="collapse" id="doctoralMajors">
+                    <div class="majors-container">
+                        <h6 class="mb-3 text-info">
+                            <i class="bi bi-person-badge me-2"></i>
+                            {% if current_language == 'my' %}ဒေါက်တာဘွဲ့မေဂျာများ{% else %}Doctoral Majors{% endif %}
+                        </h6>
+                        {% if university.display_doctoral_majors %}
+                            <div class="row g-2">
+                                {% for major in university.display_doctoral_majors %}
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="major-item p-2 rounded">
+                                            <i class="bi bi-bookmark-check text-info me-2"></i>
+                                            <span>{{ major }}</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-muted text-center py-4">
+                                <i class="bi bi-info-circle display-6"></i>
+                                <p class="mt-2">{% if current_language == 'my' %}ဒေါက်တာဘွဲ့မေဂျာများ မရှိသေးပါ{% else %}No doctoral majors available{% endif %}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campus Tab -->
+      <div class="tab-pane fade" id="campus" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="feature-card h-100">
+              <h5 class="mb-3"><i class="bi bi-house-door text-info me-2"></i>{% if current_language == 'my' %}ကျောင်းဝန်းအဆောက်အအုံများ{% else %}Campus Facilities{% endif %}</h5>
+              <div class="facilities-list">
+                {{ university.display_campus_facilities }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="feature-card h-100">
+              <h5 class="mb-3"><i class="bi bi-people text-success me-2"></i>{% if current_language == 'my' %}ကျောင်းသားအဖွဲ့အစည်းများ{% else %}Student Organizations{% endif %}</h5>
+              <div class="organizations-list">
+                {{ university.display_student_organizations }}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="feature-card mt-4">
+          <h5 class="mb-3"><i class="bi bi-globe-asia-australia text-warning me-2"></i>{% if current_language == 'my' %}နိုင်ငံတကာအဖွဲ့အစည်းများ{% else %}International Collaborations{% endif %}</h5>
+          <div class="collaborations-content">
+            {{ university.display_international_collaborations }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Admissions Tab -->
+      <div class="tab-pane fade" id="admissions" role="tabpanel">
+        <div class="feature-card">
+          <h5 class="mb-4"><i class="bi bi-clipboard-check text-primary me-2"></i>{% if current_language == 'my' %}တက်ရောက်ခွင့်ဆိုင်ရာအချက်အလက်များ{% else %}Admissions Information{% endif %}</h5>
+          
+          <div class="admission-process mb-4">
+            <h6 class="mb-3">{% if current_language == 'my' %}တက်ရောက်ခွင့်လုပ်ငန်းစဉ်{% else %}Admission Process{% endif %}</h6>
+            <div class="process-steps">
+              <div class="step-item d-flex align-items-center mb-3">
+                <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">1</div>
+                <div>
+                  <h6 class="mb-1">{% if current_language == 'my' %}လျှောက်လွှာတင်ခြင်း{% else %}Application Submission{% endif %}</h6>
+                  <p class="mb-0 text-muted small">{% if current_language == 'my' %}အွန်လိုင်းလျှောက်လွှာပုံစံဖြည့်သွင်းပါ{% else %}Fill out the online application form{% endif %}</p>
+                </div>
+              </div>
+              <div class="step-item d-flex align-items-center mb-3">
+                <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">2</div>
+                <div>
+                  <h6 class="mb-1">{% if current_language == 'my' %}စာမေးပွဲဖြေဆိုခြင်း{% else %}Entrance Examination{% endif %}</h6>
+                  <p class="mb-0 text-muted small">{% if current_language == 'my' %}တက္ကသိုလ်ဝင်စာမေးပွဲဖြေဆိုပါ{% else %}Take the university entrance exam{% endif %}</p>
+                </div>
+              </div>
+              <div class="step-item d-flex align-items-center">
+                <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">3</div>
+                <div>
+                  <h6 class="mb-1">{% if current_language == 'my' %}ရွေးချယ်ခံရခြင်း{% else %}Selection & Enrollment{% endif %}</h6>
+                  <p class="mb-0 text-muted small">{% if current_language == 'my' %}ရွေးချယ်ခံရပါက စာရင်းသွင်းပါ{% else %}If selected, complete the enrollment process{% endif %}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admission-requirements">
+            <h6 class="mb-3">{% if current_language == 'my' %}လိုအပ်ချက်များ{% else %}Requirements{% endif %}</h6>
+            <ul class="list-group">
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                {% if current_language == 'my' %}အထက်တန်းအောင်မြင်ခြင်း (သို့) ညီမျှသောအရည်အချင်း{% else %}High School Completion or Equivalent{% endif %}
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                {% if current_language == 'my' %}တက္ကသိုလ်ဝင်စာမေးပွဲအောင်မြင်ခြင်း{% else %}University Entrance Exam Pass{% endif %}
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                {% if current_language == 'my' %}လိုအပ်သောစာရွက်စာတမ်းများ{% else %}Required Documents Submission{% endif %}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Universities -->
+<div class="related-universities mt-5">
+    <h4 class="mb-4">{% if current_language == 'my' %}ဆက်စပ်တက္ကသိုလ်များ{% else %}Related Universities{% endif %}</h4>
+    
+    {% if related_universities %}
+        <div class="row g-3">
+            {% for related_uni in related_universities|slice:":3" %}
+                <div class="col-md-4">
+                    <div class="related-card p-3 rounded">
+                        <h6>{{ related_uni.display_name }}</h6>
+                        <p class="small mb-2">
+                            {{ related_uni.display_location }}, 
+                            {% if current_language == 'my' %}တည်ထောင်သည့် ခုနှစ်{% else %}Est.{% endif %} {{ related_uni.established }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if related_uni.national_ranking %}
+                                <span class="badge bg-primary">
+                                    {% if current_language == 'my' %}အဆင့် #{{ related_uni.national_ranking }}{% else %}Rank #{{ related_uni.national_ranking }}{% endif %}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">{% if current_language == 'my' %}အဆင့်သတ်မှတ်မထား{% else %}Not Ranked{% endif %}</span>
+                            {% endif %}
+                            <a href="{% url 'public_unis_detail' related_uni.id %}" class="btn btn-sm btn-outline-primary">
+                                {% if current_language == 'my' %}ကြည့်ရန်{% else %}View{% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Fallback: Show some random universities if no specific related ones -->
+        <div class="row g-3">
+            {% for random_uni in random_universities|slice:":3" %}
+                <div class="col-md-4">
+                    <div class="related-card p-3 rounded">
+                        <h6>{{ random_uni.display_name }}</h6>
+                        <p class="small mb-2">
+                            {{ random_uni.display_location }}, 
+                            {% if current_language == 'my' %}တည်ထောင်သည့် ခုနှစ်{% else %}Est.{% endif %} {{ random_uni.established }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if random_uni.national_ranking %}
+                                <span class="badge bg-primary">
+                                    {% if current_language == 'my' %}အဆင့် #{{ random_uni.national_ranking }}{% else %}Rank #{{ random_uni.national_ranking }}{% endif %}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">{% if current_language == 'my' %}အဆင့်သတ်မှတ်မထား{% else %}Not Ranked{% endif %}</span>
+                            {% endif %}
+                            <a href="{% url 'public_unis_detail' random_uni.id %}" class="btn btn-sm btn-outline-primary">
+                                {% if current_language == 'my' %}ကြည့်ရန်{% else %}View{% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+  </div>
+</section>
+
+<!-- Contact Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactModalLabel">{% if current_language == 'my' %}{{ university.display_name }} ဆက်သွယ်ရန်{% else %}Contact {{ university.display_name }}{% endif %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="contactName" class="form-label">{% if current_language == 'my' %}နာမည်{% else %}Name{% endif %}</label>
+            <input type="text" class="form-control" id="contactName">
+          </div>
+          <div class="mb-3">
+            <label for="contactEmail" class="form-label">{% if current_language == 'my' %}အီးမေးလ်{% else %}Email{% endif %}</label>
+            <input type="email" class="form-control" id="contactEmail">
+          </div>
+          <div class="mb-3">
+            <label for="contactMessage" class="form-label">{% if current_language == 'my' %}မက်ဆေ့ချ်{% else %}Message{% endif %}</label>
+            <textarea class="form-control" id="contactMessage" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% if current_language == 'my' %}ပိတ်ရန်{% else %}Close{% endif %}</button>
+        <button type="button" class="btn btn-primary">{% if current_language == 'my' %}မက်ဆေ့ချ်ပို့ရန်{% else %}Send Message{% endif %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Enhanced UX Styles */
+   .university-header-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2.5rem 2rem;
+      height: 100%;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .university-header-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    }
+
+    .university-header-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .1);
+      border-color: var(--accent-blue);
+    }
+  
+  
+  
+.quick-action-bar {
+  background: var(--card-bg) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-color);
+}
+
+.navigation-tabs .nav-tabs {
+  border-bottom: 2px solid var(--border-color);
+}
+
+.navigation-tabs .nav-link {
+  border: none;
+  padding: 12px 20px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-bottom: 3px solid transparent;
+}
+
+.navigation-tabs .nav-link.active {
+  color: var(--primary);
+  border-bottom: 3px solid var(--primary);
+  background: transparent;
+}
+
+.stat-card, .degree-card, .related-card {
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.stat-card:hover, .degree-card:hover, .related-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.highlight-icon, .stat-icon {
+  transition: transform 0.3s ease;
+}
+
+.highlight-item:hover .highlight-icon,
+.stat-card:hover .stat-icon {
+  transform: scale(1.1);
+}
+
+.step-number {
+  transition: all 0.3s ease;
+}
+
+.step-item:hover .step-number {
+  transform: scale(1.1);
+  background: var(--accent-teal) !important;
+}
+
+.read-more-container {
+  position: relative;
+}
+
+.read-more-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.read-more-btn {
+  font-size: 0.9rem;
+  text-decoration: none !important;
+}
+
+/* Progress indicator for tabs */
+.tab-progress {
+  height: 3px;
+  background: var(--border-color);
+  position: relative;
+  margin-top: -2px;
+}
+
+.tab-progress-bar {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .college-meta {
+    flex-direction: column;
+    gap: 10px !important;
+  }
+  
+  .quick-action-bar {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .navigation-tabs .nav-link {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Degree Programs Styles */
+.degree-card {
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.degree-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-color: var(--accent-blue);
+}
+
+.degree-card[aria-expanded="true"] {
+  border-color: var(--accent-blue);
+  background: var(--bg-secondary);
+}
+
+.majors-container {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.major-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.major-item:hover {
+  background: var(--accent-blue);
+  color: white;
+  transform: translateX(5px);
+}
+
+/* Dark mode adjustments */
+[data-bs-theme="dark"] .degree-card {
+  border-color: var(--border-color);
+}
+
+[data-bs-theme="dark"] .degree-card:hover {
+  border-color: var(--accent-blue);
+}
+
+[data-bs-theme="dark"] .major-item:hover {
+  background: var(--accent-blue);
+  color: white;
+}
+
+[data-bs-theme="dark"] .badge.bg-light {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+.related-card {
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    background: var(--bg-card);
+}
+
+.related-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: var(--accent-blue);
+}
+
+.related-card h6 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.related-card .badge {
+    font-size: 0.7rem;
+}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Read More functionality
+    const readMoreContainers = document.querySelectorAll('.read-more-container');
+    
+    readMoreContainers.forEach(container => {
+      const content = container.querySelector('.read-more-content');
+      const button = container.querySelector('.read-more-btn');
+      const maxHeight = content.getAttribute('data-max-height') || 200;
+      
+      if (content.scrollHeight > maxHeight) {
+        content.style.maxHeight = maxHeight + 'px';
+        button.classList.remove('d-none');
+        
+        button.addEventListener('click', function() {
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            button.innerHTML = '{% if current_language == "my" %}ပိုမိုဖတ်ရန်{% else %}Read less{% endif %} <i class="bi bi-chevron-up"></i>';
+          } else {
+            content.style.maxHeight = maxHeight + 'px';
+            button.innerHTML = '{% if current_language == "my" %}ဆက်လက်ဖတ်ရန်{% else %}Read more{% endif %} <i class="bi bi-chevron-down"></i>';
+          }
+        });
+      }
+    });
+    
+    // Quick Actions
+    document.getElementById('shareBtn').addEventListener('click', function() {
+      if (navigator.share) {
+        navigator.share({
+          title: '{{ university.display_name }}',
+          text: '{% if current_language == "my" %}{{ university.display_name }} အကြောင်း ဖတ်ရန်{% else %}Check out {{ university.display_name }}{% endif %}',
+          url: window.location.href
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('{% if current_language == "my" %}လင့်ခ်ကိုကူးယူပြီးပါပြီ{% else %}Link copied to clipboard{% endif %}');
+        });
+      }
+    });
+    
+    document.getElementById('printBtn').addEventListener('click', function() {
+      window.print();
+    });
+    
+    document.getElementById('favoriteBtn').addEventListener('click', function() {
+      const btn = this;
+      btn.classList.toggle('active');
+      if (btn.classList.contains('active')) {
+        btn.innerHTML = '<i class="bi bi-bookmark-fill"></i> {% if current_language == "my" %}သိမ်းဆည်းပြီး{% else %}Saved{% endif %}';
+      } else {
+        btn.innerHTML = '<i class="bi bi-bookmark"></i> {% if current_language == "my" %}စိတ်ကြိုက်သိမ်းရန်{% else %}Save{% endif %}';
+      }
+    });
+    
+    // Tab progress indicator
+    const tabs = document.querySelectorAll('#universityTabs .nav-link');
+    const progressBar = document.createElement('div');
+    progressBar.className = 'tab-progress';
+    progressBar.innerHTML = '<div class="tab-progress-bar" style="width: 25%;"></div>';
+    document.querySelector('.navigation-tabs').appendChild(progressBar);
+    
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', function() {
+        const progressWidth = (index + 1) * 25;
+        document.querySelector('.tab-progress-bar').style.width = `${progressWidth}%`;
+      });
+    });
+
+    const degreeCards = document.querySelectorAll('.clickable-degree');
+  let currentlyOpen = null;
+
+  degreeCards.forEach(card => {
+    card.addEventListener('click', function() {
+      const targetId = this.getAttribute('data-bs-target');
+      const targetElement = document.querySelector(targetId);
+      
+      // Close currently open section if clicking a different card
+      if (currentlyOpen && currentlyOpen !== targetElement) {
+        bootstrap.Collapse.getInstance(currentlyOpen).hide();
+      }
+      
+      // Toggle current section
+      const bsCollapse = new bootstrap.Collapse(targetElement, {
+        toggle: true
+      });
+      
+      currentlyOpen = targetElement;
+      
+      // Update card active state
+      degreeCards.forEach(c => {
+        if (c === this) {
+          c.setAttribute('aria-expanded', 
+            c.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+        } else {
+          c.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

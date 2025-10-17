@@ -1,0 +1,570 @@
+{% extends "base.html" %}
+{% block title %}Career Ladder{% endblock %}
+
+{% block content %}
+<section class="hero-section" style="margin-top: 80px;">
+  <div class="container">
+    <div class="hero-content text-center">
+      <div class="hero-badge fade-in-up">
+        <i class="bi bi-joystick"></i>
+        <span data-i18n="quizHub.title">Career Assessment Hub</span>
+      </div>
+      <h1 class="fade-in-up" data-i18n="quizHub.heading">Discover Your Perfect Career Path</h1>
+      <p class="subtext mx-auto fade-in-up delay-1" data-i18n="quizHub.subtitle">
+        Take our comprehensive aptitude assessment to uncover careers that match your unique strengths and personality.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <!-- Main Aptitude Test Card - Enhanced -->
+      <div class="col-lg-6 col-md-8">
+        <div class="feature-card premium-card fade-in-up">
+          <div class="feature-icon premium-icon">
+            <i class="bi bi-graph-up-arrow"></i>
+          </div>
+          <h3 class="card-title">Comprehensive Aptitude Assessment</h3>
+          <p class="card-description">Measure your reasoning abilities, problem-solving skills, and cognitive strengths to discover careers that truly match your potential.</p>
+          
+          <div class="assessment-features">
+            <div class="feature-item">
+              <i class="bi bi-clock text-primary"></i>
+              <span>15-20 minutes</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-question-circle text-primary"></i>
+              <span>13 comprehensive questions</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-bar-chart text-primary"></i>
+              <span>Detailed career matches</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-shield-check text-primary"></i>
+              <span>Personalized insights</span>
+            </div>
+          </div>
+
+          <a href="{% url 'career_counseling' %}" class="btn btn-primary-premium w-100">
+            <i class="bi bi-play-circle me-2"></i>Start Assessment
+          </a>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Assessment Options -->
+    <div class="row justify-content-center mt-5">
+      <div class="col-lg-8">
+        <div class="info-section">
+          <h4 class="text-center mb-4">Why Take This Assessment?</h4>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="info-card">
+                <i class="bi bi-lightbulb"></i>
+                <h5>Discover Strengths</h5>
+                <p>Identify your natural talents and cognitive abilities</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-card">
+                <i class="bi bi-bullseye"></i>
+                <h5>Career Matching</h5>
+                <p>Get matched with careers that fit your unique profile</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-card">
+                <i class="bi bi-graph-up"></i>
+                <h5>Data-Driven</h5>
+                <p>Based on comprehensive psychological research</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container">
+    <div class="cta-section enhanced-cta">
+      <div class="cta-content">
+        <h2>Ready to Discover Your Career Path?</h2>
+        <p>Join thousands who have found their ideal career through our comprehensive assessment.</p>
+        <div class="cta-stats">
+          <div class="stat">
+            <div class="stat-number">10,000+</div>
+            <div class="stat-label">Assessments Taken</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Satisfaction Rate</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Career Matches</div>
+          </div>
+        </div>
+        <a href="{% url 'career_counseling' %}" class="btn btn-cta-premium btn-lg">
+          <i class="bi bi-rocket-takeoff me-2"></i>Start Your Journey
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Success Modal (Dark, Big, Centered) ===== -->
+<div class="modal fade" id="profileSuccessModal" tabindex="-1" aria-labelledby="profileSuccessLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 text-center">
+      <div class="modal-body py-5 px-4">
+        <div class="mb-4">
+          <i class="bi bi-check-circle-fill success-icon"></i>
+        </div>
+        <h1 class="fw-bold mb-3 modal-title-big">Profile Successfully Set Up!</h1>
+        <p class="mx-auto mb-5 modal-subtext">
+          You're all set! Start your personalized career assessment now and explore paths that match your potential.
+        </p>
+
+        <div class="d-flex justify-content-center gap-4 flex-wrap">
+          <a href="{% url 'career_counseling' %}" class="btn btn-lg btn-start px-5 py-3">
+            <i class="bi bi-play-fill me-2"></i> Start Assessment
+          </a>
+          <button type="button" class="btn btn-lg btn-later px-5 py-3" data-bs-dismiss="modal">
+            Maybe Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Hero Section Styling */
+  .hero-section {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+    color: white;
+    padding: 60px 0;
+    border-radius: 0 0 30px 30px;
+  }
+
+  .hero-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .hero-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .subtext {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+  }
+
+  /* Premium Card Styling */
+  .premium-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 40px 30px;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .premium-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    border-color: var(--accent-blue);
+  }
+
+  .card-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .premium-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 2rem;
+    color: white;
+  }
+
+  .card-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  .card-description {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+
+  /* Assessment Features */
+  .assessment-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--secondary-bg);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .feature-item:hover {
+    background: color-mix(in srgb, var(--accent-blue) 5%, transparent);
+    transform: translateX(4px);
+  }
+
+  .feature-item i {
+    font-size: 1.2rem;
+  }
+
+  /* Progress Section */
+  .progress-section {
+    background: var(--secondary-bg);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .progress {
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+    transition: width 1s ease-in-out;
+  }
+
+  /* Premium Button */
+  .btn-primary-premium {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+  }
+
+  .btn-primary-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+    color: white;
+  }
+
+  .card-footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  /* Info Cards */
+  .info-section {
+    margin-top: 40px;
+  }
+
+  .info-card {
+    text-align: center;
+    padding: 30px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .info-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-blue);
+  }
+
+  .info-card i {
+    font-size: 2.5rem;
+    color: var(--accent-blue);
+    margin-bottom: 16px;
+  }
+
+  .info-card h5 {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+  }
+
+  .info-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  /* Enhanced CTA Section */
+  .enhanced-cta {
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, color-mix(in srgb, var(--secondary-bg) 90%, transparent) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+  }
+
+  .cta-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .btn-cta-premium {
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .btn-cta-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    color: white;
+  }
+
+  /* Modal Styles (unchanged but kept for reference) */
+  .modal-backdrop.show {
+    opacity: 0.9 !important;
+    background-color: #000 !important;
+    backdrop-filter: blur(4px);
+  }
+
+  #profileSuccessModal .modal-dialog {
+    max-width: 920px;
+  }
+
+  #profileSuccessModal .modal-content {
+    border-radius: 1.5rem;
+    background: linear-gradient(145deg, #121212 0%, #1c1c1c 100%);
+    color: #fff;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+    animation: popIn 0.5s ease-out;
+  }
+
+  #profileSuccessModal .modal-body {
+    padding: 4rem 2.5rem;
+  }
+
+  #profileSuccessModal .success-icon {
+    font-size: 5rem;
+    color: #00e676;
+  }
+
+  #profileSuccessModal .modal-title-big {
+    font-size: 2.5rem;
+  }
+
+  #profileSuccessModal .modal-subtext {
+    max-width: 720px;
+    font-size: 1.2rem;
+    color: #cfcfcf;
+  }
+
+  #profileSuccessModal .btn-start {
+    background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+  }
+
+  #profileSuccessModal .btn-start:hover {
+    background: linear-gradient(90deg, #006ae6 0%, #00aaff 100%);
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
+  }
+
+  #profileSuccessModal .btn-later {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+  }
+
+  #profileSuccessModal .btn-later:hover {
+    background-color: #2a2a2a;
+  }
+
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.92); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.2rem;
+    }
+    
+    .assessment-features {
+      grid-template-columns: 1fr;
+    }
+    
+    .cta-stats {
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .premium-card {
+      padding: 30px 20px;
+    }
+    
+    #profileSuccessModal .modal-body {
+      padding: 3rem 1.5rem;
+    }
+    
+    #profileSuccessModal .modal-dialog {
+      max-width: 95%;
+    }
+    
+    #profileSuccessModal .modal-title-big {
+      font-size: 2rem;
+    }
+  }
+
+  /* Animation for cards */
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .delay-1 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-2 {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    // This renders as "true" or "false" and is parsed as a boolean safely.
+    const shouldShow = JSON.parse('{{ show_success_popup|yesno:"true,false" }}');
+    if (!shouldShow) return;
+
+    const modalEl = document.getElementById('profileSuccessModal');
+    if (!modalEl) return;
+
+    const modal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: true });
+    modal.show();
+  })();
+
+  // Add some interactive elements
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to info cards
+    const infoCards = document.querySelectorAll('.info-card');
+    infoCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-4px)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+
+    // Add click animation to main CTA button
+    const mainCta = document.querySelector('.btn-cta-premium');
+    if (mainCta) {
+      mainCta.addEventListener('click', function() {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 150);
+      });
+    }
+  });
+</script>
+{% endblock %}

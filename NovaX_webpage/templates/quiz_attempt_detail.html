@@ -1,0 +1,362 @@
+<!-- templates/quiz_attempt_detail.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Assessment Details | Career Ladder{% endblock %}
+
+{% block extra_head %}
+<style>
+.detail-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+.detail-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.prediction-card {
+    background: linear-gradient(135deg, var(--card-bg), color-mix(in srgb, var(--card-bg) 90%, transparent));
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.prediction-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.match-bar {
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.match-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+    border-radius: 4px;
+    transition: width 1s ease-in-out;
+}
+
+.score-badge {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.session-badge {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.strength-indicator {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.strength-very-strong {
+    background: #10b98120;
+    color: #10b981;
+    border: 1px solid #10b98140;
+}
+
+.strength-strong {
+    background: #3b82f620;
+    color: #3b82f6;
+    border: 1px solid #3b82f640;
+}
+
+.strength-moderate {
+    background: #f59e0b20;
+    color: #f59e0b;
+    border: 1px solid #f59e0b40;
+}
+
+.strength-low {
+    background: #6b728020;
+    color: #6b7280;
+    border: 1px solid #6b728040;
+}
+
+/* Enhanced stats */
+.stat-card {
+    background: var(--secondary-bg);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--accent-blue) 2%, transparent);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent-blue);
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.page-header {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    color: white;
+    padding: 60px 0 40px 0;
+    margin-top: 80px; /* Added space for navbar */
+    margin-bottom: 40px;
+    border-radius: 0 0 30px 30px;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+.session-meta {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Adjust container spacing */
+.profile-shell {
+    margin-top: 0; /* Remove previous margin since header has it */
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .prediction-card {
+        padding: 16px;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .back-btn {
+        position: static !important;
+        transform: none !important;
+        margin-bottom: 20px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <div class="text-center position-relative">
+            <a href="{% url 'quiz_history' %}" class="back-btn position-absolute start-0 top-50 translate-middle-y ms-3">
+                <i class="bi bi-arrow-left me-2" style="text-decoration: none;">Back</i>
+            </a>
+            <br/>
+            <h1 class="page-title">Assessment Details</h1>
+            <p class="page-subtitle">Detailed analysis of your career assessment session</p>
+            
+            <div class="session-meta">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <span class="session-badge">
+                            <i class="bi bi-{{ attempt.quiz_type|lower }} me-2"></i>
+                            {{ attempt.get_quiz_type_display }}
+                        </span>
+                    </div>
+                    <div class="col-auto">
+                        <span class="text-white">
+                            <i class="bi bi-calendar me-1"></i>
+                            {{ attempt.created_at|date:"F d, Y" }}
+                        </span>
+                    </div>
+                    {% if attempt.score %}
+                    <div class="col-auto">
+                        <span class="score-badge text-warning">
+                            <i class="bi bi-star-fill me-1"></i>
+                            Score: {{ attempt.score|floatformat:1 }}/10
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+<section class="profile-shell">
+    <div class="elevated-card">
+        <div class="section-pad">
+            <div class="row">
+                <!-- Predictions & Results -->
+                <div class="col-12">
+                    {% if attempt.predictions %}
+                    <div class="detail-card">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="h5 mb-0">
+                                <i class="bi bi-graph-up me-2 text-success"></i>Career Recommendations
+                            </h4>
+                            <span class="badge bg-success-subtle text-success">
+                                {{ attempt.predictions|length }} Career Paths
+                            </span>
+                        </div>
+                        
+                        {% for prediction in attempt.predictions %}
+                        <div class="prediction-card">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="flex-grow-1">
+                                    <h5 class="h6 mb-1 text-primary">{{ prediction.career }}</h5>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="match-percentage text-success fw-bold">
+                                            {{ prediction.probability }}% match
+                                        </span>
+                                        <span class="strength-indicator 
+                                            {% if prediction.probability >= 80 %}strength-very-strong
+                                            {% elif prediction.probability >= 60 %}strength-strong
+                                            {% elif prediction.probability >= 40 %}strength-moderate
+                                            {% else %}strength-low{% endif %}">
+                                            {% if prediction.probability >= 80 %}Very Strong
+                                            {% elif prediction.probability >= 60 %}Strong
+                                            {% elif prediction.probability >= 40 %}Moderate
+                                            {% else %}Low{% endif %} Match
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="match-bar">
+                                <div class="match-fill" style="width: {{ prediction.probability }}%"></div>
+                            </div>
+                            
+                            <div class="mt-2">
+                                <small class="muted">
+                                    <i class="bi bi-lightbulb me-1"></i>
+                                    This career aligns well with your assessed strengths and preferences
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Session Overview -->
+                    <div class="detail-card">
+                        <h4 class="h5 mb-4">
+                            <i class="bi bi-info-circle me-2 text-secondary"></i>Session Overview
+                        </h4>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-number">{{ attempt.get_quiz_type_display }}</div>
+                                    <div class="stat-label">Assessment Type</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-number">{{ attempt.created_at|date:"M d, Y" }}</div>
+                                    <div class="stat-label">Date Completed</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-number text-success">
+                                        {% if attempt.completed_at %}
+                                        <i class="bi bi-check-circle"></i>
+                                        {% else %}
+                                        <i class="bi bi-clock"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="stat-label">
+                                        {% if attempt.completed_at %}Completed{% else %}In Progress{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-5 pt-4 border-top">
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'quiz_history' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-clock-history me-2"></i>View All Assessments
+                    </a>
+                    <a href="{% url 'career_counseling' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-robot me-2"></i>New Assessment
+                    </a>
+                </div>
+            </div>
+            <br/>
+        </div>
+    </div>
+</section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Animate progress bars on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBars = document.querySelectorAll('.match-fill');
+    progressBars.forEach(bar => {
+        const width = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => {
+            bar.style.width = width;
+        }, 100);
+    });
+});
+</script>
+{% endblock %}

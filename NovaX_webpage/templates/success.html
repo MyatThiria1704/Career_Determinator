@@ -1,0 +1,462 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Success | Career Ladder</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Dark Theme Variables */
+      --primary-bg-dark: #0a0f1c;
+      --secondary-bg-dark: #131b2e;
+      --accent-blue: #4361ee;
+      --accent-purple: #7209b7;
+      --accent-teal: #4cc9f0;
+      --text-primary-dark: #ffffff;
+      --text-secondary-dark: #b8c1ec;
+      --card-bg-dark: rgba(255, 255, 255, 0.05);
+      --border-dark: rgba(255, 255, 255, 0.1);
+
+      /* Light Theme Variables */
+      --primary-bg-light: #f8fafc;
+      --secondary-bg-light: #f1f5f9;
+      --accent-blue-light: #3a56d4;
+      --accent-purple-light: #6a0dad;
+      --accent-teal-light: #00b4d8;
+      --text-primary-light: #1e293b;
+      --text-secondary-light: #475569;
+      --card-bg-light: #ffffff;
+      --border-light: #e2e8f0;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+      /* Common Variables */
+      --border-radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+      /* Default to Dark Theme */
+      --primary-bg: var(--primary-bg-dark);
+      --secondary-bg: var(--secondary-bg-dark);
+      --text-primary: var(--text-primary-dark);
+      --text-secondary: var(--text-secondary-dark);
+      --card-bg: var(--card-bg-dark);
+      --border-color: var(--border-dark);
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .light-theme {
+      --primary-bg: var(--primary-bg-light);
+      --secondary-bg: var(--secondary-bg-light);
+      --text-primary: var(--text-primary-light);
+      --text-secondary: var(--text-secondary-light);
+      --card-bg: var(--card-bg-light);
+      --border-color: var(--border-light);
+      --shadow: var(--shadow-light);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background-color: var(--primary-bg);
+      color: var(--text-primary);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: var(--transition);
+    }
+
+    .success-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(67,97,238,.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(114,9,183,.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(76,201,240,.1) 0%, transparent 50%),
+        var(--primary-bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .light-theme .success-container {
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(67,97,238,.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(114,9,183,.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(76,201,240,.05) 0%, transparent 50%),
+        linear-gradient(135deg,#e6f2ff 0%, #f0f4ff 50%, #e6fffa 100%);
+    }
+
+    /* Theme and Language Controls */
+    .controls-container {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      display: flex;
+      gap: 1rem;
+      z-index: 1000;
+    }
+
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--accent-blue);
+      color: #fff;
+      transform: rotate(15deg);
+    }
+
+    .light-theme .bi-moon-fill { display: none; }
+    .light-theme .bi-sun { display: block !important; }
+    .bi-sun { display: none; }
+
+    .language-selector {
+      position: relative;
+    }
+
+    .language-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .language-btn:hover {
+      background: var(--accent-blue);
+      color: #fff;
+      border-color: var(--accent-blue);
+    }
+
+    .language-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 0.5rem;
+      min-width: 150px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: var(--transition);
+      z-index: 1000;
+      border: 1px solid var(--border-color);
+    }
+
+    .language-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .language-option {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .language-option:hover {
+      background: var(--secondary-bg);
+    }
+
+    .language-option.active {
+      background: var(--accent-blue);
+      color: #fff;
+    }
+
+    .success-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      animation: fadeIn 1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .success-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2.5rem;
+      color: white;
+      animation: bounceIn 0.8s ease;
+    }
+
+    .success-card h4 {
+      color: var(--accent-teal);
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+
+    .success-card p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .btn-success {
+      width: 100%;
+      border-radius: 50px;
+      padding: 1rem;
+      border: none;
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-success::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+      transition: var(--transition);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+      color: white;
+    }
+
+    .btn-success:hover::before {
+      left: 100%;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .success-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+      }
+      
+      .success-card h4 {
+        font-size: 1.5rem;
+      }
+
+      .success-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+      }
+
+      .controls-container {
+        top: 1rem;
+        right: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Theme and Language Controls -->
+  <div class="controls-container">
+    <div class="language-selector">
+      <button class="language-btn" id="languageBtn">
+        <i class="bi bi-globe"></i>
+        <span id="currentLanguage">EN</span>
+        <i class="bi bi-chevron-down"></i>
+      </button>
+      <div class="language-dropdown" id="languageDropdown">
+        <div class="language-option active" data-lang="en"><span>English</span></div>
+        <div class="language-option" data-lang="my"><span>မြန်မာ</span></div>
+        <div class="language-option" data-lang="zh"><span>中文</span></div>
+      </div>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle">
+      <i class="bi bi-moon-fill"></i>
+      <i class="bi bi-sun"></i>
+    </button>
+  </div>
+
+  <div class="success-container">
+    <div class="success-card fade-in-up">
+      <div class="success-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <h4 data-i18n="success.title">Password Changed!</h4>
+      <p data-i18n="success.message">You can now log in with your new password.</p>
+      <a href="{% url 'login' %}" class="btn-success" data-i18n="success.loginButton">Go to Login</a>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Translations
+    const translations = {
+      en: {
+        "success.title":"Password Changed!",
+        "success.message":"You can now log in with your new password.",
+        "success.loginButton":"Go to Login"
+      },
+      my: {
+        "success.title":"စကားဝှက်ပြောင်းလဲပြီးပါပြီ!",
+        "success.message":"သင့်စကားဝှက်အသစ်ဖြင့် ယခုအခါ ဝင်ရောက်နိုင်ပါပြီ။",
+        "success.loginButton":"ဝင်ရောက်ရန်သို့ သွားရန်"
+      },
+      zh: {
+        "success.title":"密码更改成功！",
+        "success.message":"您现在可以使用新密码登录。",
+        "success.loginButton":"前往登录"
+      }
+    };
+
+    // Theme Management
+    const themeToggle = document.getElementById('themeToggle');
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'light') document.body.classList.add('light-theme');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const newTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+      });
+    }
+
+    // Language Management
+    const languageBtn = document.getElementById('languageBtn');
+    const languageDropdown = document.getElementById('languageDropdown');
+    const savedLang = localStorage.getItem('language') || 'en';
+    const currentLanguageElement = document.getElementById('currentLanguage');
+    if (currentLanguageElement) currentLanguageElement.textContent = savedLang.toUpperCase();
+    updateContent(savedLang);
+
+    if (languageBtn) languageBtn.addEventListener('click', () => languageDropdown.classList.toggle('show'));
+    document.addEventListener('click', (e) => {
+      if (!languageBtn?.contains(e.target) && !languageDropdown?.contains(e.target)) {
+        languageDropdown?.classList.remove('show');
+      }
+    });
+    document.querySelectorAll('.language-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const lang = opt.getAttribute('data-lang');
+        document.querySelectorAll('.language-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        if (currentLanguageElement) currentLanguageElement.textContent = lang.toUpperCase();
+        updateContent(lang);
+        localStorage.setItem('language', lang);
+        languageDropdown?.classList.remove('show');
+      });
+    });
+
+    function updateContent(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang]?.[key]) el.textContent = translations[lang][key];
+      });
+    }
+
+    // Animation on scroll
+    document.addEventListener('DOMContentLoaded', function () {
+      const fadeElements = document.querySelectorAll('.fade-in-up');
+      fadeElements.forEach(el => {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+        el.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+      });
+    });
+  </script>
+</body>
+</html>

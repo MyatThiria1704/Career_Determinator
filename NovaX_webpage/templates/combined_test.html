@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Guidance - for both Aptitude and Educational Test</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8F9F5;
+    color: #333333;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    width: 90%;
+    max-width: 600px;
+    margin: 80px auto;
+    background-color: #EEF5E9;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  h2 { color: #1E2E25; }
+  .question { display: none; animation: fade 0.4s ease-in-out; }
+  .question.active { display: block; }
+  @keyframes fade { from {opacity: 0;} to {opacity: 1;} }
+
+  .options button {
+    background-color: #A6CE39;
+    border: 2px solid transparent;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    color: #1E2E25;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .options button:hover {
+    background-color: #9AD44D;
+  }
+  .options button.selected {
+    border: 2px solid #2F4E3C;
+    background-color: #C8E36B;
+  }
+
+  .next-btn {
+    background-color: #2F4E3C;
+    color: #F8F9F5;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+  }
+  .next-btn:hover {
+    background-color: #A6CE39;
+    color: #1E2E25;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Plan Your Future After Uni 🎓</h2>
+
+    <div id="questions">
+        
+      <div class="question active" data-q="1">
+        <p>1. Which best describes you?</p>
+        <div class="options">
+            <button>Just finished Grade 12</button><button>Current university student</button><button>Graduated</button><button>Other</button>
+        </div>
+      </div>
+      <div class="question" data-q="2">
+        <p>2. What's your top goal in the next 2 years?</p>
+        <div class="options"><button>Start or continue studies</button><button>Get a job/ internship</button><button>Build skills/ portfolio</button><button>Others (travel, family, startup)</button></div>
+      </div>
+      <div class="question">
+        <p>3. Which learning style fits you?</p>
+        <div class="options"><button>Hands-on/ projects</button><button>Lecture and Theory</button><button>Self-paced online</button><button>Mix of all</button></div>
+      </div>
+      <div class="question">
+        <p>4. How comfortable are you with digital skills (coding, tools)?</p>
+        <div class="options"><button>No experience</button><button>Basic tools/ offic/ HTML</button><button>Confident coding/ tools</button><button>Advanced (projects, deployed apps)</button></div>
+      </div>
+      <div class="question">
+        <p>5. Which outcome matters most to you?</p>
+        <div class="options"><button>Stable job/ income</button><button>Work I love</button><button>Fast skill growth</button><button>Flexible lifestyle</button></div>
+      </div>
+      <div class="question">
+        <p>6. How do you learn best outside class?</p>
+        <div class="options"><button>Online courses</button><button>Doing projects</button><button>One-to-one mentorship</button><button>Volunteering/ internship</button></div>
+      </div>
+      <!-- 7 -->
+    <div class="question" data-q="7">
+      <p>7. Are you comfortable reaching out to strangers for help (mentors, recruiters)?</p>
+      <div class="options">
+        <button>Yes, I do it</button>
+        <button>Sometimes</button>
+        <button>No — feels hard</button>
+        <button>Trying to get better</button>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="question" data-q="8">
+      <p>8. Which supports would help you most right now?</p>
+      <div class="options">
+        <button>Career counselling</button>
+        <button>Scholarship info</button>
+        <button>Internship placements</button>
+        <button>Skill bootcamps</button>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="question" data-q="9">
+      <p>9. How do you handle stress/uncertainty about the future?</p>
+      <div class="options">
+        <button>Make a plan & list steps</button>
+        <button>Talk to friends/family</button>
+        <button>Avoid / procrastinate</button>
+        <button>Seek mentor / counselor</button>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="question" data-q="10">
+      <p>10. Are you open to non-traditional routes (bootcamps, apprenticeships)?</p>
+      <div class="options">
+        <button>Yes — practical is fine</button>
+        <button>Prefer traditional degree</button>
+        <button>Maybe — depends on reputation</button>
+        <button>Not sure</button>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="question" data-q="11">
+      <p>11. How strong is your support network (friends, family, alumni)?</p>
+      <div class="options">
+        <button>Strong</button>
+        <button>Some support</button>
+        <button>Little support</button>
+        <button>Mostly on my own</button>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="question" data-q="12">
+      <p>12. How confident are you in pitching yourself (CV, interview)?</p>
+      <div class="options">
+        <button>Confident</button>
+        <button>Okay — some practice needed</button>
+        <button>Not confident</button>
+        <button>I avoid pitching</button>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="question" data-q="13">
+      <p>13. Would you consider part-time study while working?</p>
+      <div class="options">
+        <button>Yes — flexible learning works</button>
+        <button>No — prefer full focus</button>
+        <button>Maybe</button>
+        <button>Depends on workload</button>
+      </div>
+    </div>
+
+    <!-- 14 -->
+    <div class="question" data-q="14">
+      <p>14. Biggest barrier stopping you from deciding?</p>
+      <div class="options">
+        <button>Lack of info/options</button>
+        <button>Financial constraints</button>
+        <button>Fear of choosing wrong</button>
+        <button>Other</button>
+      </div>
+    </div>
+
+    <!-- 15 -->
+    <div class="question" data-q="15">
+      <p>15. What first action would you take today to move forward?</p>
+      <div class="options">
+        <button>Book a chat with a mentor/counselor</button>
+        <button>Apply to 3 programs/jobs</button>
+        <button>Start a 2-week online course</button>
+        <button>Start a small portfolio project</button>
+      </div>
+    </div>
+    </div>
+
+    <button class="next-btn" id="nextBtn">Next ➜</button>
+  </div>
+
+  <script>
+    const questions = document.querySelectorAll('.question');
+    const nextBtn = document.getElementById('nextBtn');
+    let index = 0;
+    const responses = {};
+
+    document.querySelectorAll('.options button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.parentNode;
+        parent.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        const qText = parent.parentNode.querySelector('p').textContent;
+        responses[qText] = btn.textContent;
+      });
+    });
+
+    nextBtn.addEventListener('click', async () => {
+      if (!questions[index].querySelector('.selected')) {
+        alert('Please select an answer before proceeding!');
+        return;
+      }
+      questions[index].classList.remove('active');
+      index++;
+      if (index < questions.length) {
+        questions[index].classList.add('active');
+      } else {
+        // Submit to Django
+        const res = await fetch('/api/save-survey/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: 'Combined test Q', responses })
+        });
+        const data = await res.json();
+        document.querySelector('.container').innerHTML = 
+          `<h2>🎉 Great! You’ve completed the survey!</h2>
+           <p>${data.message || 'Your answers are safely saved.'}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>

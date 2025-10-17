@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Career Ladder | Search Careers{% endblock %}
+
+{% block extra_head %}
+<!-- Burmese Font Support -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  .burmese-text {
+    font-family: 'Noto Sans Myanmar', 'Myanmar3', 'Padauk', 'Tharlon', 'Masterpiece Uni Sans', sans-serif;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Hide all content until language is decided */
+  body:not(.language-ready) .translation-content {
+    opacity: 0;
+  }
+  
+  body.language-ready .translation-content {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Set initial language from server -->
+<script>
+// Set language immediately before any content renders
+document.addEventListener('DOMContentLoaded', function() {
+    const serverLang = '{{ current_language }}' || localStorage.getItem('language') || 'en';
+    document.body.setAttribute('data-initial-lang', serverLang);
+    localStorage.setItem('language', serverLang);
+    document.body.classList.add('language-ready');
+});
+</script>
+
+<section class="hero-section" style="padding: 8rem 0 4rem;">
+  <div class="container">
+    <div class="hero-content text-center translation-content">
+      <!-- Title - Render correct language from start -->
+      <h1 class="fade-in-up">
+        {% if current_language == 'my' %}
+          ရှာဖွေမှုရလဒ်များ
+        {% else %}
+          Search Results
+        {% endif %}
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="subtext mx-auto fade-in-up delay-1">
+        {% if query %}
+          {% if current_language == 'my' %}
+            "{{ query }}" အတွက် ရလဒ်များ
+          {% else %}
+            Results for "{{ query }}"
+          {% endif %}
+        {% else %}
+          {% if current_language == 'my' %}
+            အလုပ်အကိုင်အားလုံး
+          {% else %}
+            All Careers
+          {% endif %}
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section translation-content" style="padding: 2rem 0;">
+  <div class="container">
+    <div class="row g-4">
+      {% for career in careers %}
+        <div class="col-lg-4 col-md-6 fade-in-up">
+          <a href="{% url 'career_detail' career.slug %}"
+             class="feature-card h-100 d-block text-decoration-none"
+             style="cursor: pointer; min-height: 300px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: block; text-decoration: none; color: inherit; transition: all 0.3s ease;">
+            <div class="feature-icon" style="text-align: center; margin-bottom: 1rem;">
+              <i class="bi bi-briefcase" style="font-size: 2rem; color: var(--accent-teal);"></i>
+            </div>
+            
+            <!-- Career Title -->
+            <h3 style="margin-bottom: 1rem; color: var(--text-primary);">
+              {% if current_language == 'my' and career.get_title_my %}
+                {{ career.get_title_my }}
+              {% else %}
+                {{ career.get_title }}
+              {% endif %}
+            </h3>
+            
+            <!-- Description -->
+            <p class="mb-2" style="min-height: 60px; color: var(--text-secondary); line-height: 1.5;">
+              {% if current_language == 'my' and career.get_description_my %}
+                {{ career.get_description_my|truncatewords:20 }}
+              {% else %}
+                {{ career.get_description|truncatewords:20 }}
+              {% endif %}
+            </p>
+            
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="badge" style="background: var(--accent-blue); color: white; padding: 0.5rem 0.75rem; border-radius: 6px;">
+                {% if current_language == 'my' and career.get_job_outlook_my %}
+                  {{ career.get_job_outlook_my }}
+                {% else %}
+                  {{ career.get_job_outlook }}
+                {% endif %}
+              </span>
+              <span style="color: var(--accent-teal); font-weight: 600; font-size: 0.9rem;">
+                {% if current_language == 'my' %}
+                  {{ career.salary_range_min|floatformat:0 }} - {{ career.salary_range_max|floatformat:0 }} ကျပ်
+                {% else %}
+                  ${{ career.salary_range_min|floatformat:0 }} - ${{ career.salary_range_max|floatformat:0 }}
+                {% endif %}
+              </span>
+            </div>
+            <div class="mt-2">
+              <small style="color: var(--text-secondary);">
+                {% if current_language == 'my' and career.category.get_name_my %}
+                  {{ career.category.get_name_my }}
+                {% else %}
+                  {{ career.category.get_name }}
+                {% endif %}
+              </small>
+            </div>
+          </a>
+        </div>
+      {% empty %}
+        <div class="col-12 text-center fade-in-up">
+          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 3rem;">
+            <i class="bi bi-search" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
+            <h3>
+              {% if current_language == 'my' %}
+                အလုပ်အကိုင်များ မတွေ့ရှိပါ
+              {% else %}
+                No careers found
+              {% endif %}
+            </h3>
+            <p>
+              {% if current_language == 'my' %}
+                အခြားရှာဖွေရေးစကားလုံးများကို စမ်းကြည့်ပါ
+              {% else %}
+                Try different search terms
+              {% endif %}
+            </p>
+            <a href="{% url 'career_list' %}" class="btn btn-primary-custom mt-3">
+              {% if current_language == 'my' %}
+                အလုပ်အကိုင်အားလုံးကို ကြည့်ရန်
+              {% else %}
+                View All Careers
+              {% endif %}
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Add search page translations to base system for dynamic updates
+(function() {
+    if (typeof translations !== 'undefined') {
+        // Search page English translations
+        translations.en['search.results'] = "Search Results";
+        translations.en['search.resultsFor'] = "Results for";
+        translations.en['search.allCareers'] = "All Careers";
+        translations.en['search.noResults'] = "No careers found";
+        translations.en['search.tryDifferent'] = "Try different search terms";
+        translations.en['search.viewAll'] = "View All Careers";
+        
+        // Search page Burmese translations
+        translations.my['search.results'] = "ရှာဖွေမှုရလဒ်များ";
+        translations.my['search.resultsFor'] = "အတွက် ရလဒ်များ";
+        translations.my['search.allCareers'] = "အလုပ်အကိုင်အားလုံး";
+        translations.my['search.noResults'] = "အလုပ်အကိုင်များ မတွေ့ရှိပါ";
+        translations.my['search.tryDifferent'] = "အခြားရှာဖွေရေးစကားလုံးများကို စမ်းကြည့်ပါ";
+        translations.my['search.viewAll'] = "အလုပ်အကိုင်အားလုံးကို ကြည့်ရန်";
+    }
+})();
+
+// Initialize with current language for any dynamic elements
+document.addEventListener('DOMContentLoaded', function() {
+    const currentLang = '{{ current_language }}' || localStorage.getItem('language') || 'en';
+    if (typeof updateContent === 'function') {
+        updateContent(currentLang);
+    }
+    
+    // Force header language update
+    const currentLanguageElement = document.getElementById('currentLanguage');
+    if (currentLanguageElement) {
+        currentLanguageElement.textContent = currentLang.toUpperCase();
+    }
+});
+</script>
+{% endblock %}

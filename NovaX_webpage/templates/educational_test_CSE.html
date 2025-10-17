@@ -1,0 +1,638 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE Career Educational Test</title>
+<style>
+  :root{
+    --dark-green:#1E2E25; --forest:#2F4E3C; --light-green:#A6CE39;
+    --offwhite:#F8F9F5; --light-tint:#EEF5E9; --text-dark:#333333; --text-mid:#666666;
+    --bright:#9AD44D; --yellowish:#C8E36B;
+  }
+  html,body{height:100%;margin:0;background:var(--offwhite);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text-dark)}
+  .wrap{max-width:760px;margin:48px auto;padding:24px}
+  .card{background:var(--light-tint);border-radius:14px;padding:26px;box-shadow:0 8px 30px rgba(30,46,37,0.06);border:1px solid rgba(0,0,0,0.03)}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  h1{margin:0;font-size:20px;color:var(--dark-green)}
+  p.lead{margin:0;color:var(--text-mid);font-size:14px}
+
+  .question{display:none;animation:fade .28s ease}
+  .question.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .q-title{font-weight:700;color:var(--forest);margin:0 0 12px 0}
+  .q-desc{color:var(--text-mid);font-size:14px;margin-bottom:18px}
+
+  .slider-row{display:flex;align-items:center;gap:14px}
+  .slider{flex:1}
+  input[type="range"]{
+    -webkit-appearance:none;width:100%;
+    height:12px;border-radius:8px;background:linear-gradient(90deg,var(--light-green),var(--bright));outline:none;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--dark-green);border:4px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.12);}
+  .scale-labels{display:flex;justify-content:space-between;margin-top:6px;color:var(--text-mid);font-size:13px}
+
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+  .progress{font-size:13px;color:var(--text-mid)}
+  .btn{background:var(--forest);color:var(--offwhite);border:0;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:700}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .small-note{font-size:13px;color:var(--text-mid);margin-top:10px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="card">
+      <header>
+        <div>
+          <h1>CSE Career Educational Test</h1>
+          <p class="lead">Rate yourself 1–10. Honest answers = better results. ✨</p>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;color:var(--text-mid)">Step <span id="stepNum">1</span> / 8</div>
+        </div>
+      </header>
+
+      <form id="testForm" onsubmit="return false;">
+        <!-- Questions -->
+        <div class="question active" data-q="1" data-key="q1">
+          <div class="q-title">1. How much do you enjoy creating websites or designing user interfaces?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q1_input"></div>
+            <div id="q1_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="2" data-key="q2">
+          <div class="q-title">2. How interested are you in artificial intelligence or machine learning?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q2_input"></div>
+            <div id="q2_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)" >5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="3" data-key="q3">
+          <div class="q-title">3. How passionate are you about cybersecurity or ethical hacking?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q3_input"></div>
+            <div id="q3_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="4" data-key="q4">
+          <div class="q-title">4. Do you enjoy working with servers, networks, or managing systems?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q4_input" ></div>
+            <div id="q4_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)" >5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="5" data-key="q5">
+          <div class="q-title">5. Are you excited about data analysis and data-driven insights?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q5_input"></div>
+            <div id="q5_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)" >5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="6" data-key="q6">
+          <div class="q-title">6. How much do you like cloud computing or cloud platforms (AWS, Azure)?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q6_input"></div>
+            <div id="q6_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)" >5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="7" data-key="q7">
+          <div class="q-title">7.  How interested are you in game development or interactive media?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q7_input"></div>
+            <div id="q7_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)" >5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="8" data-key="q8">
+          <div class="q-title">8. How strong are your problem-solving and debugging skills?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="q8_input"></div>
+            <div id="q8_val" style="width:46px;text-align:center;font-weight:700;color:var(--forest)" >5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="footer">
+          <div class="progress">Question <span id="current">1</span> / 8</div>
+          <button id="nextBtn" class="btn" type="button">Next ➜</button>
+        </div>
+
+        <div class="small-note">All answers are anonymous and used to suggest career matches.</div>
+      </form>
+    </div>
+  </div>
+
+<script>
+const questions = Array.from(document.querySelectorAll('.question'));
+const nextBtn = document.getElementById('nextBtn');
+const stepNum = document.getElementById('stepNum');
+const currentEl = document.getElementById('current');
+
+const answers = {}; // store numeric answers keyed by data-key
+
+// Initialize sliders & listeners
+questions.forEach(q => {
+  const key = q.dataset.key;
+  if (!key) return;
+  const input = q.querySelector('input[type="range"]');
+  const valEl = q.querySelector(`#${key}_val`);
+  answers[key] = Number(input.value); // initial value
+
+  input.addEventListener('input', (e) => {
+    valEl.textContent = e.target.value;
+    answers[key] = Number(e.target.value);
+  });
+});
+
+let idx = 0;
+function showIndex(i){
+  questions.forEach((q,j) => q.classList.toggle('active', j===i));
+  stepNum.textContent = i+1;
+  currentEl.textContent = i+1;
+  nextBtn.textContent = (i === questions.length - 1) ? 'Submit' : 'Next ➜';
+}
+showIndex(0);
+
+// Submit / next
+nextBtn.addEventListener('click', async () => {
+  const q = questions[idx];
+  const key = q.dataset.key;
+  if (key && (typeof answers[key] === 'undefined' || answers[key] === null)) {
+    alert('Please select a value for this question.');
+    return;
+  }
+
+  if (idx < questions.length - 1) {
+    idx++;
+    showIndex(idx);
+    return;
+  }
+
+  // Compute results
+  const percentages = calculateResults(Object.values(answers));
+
+  try {
+    await fetch('/api/save-survey/', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ category: 'educational_test_CSE', responses: answers })
+    });
+  } catch (err) {
+    console.warn('Failed to save to backend:', err);
+  }
+
+  sessionStorage.setItem('aptitude_percentages', JSON.stringify(percentages));
+  window.location.href = '/educational_test_CSE_result/';
+});
+
+// Calculate percentages
+function calculateResults(scores) {
+  return {
+    "Web Developer": Math.round((scores[0]/10)*100),
+    "AI Engineer": Math.round((scores[1]/10)*100),
+    "Cyber Security": Math.round((scores[2]/10)*100),
+    "System Administrator": Math.round((scores[3]/10)*100),
+    "Data Scientist": Math.round((scores[4]/10)*100),
+    "Cloud Engineer": Math.round((scores[5]/10)*100),
+    "Game Developer": Math.round((scores[6]/10)*100),
+    "Network Administrator": Math.round((scores[7]/10)*100)
+  };
+}
+</script>
+</body>
+</html> {% endcomment %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE Career Educational Test</title>
+<style>
+  :root{
+    --dark-green:#1E2E25; --forest:#2F4E3C; --light-green:#A6CE39;
+    --offwhite:#F8F9F5; --light-tint:#EEF5E9; --text-dark:#333333; --text-mid:#666666;
+    --bright:#9AD44D; --yellowish:#C8E36B;
+  }
+  html,body{height:100%;margin:0;background:var(--offwhite);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text-dark)}
+  .wrap{max-width:760px;margin:48px auto;padding:24px}
+  .card{background:var(--light-tint);border-radius:14px;padding:26px;box-shadow:0 8px 30px rgba(30,46,37,0.06);border:1px solid rgba(0,0,0,0.03)}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  h1{margin:0;font-size:20px;color:var(--dark-green)}
+  p.lead{margin:0;color:var(--text-mid);font-size:14px}
+
+  .question{display:none;animation:fade .28s ease}
+  .question.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .q-title{font-weight:700;color:var(--forest);margin:0 0 12px 0;font-size:16px}
+  .q-desc{color:var(--text-mid);font-size:14px;margin-bottom:24px}
+
+  .choices{display:flex;flex-direction:column;gap:12px}
+  .choice-item{
+    background:#fff;border:2px solid #e5e7eb;border-radius:10px;padding:16px 20px;
+    cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;gap:12px;
+  }
+  .choice-item:hover{border-color:var(--light-green);background:#fafafa}
+  .choice-item.selected{border-color:var(--bright);background:rgba(166,206,57,0.15)}
+  .choice-item input[type="radio"]{
+    appearance:none;width:20px;height:20px;border:2px solid var(--text-mid);
+    border-radius:50%;cursor:pointer;position:relative;flex-shrink:0;
+  }
+  .choice-item input[type="radio"]:checked{border-color:var(--forest);background:var(--bright)}
+  .choice-item input[type="radio"]:checked::after{
+    content:'';position:absolute;width:8px;height:8px;background:var(--forest);
+    border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);
+  }
+  .choice-label{color:var(--text-dark);font-size:15px;flex:1}
+
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:12px}
+  .progress{font-size:13px;color:var(--text-mid)}
+  .btn{background:var(--forest);color:var(--offwhite);border:0;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:700;transition:all 0.2s}
+  .btn:hover{background:var(--dark-green)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-back{background:#e5e7eb;color:var(--text-dark)}
+  .btn-back:hover{background:#d1d5db}
+  .btn-container{display:flex;gap:8px}
+  .small-note{font-size:13px;color:var(--text-mid);margin-top:10px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="card">
+      <header>
+        <div>
+          <h1>CSE Career Educational Test</h1>
+          <p class="lead">Choose the option that best describes you. Honest answers = better results.</p>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;color:var(--text-mid)">Step <span id="stepNum">1</span> / 8</div>
+        </div>
+      </header>
+
+      <form id="testForm" onsubmit="return false;">
+        <!-- Question 1 -->
+        <div class="question active" data-q="1" data-key="q1">
+          <div class="q-title">1. How much do you enjoy creating websites or designing user interfaces?</div>
+          <div class="q-desc">Consider your interest in building web applications and visual design.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q1" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q1" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q1" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q1" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q1" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question" data-q="2" data-key="q2">
+          <div class="q-title">2. How interested are you in artificial intelligence or machine learning?</div>
+          <div class="q-desc">Think about building intelligent systems and data-driven solutions.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q2" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q2" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q2" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q2" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q2" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question" data-q="3" data-key="q3">
+          <div class="q-title">3. How passionate are you about cybersecurity or ethical hacking?</div>
+          <div class="q-desc">Consider your interest in protecting systems and finding vulnerabilities.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q3" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q3" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q3" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q3" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q3" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question" data-q="4" data-key="q4">
+          <div class="q-title">4. Do you enjoy working with servers, networks, or managing systems?</div>
+          <div class="q-desc">Think about infrastructure, server administration, and network configuration.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q4" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q4" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q4" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q4" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q4" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question" data-q="5" data-key="q5">
+          <div class="q-title">5. Are you excited about data analysis and data-driven insights?</div>
+          <div class="q-desc">Consider working with large datasets and extracting meaningful patterns.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q5" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q5" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q5" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q5" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q5" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question" data-q="6" data-key="q6">
+          <div class="q-title">6. How much do you like cloud computing or cloud platforms (AWS, Azure)?</div>
+          <div class="q-desc">Think about deploying and managing applications in the cloud.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q6" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q6" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q6" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q6" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q6" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question" data-q="7" data-key="q7">
+          <div class="q-title">7. How interested are you in game development or interactive media?</div>
+          <div class="q-desc">Consider creating games, animations, or interactive experiences.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q7" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q7" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q7" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q7" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q7" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question" data-q="8" data-key="q8">
+          <div class="q-title">8. How strong are your problem-solving and debugging skills?</div>
+          <div class="q-desc">Think about finding and fixing issues in code or systems.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="q8" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q8" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q8" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q8" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="q8" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="progress">Question <span id="current">1</span> / 8</div>
+          <div class="btn-container">
+            <button id="backBtn" class="btn btn-back" type="button" style="display:none">← Back</button>
+            <button id="nextBtn" class="btn" type="button">Next →</button>
+          </div>
+        </div>
+
+        <div class="small-note">All answers are anonymous and used to suggest career matches.</div>
+      </form>
+    </div>
+  </div>
+
+<script>
+const questions = Array.from(document.querySelectorAll('.question'));
+const nextBtn = document.getElementById('nextBtn');
+const backBtn = document.getElementById('backBtn');
+const stepNum = document.getElementById('stepNum');
+const currentEl = document.getElementById('current');
+
+const answers = {};
+
+// Setup radio button listeners
+questions.forEach(q => {
+  const key = q.dataset.key;
+  if (!key) return;
+
+  const radios = q.querySelectorAll('input[type="radio"]');
+  radios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      answers[key] = Number(e.target.value);
+      // Update visual selection
+      q.querySelectorAll('.choice-item').forEach(item => item.classList.remove('selected'));
+      e.target.closest('.choice-item').classList.add('selected');
+    });
+  });
+});
+
+let idx = 0;
+function showIndex(i){
+  questions.forEach((q,j) => q.classList.toggle('active', j===i));
+  stepNum.textContent = i+1;
+  currentEl.textContent = i+1;
+  nextBtn.textContent = (i === questions.length - 1) ? 'Submit' : 'Next →';
+  backBtn.style.display = i === 0 ? 'none' : 'block';
+
+  // Restore selected choice visual
+  const currentQ = questions[i];
+  const key = currentQ.dataset.key;
+  if (answers[key]) {
+    const selectedRadio = currentQ.querySelector(`input[value="${answers[key]}"]`);
+    if (selectedRadio) {
+      selectedRadio.checked = true;
+      currentQ.querySelectorAll('.choice-item').forEach(item => item.classList.remove('selected'));
+      selectedRadio.closest('.choice-item').classList.add('selected');
+    }
+  }
+}
+showIndex(0);
+
+backBtn.addEventListener('click', () => {
+  if (idx > 0) {
+    idx--;
+    showIndex(idx);
+  }
+});
+
+nextBtn.addEventListener('click', async () => {
+  const q = questions[idx];
+  const key = q.dataset.key;
+
+  if (key && (typeof answers[key] === 'undefined' || answers[key] === null)) {
+    alert('Please select an answer before continuing.');
+    return;
+  }
+
+  if (idx < questions.length - 1) {
+    idx++;
+    showIndex(idx);
+    return;
+  }
+
+  // Compute results
+  const percentages = calculateResults(Object.values(answers));
+
+  try {
+    await fetch('/api/save-survey/', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ category: 'educational_test_CSE', responses: answers })
+    });
+  } catch (err) {
+    console.warn('Failed to save to backend:', err);
+  }
+
+  sessionStorage.setItem('aptitude_percentages', JSON.stringify(percentages));
+  window.location.href = '/educational_test_CSE_result/';
+});
+
+// Calculate percentages
+function calculateResults(scores) {
+  return {
+    "Web Developer": Math.round((scores[0]/10)*100),
+    "AI Engineer": Math.round((scores[1]/10)*100),
+    "Cyber Security": Math.round((scores[2]/10)*100),
+    "System Administrator": Math.round((scores[3]/10)*100),
+    "Data Scientist": Math.round((scores[4]/10)*100),
+    "Cloud Engineer": Math.round((scores[5]/10)*100),
+    "Game Developer": Math.round((scores[6]/10)*100),
+    "Software Engineer": Math.round((scores[7]/10)*100)
+  };
+}
+</script>
+</body>
+</html>

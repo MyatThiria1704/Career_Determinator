@@ -1,0 +1,895 @@
+{% extends "base.html" %}
+{% block title %}Career Ladder | Find Your Perfect Career Path With Confidence{% endblock %}
+{% load static %}
+{% block extra_head %}
+<style>
+  /* ---------- Global Styles & Variables ---------- */
+  :root {
+    --section-padding: 5rem 0;
+  }
+  .hell0{
+    margin: 30px;
+  }
+
+  .section {
+    padding: var(--section-padding) !important;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: .75rem;
+    text-align: center;
+  }
+
+  .section-subtitle {
+    font-size: 1.1rem;
+    max-width: 650px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    opacity: .9;
+    line-height: 1.6;
+  }
+
+  /* ---------- PREMIUM HERO (with Light Mode Fixes) ---------- */
+  .hero-section-premium {
+    position: relative;
+    padding: 8rem 0 !important;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  #hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .dark-theme .hero-section-premium,
+  .hero-section-premium {
+    background-color: #0b0c16;
+    color: #fff;
+  }
+
+  .light-theme .hero-section-premium {
+    background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    gap: .5rem;
+    align-items: center;
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    padding: .4rem .75rem;
+    border-radius: 999px;
+    font-size: .9rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .dark-theme .hero-title,
+  .hero-title {
+    background: linear-gradient(90deg, #ffffff, var(--accent-teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .light-theme .hero-title {
+    color: var(--text-primary);
+    background: none;
+    -webkit-text-fill-color: unset;
+  }
+
+  .hero-desc {
+    max-width: 680px;
+    margin: 1.5rem auto 2.5rem;
+    opacity: .9;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .tw-accent {
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+  }
+
+  .tw-caret::after {
+    content: "▌";
+    animation: caret 3s step-end infinite;
+    margin-left: .1em;
+  }
+
+  @keyframes caret {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* ---------- How it works cards ---------- */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .feature-card-compact {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--border-color);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+  }
+
+  .light-theme .feature-card-compact {
+    box-shadow: var(--shadow-light);
+  }
+
+  .feature-card-compact:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-blue);
+  }
+
+  .light-theme .feature-card-compact:hover {
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-card-compact h3 {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .feature-card-compact p {
+    color: var(--text-secondary);
+  }
+
+  .feature-icon-compact {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    background: rgba(67, 97, 238, .1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    color: var(--accent-teal);
+  }
+
+  .light-theme .feature-icon-compact {
+    color: var(--accent-blue-light);
+  }
+
+  /* ---------- Pain Point Section ("Avoid Regret") ---------- */
+  .pain-point-section {
+    background: var(--secondary-bg);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .pain-point-stat {
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+
+  .pain-point-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    max-width: 500px;
+    margin: 0 auto;
+    color: var(--text-primary);
+  }
+
+  /* ---------- Featured Careers Section ---------- */
+  .career-preview-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: left;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .light-theme .career-preview-card {
+    box-shadow: var(--shadow-light);
+  }
+
+  .career-preview-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-blue);
+  }
+
+  .career-preview-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--accent-teal);
+  }
+
+  .career-preview-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
+    color: var(--text-primary);
+  }
+
+  .career-preview-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    flex-grow: 1;
+  }
+
+  .career-preview-link {
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--accent-blue);
+  }
+
+  .career-preview-link:hover {
+    text-decoration: underline;
+  }
+
+  .career-preview-link i {
+    transition: transform 0.2s;
+  }
+
+  .career-preview-link:hover i {
+    transform: translateX(4px);
+  }
+
+  /* ---------- Testimonials ---------- */
+  .testimonial-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    height: 100%;
+  }
+
+  .light-theme .testimonial-card {
+    box-shadow: var(--shadow-light);
+  }
+
+  .testimonial-text {
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  .testimonial-text::before {
+    content: "“";
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--accent-blue);
+    opacity: 0.3;
+    float: left;
+    margin-right: .5rem;
+    line-height: 1;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .author-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .author-info .author-name {
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .author-info .author-role {
+    font-size: .9rem;
+    opacity: .8;
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  /* ---------- Final CTA ---------- */
+  .final-cta-section {
+    background: var(--secondary-bg);
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 5rem !important;
+  }
+
+
+ .pain-point-section {
+  background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--primary-bg) 100%);
+  border-radius: 30px;
+  margin: 4rem 0;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.pain-point-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(106, 90, 249, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 194, 255, 0.1) 0%, transparent 50%);
+}
+
+.pain-point-content {
+  position: relative;
+  z-index: 2;
+}
+
+.stat-container {
+  margin-bottom: 3rem;
+}
+
+.pain-point-stat {
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #6a5af9, #00c2ff, #4361ee);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+  
+  /* Standard background-clip property - remove vendor prefixes for modern browsers */
+  background-clip: text;
+  -webkit-background-clip: text;
+  
+  /* Standard color property for text transparency */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.stat-subtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+/* Progress Bar */
+.progress-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.progress-bar-wrapper {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  height: 12px;
+  background: rgba(106, 90, 249, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6a5af9, #00c2ff);
+  border-radius: 10px;
+  animation: fillProgress 2s ease-out;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+  animation: shimmer 2s infinite;
+}
+
+@keyframes fillProgress {
+  from { width: 0%; }
+  to { width: 80%; }
+}
+
+@keyframes shimmer {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Impact Cards */
+.impact-card {
+  background: var(--card-bg);
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.impact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(106, 90, 249, 0.15);
+  border-color: #6a5af9;
+}
+
+.impact-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6a5af9, #00c2ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 1.8rem;
+  color: white;
+}
+
+.impact-card h4 {
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+}
+
+.impact-card p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Solution Statement */
+.solution-statement {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.solution-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-teal));
+  
+  /* Standard background-clip property */
+  background-clip: text;
+  -webkit-background-clip: text;
+  
+  /* Standard color property */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.solution-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* CTA Button */
+.btn-hero-solution {
+  background: linear-gradient(135deg, #6a5af9, #4361ee);
+  color: white;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(106, 90, 249, 0.3);
+  
+  /* Standard background-clip for button */
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+.btn-hero-solution:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(106, 90, 249, 0.4);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pain-point-section {
+    padding: 3rem 1.5rem;
+    margin: 3rem 0;
+  }
+  
+  .progress-bar-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .impact-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* Fallback for older browsers that don't support background-clip: text */
+@supports not (background-clip: text) {
+  .pain-point-stat,
+  .solution-title {
+    background: none;
+    color: var(--accent-blue); /* Fallback solid color */
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section-premium">
+  <canvas id="hero-canvas"></canvas>
+  <div class="px-4 px-md-5 text-center" style="max-width: 1600px; margin: 0 auto;">
+    <div class="hero-content">
+      <a href="#testimonials" class="hero-badge mb-4">
+        <i class="bi bi-star-fill text-warning" aria-hidden="true"></i>
+        <span data-i18n="hero.trusted">Trusted by 15,000+ career seekers</span>
+      </a>
+
+      <h1 class="hero-title" data-i18n="hero.titleHtml">Your Future Career, <br>Clarified.</h1>
+      
+      <p class="hero-desc" data-i18n="hero.subtitle">
+        Stop guessing. Our scientifically-backed assessment uncovers your unique strengths and matches you with careers you'll not only succeed in, but love. Discover your perfect
+        <span class="tw-accent tw-caret">
+          <span id="twWords" data-rotate='["path","fit","calling","future"]'></span>
+        </span>
+      </p>
+
+      <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
+        <a href="{% url 'quiz_hub' %}" class="btn btn-primary-custom btn-lg">
+          <i class="bi bi-patch-question-fill"></i> <span data-i18n="hero.cta.findPath">Find My Career Path</span>
+        </a>
+        <a href="#how-it-works" class="btn btn-secondary-custom btn-lg" data-i18n="hero.cta.howItWorks">See How It Works</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how-it-works" class="section">
+  <div class="container">
+    <h2 class="section-title" data-i18n="howItWorks.title">How Career Ladder Works
+      
+    </h2>
+    <p class="section-subtitle" data-i18n="howItWorks.subtitle">In three simple steps, we turn uncertainty into a clear, actionable plan for your professional and academic life.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card-compact">
+        <div class="feature-icon-compact"><i class="bi bi-clipboard2-pulse"></i></div>
+        <h3 data-i18n="howItWorks.step1.title">1. Deep Self-Discovery</h3>
+        <p data-i18n="howItWorks.step1.desc">Our quick, insightful quiz goes beyond resumes to understand your core personality, interests, and what truly motivates you.</p>
+      </div>
+      <div class="feature-card-compact">
+        <div class="feature-icon-compact"><i class="bi bi-magic"></i></div>
+        <h3 data-i18n="howItWorks.step2.title">2. Intelligent Matching</h3>
+        <p data-i18n="howItWorks.step2.desc">Receive a personalized report detailing career paths that align with your unique profile, complete with salary projections and future demand.</p>
+      </div>
+      <div class="feature-card-compact">
+        <div class="feature-icon-compact"><i class="bi bi-mortarboard-fill"></i></div>
+        <h3 data-i18n="howItWorks.step3.title">3. University & Major Guidance</h3>
+        <p data-i18n="howItWorks.step3.desc">Connect your ideal career path to the right academic plan. We recommend relevant university majors and institutions to get you there.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section pain-point-section">
+  <div class="container">
+    <div class="pain-point-content text-center">
+      <!-- Main Stat -->
+      <div class="stat-container mb-4">
+        <h2 class="pain-point-stat" data-i18n="painPoints.stat">80%</h2>
+        <div class="stat-subtitle" data-i18n="painPoints.subtitle">of professionals feel career regret</div>
+      </div>
+      
+      <!-- Animated Progress Bar -->
+      <div class="progress-container mb-5">
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 80%"></div>
+          </div>
+          <div class="progress-labels">
+            <span data-i18n="painPoints.regret">Career Regret</span>
+            <span>80%</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Impact Cards -->
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="impact-card fade-in-up">
+            <div class="impact-icon">
+              <i class="bi bi-clock"></i>
+            </div>
+            <h4 data-i18n="painPoints.wastedTime">Wasted Time</h4>
+            <p data-i18n="painPoints.wastedTimeDesc">Average 3+ years in wrong careers</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="impact-card fade-in-up delay-1">
+            <div class="impact-icon">
+              <i class="bi bi-currency-dollar"></i>
+            </div>
+            <h4 data-i18n="painPoints.incomeLoss">Income Loss</h4>
+            <p data-i18n="painPoints.incomeLossDesc">Up to 40% lower lifetime earnings</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="impact-card fade-in-up delay-2">
+            <div class="impact-icon">
+              <i class="bi bi-emoji-frown"></i>
+            </div>
+            <h4 data-i18n="painPoints.satisfaction">Low Satisfaction</h4>
+            <p data-i18n="painPoints.satisfactionDesc">67% report job dissatisfaction</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Solution Statement -->
+      <div class="solution-statement mb-4">
+        <h3 class="solution-title" data-i18n="painPoints.solutionTitle">We're changing career discovery</h3>
+        <p class="solution-text" data-i18n="painPoints.solutionText">
+          Through data-driven assessments and personalized guidance, we help you find career paths that align with your personality, skills, and ambitions.
+        </p>
+      </div>
+      
+      <!-- CTA Button -->
+      <a href="{% url 'quiz_hub' %}" class="btn-hero-solution">
+        <span data-i18n="painPoints.cta">Find Your Ideal Career Path</span>
+        <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<section id="featured-careers" class="section">
+    <div class="container">
+        <h2 class="section-title" data-i18n="explore.title">Explore Potential Paths</h2>
+        <p class="section-subtitle" data-i18n="explore.subtitle">Get a glimpse into the diverse range of careers our assessment covers. Your perfect match could be one you've never considered.</p>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="career-preview-card">
+                    <div class="career-preview-icon"><i class="bi bi-code-slash"></i></div>
+                    <h4 class="career-preview-title" data-i18n="explore.job1.title">Software Engineer</h4>
+                    <p class="career-preview-desc" data-i18n="explore.job1.desc">Build and maintain the digital infrastructure that powers our world, from web apps to complex systems.</p>
+                    <a href="{% url 'career_list' %}" class="career-preview-link mt-3" data-i18n="explore.learnMore">Learn More <i class="bi bi-arrow-right-short"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="career-preview-card">
+                    <div class="career-preview-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <h4 class="career-preview-title" data-i18n="explore.job2.title">Data Analyst</h4>
+                    <p class="career-preview-desc" data-i18n="explore.job2.desc">Turn raw data into actionable insights, helping businesses make smarter, evidence-based decisions.</p>
+                    <a href="#" class="career-preview-link mt-3" data-i18n="explore.learnMore">Learn More <i class="bi bi-arrow-right-short"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="career-preview-card">
+                    <div class="career-preview-icon"><i class="bi bi-palette"></i></div>
+                    <h4 class="career-preview-title" data-i18n="explore.job3.title">UX/UI Designer</h4>
+                    <p class="career-preview-desc" data-i18n="explore.job3.desc">Craft beautiful and intuitive digital experiences that are both user-friendly and visually appealing.</p>
+                    <a href="#" class="career-preview-link mt-3" data-i18n="explore.learnMore">Learn More <i class="bi bi-arrow-right-short"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="career-preview-card">
+                    <div class="career-preview-icon"><i class="bi bi-heart-pulse"></i></div>
+                    <h4 class="career-preview-title" data-i18n="explore.job4.title">Healthcare Admin</h4>
+                    <p class="career-preview-desc" data-i18n="explore.job4.desc">Manage the business side of medical facilities, ensuring efficient operation and quality patient care.</p>
+                    <a href="#" class="career-preview-link mt-3" data-i18n="explore.learnMore">Learn More <i class="bi bi-arrow-right-short"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'career_list' %}" class="btn btn-secondary-custom" data-i18n="explore.button">Explore All Careers</a>
+        </div>
+    </div>
+</section>
+
+<section id="testimonials" class="section" style="background: var(--secondary-bg); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+        <h2 class="section-title" data-i18n="testimonials.title">Real Stories, Real Results</h2>
+        <p class="section-subtitle" data-i18n="testimonials.subtitle">See how we've helped others find clarity and direction in their careers.</p>
+        <div class="feature-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text" data-i18n="testimonials.t1.quote">I was completely lost. This quiz didn't just give me job titles, it helped me understand *why* certain careers were a good fit. I finally feel confident about my future.</p>
+                <div class="testimonial-author">
+                    <img src="https://i.pravatar.cc/50?u=jane" alt="Jane Doe" class="author-avatar">
+                    <div class="author-info">
+                        <p class="author-name" data-i18n="testimonials.t1.name">Jane D.</p>
+                        <p class="author-role" data-i18n="testimonials.t1.role">Found her path in UX Design</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text" data-i18n="testimonials.t2.quote">As someone looking for a career change, this was invaluable. The results were surprisingly accurate and introduced me to roles I had never even considered before. Highly recommend!</p>
+                <div class="testimonial-author">
+                    <img src="https://i.pravatar.cc/50?u=mark" alt="Mark S." class="author-avatar">
+                    <div class="author-info">
+                        <p class="author-name" data-i18n="testimonials.t2.name">Mark S.</p>
+                        <p class="author-role" data-i18n="testimonials.t2.role">Transitioning to Data Analytics</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+              <p class="testimonial-text" data-i18n="testimonials.t3.quote">The roadmap feature is a game-changer. It broke down a huge goal into small, manageable steps. I felt less overwhelmed and more empowered to start my journey.</p>
+              <div class="testimonial-author">
+                  <img src="https://i.pravatar.cc/50?u=sara" alt="Sara K." class="author-avatar">
+                  <div class="author-info">
+                      <p class="author-name" data-i18n="testimonials.t3.name">Sara K.</p>
+                      <p class="author-role" data-i18n="testimonials.t3.role">Aspiring Digital Marketer</p>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    /* ---- Typewriter rotating words ---- */
+    const el = document.getElementById('twWords');
+    if (el) {
+      const items = JSON.parse(el.getAttribute('data-rotate') || '[]');
+      let idx = 0, pos = 0, del = false;
+      const tick = () => {
+        if (!items.length) return;
+        const full = items[idx];
+        el.textContent = full.substring(0, pos);
+        if (!del && pos < full.length) pos++;
+        else if (del && pos > 0) pos--;
+        if (pos === full.length) { setTimeout(() => { del = true; }, 2000); }
+        if (pos === 0 && del) { del = false; idx = (idx + 1) % items.length; }
+        setTimeout(tick, del ? 50 : 100);
+      };
+      tick();
+    }
+
+    /* ---- Premium Hero Canvas Animation (with Light Mode Support) ---- */
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let width, height, particles;
+
+      const init = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = canvas.parentElement.offsetHeight;
+        particles = [];
+        const particleCount = Math.floor(width * height / 25000);
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(createParticle());
+        }
+      };
+
+      const createParticle = () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        radius: Math.random() * 1.5 + 1
+      });
+
+      const draw = () => {
+        ctx.clearRect(0, 0, width, height);
+        const isLightTheme = document.body.classList.contains('light-theme');
+        const lineColor = isLightTheme ? 'rgba(71, 85, 105, 0.1)' : 'rgba(255, 255, 255, 0.08)';
+        const particleColor = isLightTheme ? 'rgba(71, 85, 105, 0.3)' : 'rgba(255, 255, 255, 0.3)';
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = particleColor;
+          ctx.fill();
+        });
+
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = lineColor;
+              ctx.lineWidth = 1 - dist / 120;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      };
+
+      init();
+      draw();
+      window.addEventListener('resize', init);
+    }
+
+    /* ---- Back to top button logic ---- */
+    const toTopBtn = document.getElementById('toTopBtn');
+    if (toTopBtn) {
+      const toggleBtn = () => {
+        if (window.scrollY > 400) {
+          toTopBtn.classList.add('show');
+        } else {
+          toTopBtn.classList.remove('show');
+        }
+      };
+      window.addEventListener('scroll', toggleBtn, { passive: true });
+      toTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      toggleBtn();
+    }
+  });
+</script>
+{% endblock %}

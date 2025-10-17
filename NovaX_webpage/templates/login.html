@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Login | Career Ladder{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Reuse the same styling approach as register.html */
+  .auth-wrap{min-height:calc(100vh - 160px);display:flex;align-items:center;justify-content:center;padding:2rem 1rem;}
+  .premium-card{
+    background:var(--card-bg);border:1px solid var(--border-color);
+    border-radius:24px;box-shadow:var(--shadow,0 20px 40px rgba(0,0,0,.25));
+    max-width:520px;width:100%;overflow:hidden;position:relative;
+    margin-top: 100px;
+  }
+  .premium-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;
+    background:linear-gradient(90deg,var(--primary,#6d5efc),var(--accent,#7b61ff));opacity:.9}
+  .premium-card .card-body{padding:2.25rem}
+  .brand-section{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+  .logo-container{
+    width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--primary,#6d5efc),var(--accent,#7b61ff));box-shadow:0 8px 24px rgba(109,94,252,.35)
+  }
+  .logo-text{color:#fff;font-weight:700}
+  h1.page-title{font-size:1.6rem;font-weight:800;margin:0}
+  p.lead{color:var(--text-secondary);margin:0 0 1.25rem}
+  .form-label{font-weight:600;color:var(--text-primary);font-size:.92rem}
+  .input-group{border:1px solid var(--border-color);border-radius:12px;overflow:hidden}
+  .input-group:focus-within{border-color:var(--primary,#6d5efc);box-shadow:0 0 0 3px rgba(109,94,252,.15)}
+  .input-group-text{background:var(--muted-bg,rgba(255,255,255,.03));border:none;color:var(--text-secondary);padding:.75rem 1rem}
+  .form-control{background:var(--card-bg);border:none;color:var(--text-primary);padding:.75rem 1rem}
+  .form-control::placeholder{color:var(--text-secondary);opacity:.8}
+  .password-toggle{background:var(--muted-bg,rgba(255,255,255,.03));border:none;color:var(--text-secondary);padding:.75rem 1rem;cursor:pointer;}
+  .password-toggle:hover{background:var(--secondary-bg);}
+  .btn-primary-custom{width:100%}
+  .sub-links{display:flex;justify-content:space-between;align-items:center;margin:.25rem 0 1rem}
+  .signup-link{text-align:center;margin-top:1rem;color:var(--text-secondary)}
+  .signup-link a{text-decoration:none}
+  @media (max-width:576px){.premium-card .card-body{padding:1.75rem}}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="auth-wrap">
+  <div class="premium-card">
+    <div class="card-body">
+      <div class="brand-section">
+        <div class="logo-container"><span class="logo-text">CL</span></div>
+        <h1 class="page-title">Welcome back</h1>
+      </div>
+      <p class="lead">Log in to continue your journey.</p>
+
+      {% if messages %}
+        {% for m in messages %}
+          <div class="alert alert-{{ m.tags }} mb-3">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next|default:'/' }}">
+
+        <div class="mb-3">
+          <label class="form-label">Email or Username</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input name="email" class="form-control" placeholder="you@example.com or username" autocomplete="username" required>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input name="password" type="password" class="form-control password-input" placeholder="••••••••" autocomplete="current-password" required>
+            <button type="button" class="password-toggle" tabindex="-1">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="sub-links">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+          <a href="{% url 'forgot_password' %}" class="text-decoration-none">Forgot password?</a>
+        </div>
+
+        <button class="btn btn-primary-custom">Log in</button>
+      </form>
+
+      <div class="signup-link">
+        New here? <a href="{% url 'register' %}">Create an account</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Password visibility toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const passwordToggle = document.querySelector('.password-toggle');
+    
+    if (passwordToggle) {
+      passwordToggle.addEventListener('click', function() {
+        const passwordInput = this.closest('.input-group').querySelector('.password-input');
+        const eyeIcon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+          // Show password
+          passwordInput.type = 'text';
+          eyeIcon.classList.remove('bi-eye');
+          eyeIcon.classList.add('bi-eye-slash');
+        } else {
+          // Hide password
+          passwordInput.type = 'password';
+          eyeIcon.classList.remove('bi-eye-slash');
+          eyeIcon.classList.add('bi-eye');
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

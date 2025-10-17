@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% if current_language == 'my' %}အစိုးရ တက္ကသိုလ်များ - NovaX{% else %}Public Universities - NovaX{% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container text-center">
+    <div class="hero-content">
+      <div class="hero-badge fade-in-up">
+        <i class="bi bi-building"></i> 
+        {% if current_language == 'my' %}အစိုးရ တက္ကသိုလ် ကွန်ယက်{% else %}Public University Network{% endif %}
+      </div>
+      <h1 class="fade-in-up">
+        {% if current_language == 'my' %}အစိုးရ တက္ကသိုလ်များ{% else %}Public Universities{% endif %}
+      </h1>
+      <p class="subtext mx-auto fade-in-up delay-1">
+        {% if current_language == 'my' %}
+        မြန်မာနိုင်ငံရှိ ထိပ်တန်းအစိုးရတက္ကသိုလ်များတွင် စူးစမ်းလေ့လာပါ။
+        {% else %}
+        Explore programs at Myanmar's leading public universities.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Universities Section -->
+<section class="section">
+  <div class="container">
+    <a href="/" class="btn btn-secondary-custom mb-4">
+      <i class="bi bi-arrow-left"></i> 
+      {% if current_language == 'my' %}တက္ကသိုလ် လမ်းကြောင်းသို့ ပြန်သွားရန်{% else %}Back to University Path{% endif %}
+    </a>
+
+    {% for uni in universities %}
+    <div class="feature-card mb-4 text-start">
+      <div class="row align-items-center g-0">
+        <div class="col-md-8 p-4">
+          <h4 class="mb-2" style="color: var(--text-primary);">
+            {{ uni.display_name }} ({{ uni.display_abbreviation }})
+          </h4>
+          <p class="meta mb-2" style="color: var(--text-secondary);">
+            <i class="bi bi-geo-alt"></i> {{ uni.display_location }} &nbsp;&nbsp;
+            <i class="bi bi-calendar"></i> 
+            {% if current_language == 'my' %}တည်ထောင်သည့် ခုနှစ်{% else %}Est.{% endif %} {{ uni.established }}
+          </p>
+          
+          <!-- Popular Programs -->
+          {% if uni.popular_programs %}
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-star-fill text-warning"></i>
+              {% if current_language == 'my' %}အထင်ကရသင်တန်းများ:{% else %}Popular Programs:{% endif %}
+            </small>
+            <div>
+              {% for program in uni.popular_programs|slice:":3" %}
+              <span class="badge bg-light text-dark me-1 mb-1">{{ program }}</span>
+              {% endfor %}
+              {% if uni.popular_programs|length > 3 %}
+              <span class="badge bg-light text-dark">+{{ uni.popular_programs|length|add:"-3" }} more</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+          
+          <p class="desc mb-4" style="color: var(--text-secondary);">
+            {{ uni.display_description }}
+          </p>
+          
+          <!-- Rankings -->
+          {% if uni.national_ranking or uni.international_ranking %}
+          <div class="mb-3">
+            {% if uni.national_ranking %}
+            <span class="badge bg-success me-2">
+              <i class="bi bi-trophy"></i>
+              {% if current_language == 'my' %}နိုင်ငံတွင်း #{{ uni.national_ranking }}{% else %}National #{{ uni.national_ranking }}{% endif %}
+            </span>
+            {% endif %}
+            {% if uni.international_ranking %}
+            <span class="badge bg-info">
+              <i class="bi bi-globe"></i>
+              {% if current_language == 'my' %}ကမ္ဘာ့ #{{ uni.international_ranking }}{% else %}Global #{{ uni.international_ranking }}{% endif %}
+            </span>
+            {% endif %}
+          </div>
+          {% endif %}
+          
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'public_unis_detail' uni.id %}" class="btn btn-primary-custom">
+              {% if current_language == 'my' %}အသေးစိတ်ကြည့်ရန်{% else %}View Details{% endif %} <i class="bi bi-arrow-right-short"></i>
+            </a>
+            {% if uni.website %}
+            <a href="{{ uni.website }}" target="_blank" class="btn btn-secondary-custom">
+              {% if current_language == 'my' %}ဝဘ်ဆိုဒ်သို့{% else %}Visit Website{% endif %} <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+            {% endif %}
+            {% if uni.campus_map_url %}
+            <a href="{{ uni.campus_map_url }}" target="_blank" class="btn btn-outline-secondary">
+              <i class="bi bi-map"></i> {% if current_language == 'my' %}တည်နေရာ မြေပုံ{% else %}Campus Map{% endif %}
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-4 text-center" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color:#fff; border-top-right-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius);">
+          <div class="p-5">
+            <h2 style="font-size:3rem; font-weight:700;">{{ uni.display_abbreviation }}</h2>
+            <small style="opacity:0.9;">
+              {% if current_language == 'my' %}အစိုးရ တက္ကသိုလ်{% else %}Public University{% endif %}
+            </small>
+            
+            <!-- Quick Stats -->
+            <div class="mt-4">
+              {% if uni.faculties_departments %}
+              <div class="mb-2">
+                <h5>{{ uni.faculties_departments|length }}</h5>
+                <small>{% if current_language == 'my' %}ဌာနများ{% else %}Faculties{% endif %}</small>
+              </div>
+              {% endif %}
+              
+              {% if uni.popular_programs %}
+              <div class="mb-2">
+                <h5>{{ uni.popular_programs|length }}</h5>
+                <small>{% if current_language == 'my' %}သင်တန်းများ{% else %}Programs{% endif %}</small>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p style="color: var(--text-secondary);">
+        {% if current_language == 'my' %}အစိုးရ တက္ကသိုလ်များ မတွေ့ရှိပါ{% else %}No public universities found.{% endif %}
+      </p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

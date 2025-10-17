@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% if current_language == 'my' %}ဗိသုကာအလုပ်အကိုင်လမ်းကြောင်း - Career Ladder{% else %}Architecture Career Path - Career Ladder{% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <div class="hero-badge fade-in-up">
+            <i class="bi bi-building"></i> 
+            {% if current_language == 'my' %}တက္ကသိုလ် ကွန်ယက်{% else %}Campus Network{% endif %}
+        </div>
+        <h1 class="fade-in-up">
+            {% if current_language == 'my' %}တက္ကသိုလ်များ{% else %}Universities{% endif %}
+        </h1>
+        <p class="subtext mx-auto fade-in-up delay-1">
+            {% if current_language == 'my' %}
+            တက္ကသိုလ်များစွာမှာ သင်ယူမှု အစီအစဉ်များ၊ သုတေသန အခွင့်အလမ်းများနှင့် ပညာရေး၊ အသက်မွေးဝမ်းကျောင်းဆိုင်ရာ တိုးတက်မှုလမ်းကြောင်းမျိုးစုံကို ပေးအပ်လျက်ရှိပါတယ်။
+            {% else %}
+            Explore universities offering a wide range of programs, research opportunities, and pathways for academic and professional growth.
+            {% endif %}
+        </p>
+    </div>
+</section>
+
+<!-- Institutions Cards Section -->
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Public Universities -->
+            <div class="col-md-6">
+                <a href="{% url 'public_unis' %}" class="feature-card fade-in-up clickable-card" style="text-decoration:none;">
+                    <div class="card-header emerald mb-3"
+                      style="
+                        background: var(--card-bg);
+                        padding: 32px;
+                        border-radius: 16px 16px 0 0;
+                        border: 1px solid var(--border-color);
+                        color: var(--text-primary);
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                        transition: background 0.3s ease, color 0.3s ease;
+                      ">
+                    <div class="icon-box"
+                        style="
+                          background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+                          display: inline-flex;
+                          align-items: center;
+                          justify-content: center;
+                          width: 48px;
+                          height: 48px;
+                          border-radius: 12px;
+                          color: #fff;
+                          margin-bottom: 1rem;
+                          box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                        ">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                      </svg>
+                    </div>
+                    <h2 style="font-weight: 700;">
+                        {% if current_language == 'my' %}အစိုးရ တက္ကသိုလ်များ{% else %}Public Universities{% endif %}
+                    </h2>
+                    <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        {% if current_language == 'my' %}
+                        စုံလင်သော ဗိသုကာသင်ရိုးညွှန်းတမ်းများရှိသည့် ထူးချွန်တက္ကသိုလ်များ
+                        {% else %}
+                        Established institutions with comprehensive architecture programs
+                        {% endif %}
+                    </p>
+                  </div>
+
+                    <div class="card-body" style="padding: 32px; text-align:left;">
+                        
+                        <ul class="feature-list" 
+                            style="
+                              list-style: none; 
+                              padding-left: 0; 
+                              color: var(--text-primary);
+                              transition: color 0.3s ease;
+                            ">
+                          <li><span class="feature-dot blue"></span> 
+                              {% if current_language == 'my' %}အစိုးရအသိအမှတ်ပြုဘွဲ့များ{% else %}Government-recognized degrees{% endif %}
+                          </li>
+                            <li><span class="feature-dot blue"></span> 
+                                {% if current_language == 'my' %}ကျယ်ပြန့်သောကင်ပပ်စ်အဆောက်အအုံများ{% else %}Extensive campus facilities{% endif %}
+                            </li>
+                            <li><span class="feature-dot blue"></span> 
+                                {% if current_language == 'my' %}လုပ်ငန်းခွင်ဆက်သွယ်မှုအားကောင်းခြင်း{% else %}Strong industry connections{% endif %}
+                            </li>
+                            <li><span class="feature-dot blue"></span> 
+                                {% if current_language == 'my' %}သုတေသနအခွင့်အလမ်းများ{% else %}Research opportunities{% endif %}
+                            </li>
+                        </ul>
+
+                        <div class="card-footer emerald" style="font-weight:600; display:flex; align-items:center; gap:8px; margin-top:16px; color: var(--emerald);">
+                            {% if current_language == 'my' %}တက္ကသိုလ်များကြည့်ရန်{% else %}View Universities{% endif %} <span style="font-size:1.5rem">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Private Colleges -->
+            <div class="col-md-6">
+                <a href="{% url 'private_colls' %}" class="feature-card fade-in-up clickable-card delay-1" style="text-decoration:none;">
+                        <div class="card-header emerald mb-3"
+                          style="
+                            background: var(--card-bg);
+                            padding: 32px;
+                            border-radius: 16px 16px 0 0;
+                            border: 1px solid var(--border-color);
+                            color: var(--text-primary);
+                            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                            transition: background 0.3s ease, color 0.3s ease;
+                          ">
+                        <div class="icon-box"
+                            style="
+                              background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+                              display: inline-flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 48px;
+                              height: 48px;
+                              border-radius: 12px;
+                              color: #fff;
+                              margin-bottom: 1rem;
+                              box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                            ">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                            </svg>
+                        </div>
+                        <h2 style="font-weight: 700;">
+                            {% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်များ{% else %}Private Colleges{% endif %}
+                        </h2>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            {% if current_language == 'my' %}
+                            ခေတ်မီနည်းလမ်းများနှင့် ပြောင်းလွယ်ပြင်လွယ်သင်ရိုးညွှန်းတမ်းများရှိသည့် အထူးပြုအဖွဲ့အစည်းများ
+                            {% else %}
+                            Specialized institutions with flexible programs and modern approach
+                            {% endif %}
+                        </p>
+                      </div>
+
+                    <div class="card-body" style="padding: 32px; text-align:left;">
+                        <ul class="feature-list" 
+                          style="
+                            list-style: none; 
+                            padding-left: 0; 
+                            color: var(--text-primary);
+                            transition: color 0.3s ease;
+                          ">
+                        <li><span class="feature-dot blue"></span> 
+                            {% if current_language == 'my' %}ပြောင်းလွယ်ပြင်လွယ်အချိန်ဇယားရွေးချယ်ခွင့်များ{% else %}Flexible scheduling options{% endif %}
+                        </li>
+                        <li><span class="feature-dot blue"></span> 
+                            {% if current_language == 'my' %}သေးငယ်သောအတန်းအရွယ်အစား{% else %}Smaller class sizes{% endif %}
+                        </li>
+                        <li><span class="feature-dot blue"></span> 
+                            {% if current_language == 'my' %}ခေတ်မီအဆောက်အအုံများနှင့်နည်းပညာ{% else %}Modern facilities and tech{% endif %}
+                        </li>
+                        <li><span class="feature-dot blue"></span> 
+                            {% if current_language == 'my' %}စိတ်ကြိုက်စောင့်ရှောက်မှု{% else %}Personalized attention{% endif %}
+                        </li>
+                      </ul>
+
+                        <div class="card-footer blue" style="font-weight:600; display:flex; align-items:center; gap:8px; margin-top:16px; color: var(--blue);">
+                            {% if current_language == 'my' %}ကောလိပ်များကြည့်ရန်{% else %}View Colleges{% endif %} <span style="font-size:1.5rem">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Hover Animation -->
+<style>
+.clickable-card {
+    display: block;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.clickable-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+}
+.icon-box {
+    width: 64px;
+    height: 64px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    transition: transform 0.3s;
+}
+.clickable-card:hover .icon-box {
+    transform: scale(1.1);
+}
+.feature-dot {
+    width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:8px;
+}
+.feature-dot.emerald { background: var(--emerald); }
+.feature-dot.blue { background: var(--blue); }
+</style>
+
+{% endblock %}

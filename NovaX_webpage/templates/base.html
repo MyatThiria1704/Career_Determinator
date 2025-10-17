@@ -1,0 +1,1369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Career Ladder | Discover Your Career Path{% endblock %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      /* Dark Theme Variables */
+      --primary-bg-dark: #0a0f1c;
+      --secondary-bg-dark: #131b2e;
+      --accent-blue: #4361ee;
+      --accent-purple: #7209b7;
+      --accent-teal: #4cc9f0;
+      --text-primary-dark: #ffffff;
+      --text-secondary-dark: #b8c1ec;
+      --card-bg-dark: rgba(255, 255, 255, 0.05);
+      --border-dark: rgba(255, 255, 255, 0.1);
+
+      /* Improved Light Theme Variables - Soft Background */
+      --primary-bg-light: #f8fafc;
+      --secondary-bg-light: #f1f5f9;
+      --accent-blue-light: #3a56d4;
+      --accent-purple-light: #6a0dad;
+      --accent-teal-light: #00b4d8;
+      --text-primary-light: #1e293b;
+      --text-secondary-light: #475569;
+      --card-bg-light: #ffffff;
+      --border-light: #e2e8f0;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+      /* Common Variables */
+      --border-radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+      /* Default to Dark Theme */
+      --primary-bg: var(--primary-bg-dark);
+      --secondary-bg: var(--secondary-bg-dark);
+      --text-primary: var(--text-primary-dark);
+      --text-secondary: var(--text-secondary-dark);
+      --card-bg: var(--card-bg-dark);
+      --border-color: var(--border-dark);
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .light-theme {
+      --primary-bg: #f0f4ff;
+      --secondary-bg: #e6f2ff;
+      --text-primary: #1a365d;
+      --text-secondary: #2d3748;
+      --card-bg: #ffffff;
+      --border-color: #cbd5e0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    .brand-logo img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    /* ---------- NEW: Global Container Width Override ---------- */
+    /* This makes the main content area wider on larger screens */
+    @media (min-width: 1400px) {
+
+      .container,
+      .container-lg,
+      .container-md,
+      .container-sm,
+      .container-xl,
+      .container-xxl {
+        max-width: 1600px;
+        /* Or try 90vw */
+      }
+    }
+
+
+    /* ---------- Brand Logo (kept from yours) ---------- */
+    .navbar-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar-brand .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    }
+
+    .navbar-brand .brand-text {
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--primary-bg);
+      color: var(--text-primary);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: var(--transition);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--primary-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-blue);
+      border-radius: 4px;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--accent-blue);
+      color: #fff;
+      transform: rotate(15deg);
+    }
+
+    .light-theme .bi-moon-fill {
+      display: none;
+    }
+
+    .light-theme .bi-sun {
+      display: block !important;
+    }
+
+    .bi-sun {
+      display: none;
+    }
+
+    /* Language Selector */
+    .language-selector {
+      position: relative;
+      display: inline-block;
+    }
+
+    .language-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .language-btn:hover {
+      background: var(--secondary-bg);
+    }
+
+    .language-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      min-width: 120px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      z-index: 1000;
+    }
+
+    .language-dropdown.show {
+      display: block;
+    }
+
+    .language-option {
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .language-option:hover {
+      background: var(--secondary-bg);
+    }
+
+    .language-option.active {
+      background: var(--accent-teal);
+      color: white;
+    }
+
+    /* Navbar */
+    .navbar {
+      padding: 1.5rem 0;
+      background: var(--primary-bg);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: var(--transition);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .navbar.scrolled {
+      background: var(--primary-bg);
+      box-shadow: var(--shadow);
+    }
+
+    .navbar-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-brand span {
+      color: var(--accent-teal);
+      margin-left: 4px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary) !important;
+      font-weight: 500;
+      margin: 0 .5rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+      transition: var(--transition);
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-primary) !important;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    .navbar-toggler {
+      border: none;
+      color: var(--text-primary);
+      padding: .25rem .5rem;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+
+    /* Buttons */
+    .btn-primary-custom {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 30px;
+      border-radius: var(--border-radius);
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary-custom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
+      transition: var(--transition);
+    }
+
+    .btn-primary-custom:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(67, 97, 238, .3);
+      color: #fff;
+    }
+
+    .btn-primary-custom:hover::before {
+      left: 100%;
+    }
+
+    .btn-secondary-custom {
+      background: transparent;
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      font-weight: 500;
+      padding: 10px 28px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+
+    .btn-secondary-custom:hover {
+      background: var(--card-bg);
+      border-color: var(--accent-blue);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    /* Hero */
+    .hero-section {
+      padding: 12rem 0 8rem;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(67, 97, 238, .15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(114, 9, 183, .15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(76, 201, 240, .1) 0%, transparent 50%),
+        var(--primary-bg);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .light-theme .hero-section {
+      background:
+        radial-gradient(circle at 20% 80%, rgba(67, 97, 238, .08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(114, 9, 183, .08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(76, 201, 240, .05) 0%, transparent 50%),
+        linear-gradient(135deg, #e6f2ff 0%, #f0f4ff 50%, #e6fffa 100%);
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(10, 15, 28, .8) 0%, transparent 20%, transparent 80%, rgba(10, 15, 28, .8) 100%);
+      z-index: 0;
+    }
+
+    .light-theme .hero-section::before {
+      background: linear-gradient(180deg, rgba(240, 244, 255, .9) 0%, transparent 20%, transparent 80%, rgba(240, 244, 255, .9) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-section h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-section .subtext {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 1.5rem auto 2.5rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(67, 97, 238, .1);
+      color: var(--accent-teal);
+      padding: .5rem 1rem;
+      border-radius: 50px;
+      font-size: .9rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(76, 201, 240, .2);
+    }
+
+    .light-theme .hero-badge {
+      background: rgba(67, 97, 238, .08);
+      color: var(--accent-blue-light);
+      border-color: rgba(67, 97, 238, .2);
+    }
+
+    .hero-badge i {
+      margin-right: .5rem;
+    }
+
+    /* Sections */
+    .section {
+      padding: 6rem 0;
+      transition: var(--transition);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+
+    /* Testimonials */
+    .testimonial-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      height: 100%;
+      text-align: left;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .testimonial-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .1);
+      border-color: var(--accent-blue);
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .testimonial-info h4 {
+      margin-bottom: .25rem;
+      font-size: 1.1rem;
+    }
+
+    .testimonial-info p {
+      color: var(--text-secondary);
+      font-size: .9rem;
+      margin-bottom: 0;
+    }
+
+    .testimonial-card .quote {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .testimonial-card .quote::before {
+      content: '"';
+      position: absolute;
+      left: 0;
+      top: -.5rem;
+      font-size: 2rem;
+      color: var(--accent-blue);
+      opacity: .5;
+      font-family: Georgia, serif;
+    }
+
+    /* Features */
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2.5rem 2rem;
+      height: 100%;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .1);
+      border-color: var(--accent-blue);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(67, 97, 238, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: var(--accent-teal);
+      transition: var(--transition);
+    }
+
+    .light-theme .feature-icon {
+      background: rgba(67, 97, 238, .08);
+      color: var(--accent-blue-light);
+    }
+
+    .feature-card:hover .feature-icon {
+      background: rgba(67, 97, 238, .2);
+      transform: scale(1.1);
+    }
+
+    .feature-card h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+    }
+
+    /* Stats */
+    .stats-section {
+      background: var(--secondary-bg);
+      border-radius: var(--border-radius);
+      padding: 4rem 2rem;
+      margin: 3rem 0;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: .5rem;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+      border-radius: var(--border-radius);
+      padding: 4rem 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+      background-size: cover;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-section h2 {
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .cta-section p {
+      color: rgba(255, 255, 255, .8);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .btn-cta-light {
+      background: rgba(255, 255, 255, .9);
+      color: var(--accent-blue);
+      font-weight: 600;
+      padding: 12px 30px;
+      border-radius: var(--border-radius);
+      border: none;
+      transition: var(--transition);
+    }
+
+    .btn-cta-light:hover {
+      background: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .2);
+      color: var(--accent-blue);
+    }
+
+    /* Footer */
+    footer {
+      padding: 4rem 0 2rem;
+      background: var(--secondary-bg);
+      border-top: 1px solid var(--border-color);
+      transition: var(--transition);
+    }
+
+    .footer-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .footer-brand span {
+      color: var(--accent-teal);
+    }
+
+    .footer-about {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--card-bg);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+    }
+
+    .social-links a:hover {
+      background: var(--accent-blue);
+      color: #fff;
+      transform: translateY(-3px);
+      border-color: var(--accent-blue);
+    }
+
+    .footer-heading {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: .75rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-teal);
+    }
+
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: .9rem;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp .8s ease forwards;
+    }
+
+    .delay-1 {
+      animation-delay: .2s;
+    }
+
+    .delay-2 {
+      animation-delay: .4s;
+    }
+
+    .delay-3 {
+      animation-delay: .6s;
+    }
+
+    /* Responsive */
+    @media (max-width:768px) {
+      .hero-section h1 {
+        font-size: 2.8rem;
+      }
+
+      .hero-section {
+        padding: 10rem 0 6rem;
+      }
+
+      .section {
+        padding: 4rem 0;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width:576px) {
+      .hero-section h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero-section .subtext {
+        font-size: 1rem;
+      }
+
+      .btn-primary-custom,
+      .btn-secondary-custom {
+        padding: 10px 20px;
+        font-size: .9rem;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+      }
+    }
+
+
+    /* ---------- Back to Top Button ---------- */
+    #toTopBtn {
+      position: fixed;
+      right: 20px;
+      bottom: -60px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease, bottom .3s ease;
+      z-index: 1030;
+    }
+
+    #toTopBtn.show {
+      opacity: 1;
+      pointer-events: auto;
+      bottom: 20px;
+    }
+
+    #toTopBtn:hover {
+      transform: translateY(-3px) scale(1.05);
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+  {% include "includes/header.html" %}
+
+  {% block content %}{% endblock %}
+
+  {% include "includes/footer.html" %}
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JS (same logic as your original page) -->
+  <script>
+    // Translations
+    const translations = {
+      en: {
+        "nav.home": "Home", "nav.career": "Careers", "nav.aboutus": "About us", "nav.contactUs": "Contact us", "nav.getStarted": "Get Started", "nav.archiPaths": "University", "nav.reviews": "Reviews",
+        "hero.trusted": "Trusted by 15,000+ career seekers",
+        "hero.titleHtml": "Your Future Career, Clarified.",
+        "hero.subtitle": "Stop guessing. Our scientifically-backed assessment uncovers your unique strengths and matches you with careers you'll not only succeed in, but love. Discover your perfect",
+        "hero.cta.findPath": "Find My Career Path",
+        "hero.cta.howItWorks": "See How It Works",
+        "howItWorks.title": "How Career Ladder Works",
+        "howItWorks.subtitle": "In three simple steps, we turn uncertainty into a clear, actionable plan for your professional and academic life.",
+        "howItWorks.step1.title": "1. Deep Self-Discovery",
+        "howItWorks.step1.desc": "Our quick, insightful quiz goes beyond resumes to understand your core personality, interests, and what truly motivates you.",
+        "howItWorks.step2.title": "2. Intelligent Matching",
+        "howItWorks.step2.desc": "Receive a personalized report detailing career paths that align with your unique profile, complete with salary projections and future demand.",
+        "howItWorks.step3.title": "3. University & Major Guidance",
+        "howItWorks.step3.desc": "Connect your ideal career path to the right academic plan. We recommend relevant university majors and institutions to get you there.",
+        "painPoint.text": "of professionals have felt regret about their career choices. We provide the clarity to ensure you're in the right 20%.",
+        "explore.title": "Explore Potential Paths",
+        "explore.subtitle": "Get a glimpse into the diverse range of careers our assessment covers. Your perfect match could be one you've never considered.",
+        "explore.job1.title": "Software Engineer",
+        "explore.job1.desc": "Build and maintain the digital infrastructure that powers our world, from web apps to complex systems.",
+        "explore.job2.title": "Data Analyst",
+        "explore.job2.desc": "Turn raw data into actionable insights, helping businesses make smarter, evidence-based decisions.",
+        "explore.job3.title": "UX/UI Designer",
+        "explore.job3.desc": "Craft beautiful and intuitive digital experiences that are both user-friendly and visually appealing.",
+        "explore.job4.title": "Healthcare Admin",
+        "explore.job4.desc": "Manage the business side of medical facilities, ensuring efficient operation and quality patient care.",
+        "explore.learnMore": "Learn More",
+        "explore.button": "Explore All Careers",
+        "painPoints.stat": "80%",
+        "painPoints.subtitle": "of professionals feel career regret",
+        "painPoints.regret": "Career Regret",
+        "painPoints.wastedTime": "Wasted Time",
+        "painPoints.wastedTimeDesc": "Average 3+ years in wrong careers",
+        "painPoints.incomeLoss": "Income Loss",
+        "painPoints.incomeLossDesc": "Up to 40% lower lifetime earnings",
+        "painPoints.satisfaction": "Low Satisfaction",
+        "painPoints.satisfactionDesc": "67% report job dissatisfaction",
+        "painPoints.solutionTitle": "We're changing career discovery",
+        "painPoints.solutionText": "Through data-driven assessments and personalized guidance, we help you find career paths that align with your personality, skills, and ambitions.",
+        "painPoints.cta": "Find Your Ideal Career Path",
+        "testimonials.title": "Real Stories, Real Results",
+        "testimonials.subtitle": "See how we've helped others find clarity and direction in their careers.",
+        "testimonials.t1.quote": "I was completely lost. This quiz didn't just give me job titles, it helped me understand *why* certain careers were a good fit. I finally feel confident about my future.",
+        "testimonials.t1.name": "Jane D.",
+        "testimonials.t1.role": "Found her path in UX Design",
+        "testimonials.t2.quote": "As someone looking for a career change, this was invaluable. The results were surprisingly accurate and introduced me to roles I had never even considered before. Highly recommend!",
+        "testimonials.t2.name": "Mark S.",
+        "testimonials.t2.role": "Transitioning to Data Analytics",
+        "testimonials.t3.quote": "The roadmap feature is a game-changer. It broke down a huge goal into small, manageable steps. I felt less overwhelmed and more empowered to start my journey.",
+        "testimonials.t3.name": "Sara K.",
+        "testimonials.t3.role": "Aspiring Digital Marketer",
+        "footer.about": "Helping individuals discover their ideal career paths through data-driven assessments and personalized guidance.", "footer.company": "Company", "footer.aboutUs": "About Us", "footer.careers": "Careers", "footer.blog": "Blog", "footer.press": "Press", "footer.resources": "Resources", "footer.careerGuides": "Career Guides", "footer.skillAssessments": "Skill Assessments", "footer.faq": "FAQ", "footer.support": "Support", "footer.newsletter": "Stay Updated", "footer.newsletterSubtitle": "Subscribe to our newsletter for career tips and updates.", "footer.emailPlaceholder": "Your email address", "footer.subscribe": "Subscribe", "footer.rights": "All rights reserved.",
+        "quizHub.title": "Choose your assessment",
+        "quizHub.heading": "Start the path that fits your goal",
+        "quizHub.subtitle": "Pick a test to begin. You can take more than one—your matches get better with every result.",
+        "quizHub.aptitude.title": "Aptitude Test",
+        "quizHub.aptitude.desc": "Measure reasoning, pattern recognition and problem-solving speed.",
+        "quizHub.educational.title": "Educational Test",
+        "quizHub.educational.desc": "Explore study preferences and subjects that match your strengths.",
+        "quizHub.combined.title": "Combined Test",
+        "quizHub.combined.desc": "A condensed mix of aptitude + interests for a quick overall match.",
+        "quizHub.cse.title": "Educational Test (CSE)",
+        "quizHub.cse.desc": "For tech-inclined students: find the right CS/Engineering direction.",
+        "quizHub.start": "Start",
+        "quizHub.helpTitle": "Not sure where to start?",
+        "quizHub.helpSub": "Take the Combined Test first, then dive deeper with Aptitude or Educational tests.",
+        "quizHub.takeCombined": "Try Combined First",
+        "finalCta.title": "Ready to Discover Your Ideal Career?",
+        "finalCta.subtitle": "Take our scientifically-designed assessment and get personalized career recommendations in just 10 minutes.",
+        "finalCta.button": "Start Free Assessment",
+        // About Page Translations
+        "about.hero.story": "Our Story",
+        "about.hero.title": "About Career Ladder",
+        "about.hero.subtitle": "Empowering the next generation to discover their true career potential through innovative technology and personalized guidance.",
+        "about.mission.title": "Our Mission",
+        "about.mission.text": "At CareerLadder, we believe that everyone deserves to find a career they're passionate about. Our mission is to eliminate career confusion and help young professionals discover meaningful career paths that align with their unique strengths, interests, and aspirations.",
+        "about.mission.clearDirection": "Clear Direction",
+        "about.mission.clearDirectionDesc": "Providing clarity in career choices through data-driven insights",
+        "about.mission.personalGrowth": "Personal Growth",
+        "about.mission.personalGrowthDesc": "Supporting personal and professional development journeys",
+        "about.vision.title": "Our Vision",
+        "about.vision.text": "We envision a world where every individual can pursue a career that brings them fulfillment and purpose. By leveraging cutting-edge technology and psychological insights, we're creating a future where career decisions are informed, confident, and aligned with personal values.",
+        "about.vision.coreValues": "Core Values",
+        "about.vision.value1": "Innovation in career guidance",
+        "about.vision.value2": "Personalized approach for every user",
+        "about.vision.value3": "Data-driven decision making",
+        "about.vision.value4": "Continuous learning and improvement",
+        "about.vision.value5": "Empowering youth globally",
+        "about.stats.users": "Users Helped",
+        "about.stats.success": "Success Rate",
+        "about.stats.countries": "Countries",
+        "about.stats.founded": "Founded",
+        "about.team.title": "Meet Our Team",
+        "about.team.subtitle": "Passionate professionals dedicated to your career success",
+        "about.team.siThuTun.position": "AI & Machine Learning Specialist",
+        "about.team.siThuTun.desc": "Leads our AI algorithms that power personalized career recommendations. Former Google AI researcher with 8+ years in machine learning applications.",
+        "about.team.myatThiri.position": "Data Analyst",
+        "about.team.myatThiri.desc": "Transforms complex career data into actionable insights. Expert in statistical analysis and data visualization with a background in psychology.",
+        "about.team.linLaePhyu.position": "Full Stack Developer",
+        "about.team.linLaePhyu.desc": "Builds seamless user experiences across our platform. Specializes in React, Node.js, and creating intuitive interfaces for complex systems.",
+        "about.team.khinMyatThu.position": "Full Stack Developer",
+        "about.team.khinMyatThu.desc": "Creates robust backend systems and engaging frontend interfaces. Focuses on performance optimization and scalable architecture.",
+        "about.team.soePyae.position": "Backend Developer",
+        "about.team.soePyae.desc": "Architects our server infrastructure and database systems. Expert in Python, Django, and creating secure, high-performance APIs.",
+        "about.cta.title": "Ready to Discover Your Career Path?",
+        "about.cta.subtitle": "Take our assessment and get personalized career recommendations",
+        "about.cta.button": "Start Career Assessment",
+
+        //career-list.html
+        // Career Explorer translations
+        "careers.explorer": "Career Explorer",
+        "careers.explorerSubtitle": "Discover hundreds of career paths and find your perfect match",
+        "careers.searchPlaceholder": "Search careers...",
+        "careers.searchButton": "Search", 
+        "careers.all": "All",
+        "careers.allCategories": "All Categories",
+        "careers.noResultsTitle": "No careers found",
+        "careers.noResultsDesc": "Try adjusting your filters or search terms",
+        "careers.salaryRange": "${{min}} - ${{max}}",
+        "pagination.previous": "Previous",
+        "pagination.next": "Next",
+        "reviews.title": "What Our Users Are Saying",
+        "reviews.subtitle": "Real feedback. Real experiences.",
+        "reviews.overview": "Review Overview",
+        "reviews.filter": "Filter by Rating",
+        "reviews.filter_tip": "Tap to filter reviews",
+        "reviews.write_review": "Write a Review ✍️",
+        "reviews.placeholder": "Share your thoughts...",
+        "reviews.your_rating": "Your Rating:",
+        "reviews.login_link": "Log in",
+        "reviews.submit": "Submit",
+        "reviews.see_more": "See More",
+        "reviews.show_all": "Show All Reviews",
+        "reviews.no_results": "No reviews found for this rating 😕",
+        "reviews.role": "App User",
+        "reviews.none": "No reviews yet. Be the first!"
+       
+      },
+      my: {
+        "nav.home": "ပင်မစာမျက်နှာ", "nav.career": "အလုပ်အကိုင်များ", "nav.aboutus": "ကျွန်ုပ်တို့အကြောင်း", "nav.contactUs": "ဆက်သွယ်ရန်", "nav.getStarted": "စတင်ရန်", "nav.archiPaths": "တက္ကသိုလ်များ","nav.reviews":"အသုံးပြသူ သုံးသပ်ချက်",
+        "hero.trusted": "အလုပ်ရှာဖွေသူ ၁၅,၀၀၀+ ၏ ယုံကြည်မှုကို ရရှိထားသည်။",
+        "hero.titleHtml": "သင်၏အနာဂတ် အသက်မွေးဝမ်းကျောင်း၊ရှင်းလင်းပြတ်သားစွာ။",
+        "hero.subtitle": "ခန့်မှန်းခြင်းကို ရပ်လိုက်ပါ။ ကျွန်ုပ်တို့၏ သိပ္ပံနည်းကျ အကဲဖြတ်စနစ်သည် သင်၏ထူးခြားသော အားသာချက်များကို ဖော်ထုတ်ပေးပြီး သင်အောင်မြင်ရုံသာမက နှစ်သက်မြတ်နိုးမည့် အသက်မွေးဝမ်းကျောင်းလုပ်ငန်းများနှင့် ကိုက်ညီပေးပါသည်။ သင်၏ပြီးပြည့်စုံသောလမ်းကို ရှာဖွေလိုက်ပါ",
+        "hero.cta.findPath": "ကျွန်ုပ်၏ အလုပ်လမ်းကြောင်းကို ရှာပါ",
+        "hero.cta.howItWorks": "မည်သို့အလုပ်လုပ်သည်ကို ကြည့်ပါ",
+        "howItWorks.title": "Career Ladder အလုပ်လုပ်ပုံ",
+        "howItWorks.subtitle": "ရိုးရှင်းသောအဆင့်သုံးဆင့်ဖြင့်၊ ကျွန်ုပ်တို့သည် မသေချာမရေရာမှုများကို သင်၏ ပညာရေးနှင့် အသက်မွေးဝမ်းကျောင်းအတွက် ရှင်းလင်းပြီး လက်တွေ့ကျသော အစီအစဉ်တစ်ခုအဖြစ်သို့ ပြောင်းလဲပေးပါသည်။",
+        "howItWorks.step1.title": "၁။ မိမိကိုယ်ကို နက်နက်နဲနဲ ရှာဖွေခြင်း",
+        "howItWorks.step1.desc": "ကျွန်ုပ်တို့၏ လျင်မြန်ပြီး ထိုးထွင်းသိမြင်နိုင်သော စစ်ဆေးမှုသည် သင်၏ပင်ကိုစရိုက်၊ စိတ်ဝင်စားမှုများနှင့် သင့်ကို အမှန်တကယ် လှုံ့ဆော်ပေးသည့်အရာများကို နားလည်ရန် ကူညီပေးပါသည်။",
+        "howItWorks.step2.title": "၂။ ထက်မြက်စွာ ကိုက်ညီပေးခြင်း",
+        "howItWorks.step2.desc": "သင်၏ထူးခြားသော ပရိုဖိုင်နှင့်ကိုက်ညီသော အလုပ်လမ်းကြောင်းများ၊ လစာခန့်မှန်းချက်များနှင့် အနာဂတ်ဝယ်လိုအားများပါဝင်သည့် ကိုယ်ပိုင်အစီရင်ခံစာကို ရယူပါ။",
+        "howItWorks.step3.title": "၃။ တက္ကသိုလ်နှင့် အဓိကဘာသာရပ် လမ်းညွှန်မှု",
+        "howItWorks.step3.desc": "သင်၏ စံပြအသက်မွေးဝမ်းကျောင်းလမ်းကြောင်းကို မှန်ကန်သော ပညာရေးအစီအစဉ်နှင့် ချိတ်ဆက်ပါ။ သင့်ကို ထိုနေရာသို့ရောက်ရှိရန် သက်ဆိုင်ရာ တက္ကသိုလ်အဓိကဘာသာရပ်များနှင့် တက္ကသိုလ်များကို ကျွန်ုပ်တို့ အကြံပြုပါသည်။",
+        "painPoint.text": "ပညာရှင်များ၏ ၈၀% သည် ၎င်းတို့၏ အသက်မွေးဝမ်းကျောင်း ရွေးချယ်မှုများနှင့်ပတ်သက်၍ နောင်တရခဲ့ဖူးသည်။ သင်မှန်ကန်သော ၂၀% တွင် ပါဝင်ကြောင်း သေချာစေရန် ကျွန်ုပ်တို့မှ ရှင်းလင်းပြတ်သားမှုကို ပေးပါသည်။",
+        "explore.title": "ဖြစ်နိုင်ခြေရှိသော လမ်းကြောင်းများကို စူးစမ်းလေ့လာပါ",
+        "explore.subtitle": "ကျွန်ုပ်တို့၏ အကဲဖြတ်စနစ်မှ လွှမ်းခြုံထားသော အသက်မွေးဝမ်းကြောင်းလုပ်ငန်းများစွာကို လေ့လာကြည့်ပါ။ သင်၏ပြီးပြည့်စုံသော ကိုက်ညီမှုသည် သင်တစ်ခါမှ မစဉ်းစားဖူးသော တစ်ခုဖြစ်နိုင်သည်။",
+        "explore.job1.title": "ဆော့ဖ်ဝဲအင်ဂျင်နီယာ",
+        "explore.job1.desc": "ဝဘ်အက်ပ်များမှ ရှုပ်ထွေးသောစနစ်များအထိ ကျွန်ုပ်တို့ကမ္ဘာကို စွမ်းအားပေးသည့် ဒစ်ဂျစ်တယ်အခြေခံအဆောက်အအုံကို တည်ဆောက်ပြီး ထိန်းသိမ်းပါ။",
+        "explore.job2.title": "ဒေတာလေ့လာဆန်းစစ်သူ",
+        "explore.job2.desc": "စီးပွားရေးလုပ်ငန်းများကို ပိုမိုစမတ်ကျပြီး အထောက်အထား-အခြေပြု ဆုံးဖြတ်ချက်များချနိုင်ရန် ကူညီပေးရင်း မပြုပြင်ရသေးသောဒေတာများကို လုပ်ဆောင်နိုင်သော ထိုးထွင်းသိမြင်မှုများအဖြစ်သို့ ပြောင်းလဲပါ။",
+        "explore.job3.title": "UX/UI ဒီဇိုင်နာ",
+        "explore.job3.desc": "အသုံးပြုရလွယ်ကူပြီး အမြင်အာရုံဆွဲဆောင်မှုရှိသော လှပပြီး အလိုလိုသိနိုင်သော ဒစ်ဂျစ်တယ်အတွေ့အကြုံများကို ဖန်တီးပါ။",
+        "explore.job4.title": "ကျန်းမာရေးစောင့်ရှောက်မှု စီမံခန့်ခွဲသူ",
+        "explore.job4.desc": "ထိရောက်သောလည်ပတ်မှုနှင့် အရည်အသွေးရှိသော လူနာစောင့်ရှောက်မှုကို သေချာစေရန် ဆေးဘက်ဆိုင်ရာ အဆောက်အအုံများ၏ စီးပွားရေးဘက်ခြမ်းကို စီမံခန့်ခွဲပါ။",
+        "explore.learnMore": "ပိုမိုလေ့လာရန်",
+        "explore.button": "အလုပ်အကိုင်အားလုံးကို စူးစမ်းပါ",
+        "painPoints.stat": "၈၀%",
+        "painPoints.subtitle": "ပညာရှင်များ၏ အသက်မွေးဝမ်းကျောင်းဆိုင်ရာ နောင်တရခြင်း",
+        "painPoints.regret": "အလုပ်အကိုင်ဆိုင်ရာ နောင်တ",
+        "painPoints.wastedTime": "အချိန်ဖြုန်းတီးခြင်း",
+        "painPoints.wastedTimeDesc": "အလုပ်မှားများတွင် ပျမ်းမျှ ၃ နှစ်ကျော် အချိန်ကုန်ခြင်း",
+        "painPoints.incomeLoss": "ဝင်ငွေဆုံးရှုံးမှု",
+        "painPoints.incomeLossDesc": "တစ်သက်တာဝင်ငွေ ၄၀% အထိ လျော့နည်းခြင်း",
+        "painPoints.satisfaction": "ကျေနပ်မှုနည်းပါးခြင်း",
+        "painPoints.satisfactionDesc": "၆၇% မှာ အလုပ်မကျေနပ်မှုရှိသည်ဟု ဆိုသည်",
+        "painPoints.solutionTitle": "ကျွန်ုပ်တို့သည် အသက်မွေးဝမ်းကျောင်း ရှာဖွေတွေ့ရှိမှုကို ပြောင်းလဲနေသည်",
+        "painPoints.solutionText": "ဒေတာကိုအခြေခံသော အကဲဖြတ်မှုများနှင့် ပုဂ္ဂိုလ်ရေးဆန်သော လမ်းညွှန်မှုများမှတစ်ဆင့်၊ သင်၏ပင်ကိုစရိုက်၊ ကျွမ်းကျင်မှု၊ နှင့် ရည်မှန်းချက်များနှင့် ကိုက်ညီသော အသက်မွေးဝမ်းကျောင်းလမ်းကြောင်းများကို ရှာဖွေတွေ့ရှိနိုင်ရန် ကူညီပေးပါသည်။",
+        "painPoints.cta": "သင်၏ စံပြအသက်မွေးဝမ်းကျောင်းလမ်းကြောင်းကို ရှာဖွေပါ",
+        "testimonials.title": "တကယ့်အဖြစ်အပျက်များ၊ တကယ့်ရလဒ์များ",
+        "testimonials.subtitle": "ကျွန်ုပ်တို့သည် အခြားသူများကို ၎င်းတို့၏ အသက်မွေးဝမ်းကြောင်းများတွင် ရှင်းလင်းပြတ်သားမှုနှင့် လမ်းညွှန်မှုရှာဖွေတွေ့ရှိရန် မည်သို့ကူညီပေးခဲ့သည်ကို ကြည့်ပါ။",
+        "testimonials.t1.quote": "ကျွန်မ လုံးဝလမ်းပျောက်နေခဲ့တာပါ။ ဒီစစ်ဆေးမှုက ကျွန်မကို အလုပ်အကိုင်နာမည်တွေပဲ ပေးခဲ့တာမဟုတ်ဘဲ၊ ဘာကြောင့် အချို့အလုပ်တွေက သင့်တော်တယ်ဆိုတာကို နားလည်အောင် ကူညီပေးခဲ့တယ်။ နောက်ဆုံးတော့ ကျွန်မရဲ့အနာဂတ်အတွက် ယုံကြည်မှုရှိလာပါပြီ။",
+        "testimonials.t1.name": "ဂျိန်း ဒီ",
+        "testimonials.t1.role": "UX ဒီဇိုင်းတွင် သူမ၏လမ်းကြောင်းကို တွေ့ရှိခဲ့သည်",
+        "testimonials.t2.quote": "အလုပ်ပြောင်းဖို့ရှာနေတဲ့သူတစ်ယောက်အနေနဲ့၊ ဒါက တန်ဖိုးမဖြတ်နိုင်ပါဘူး။ ရလဒ်တွေက အံ့သြစရာကောင်းလောက်အောင် တိကျပြီး ကျွန်တော်တစ်ခါမှ မစဉ်းစားဖူးတဲ့ အခန်းကဏ္ဍတွေကို မိတ်ဆက်ပေးခဲ့တယ်။ အရမ်းအကြံပြုပါတယ်!",
+        "testimonials.t2.name": "မတ်ခ် အက်စ်",
+        "testimonials.t2.role": "ဒေတာလေ့လာဆန်းစစ်ခြင်းသို့ ကူးပြောင်းနေသည်",
+        "testimonials.t3.quote": "လမ်းပြမြေပုံအင်္ဂါရပ်က အဓိကကျတဲ့ အပြောင်းအလဲတစ်ခုပါ။ ကြီးမားတဲ့ ပန်းတိုင်တစ်ခုကို သေးငယ်ပြီး စီမံခန့်ခွဲနိုင်တဲ့ အဆင့်တွေအဖြစ် ခွဲခြမ်းပေးခဲ့တယ်။ ကျွန်မရဲ့ခရီးကို စတင်ဖို့ စိတ်ဖိစီးမှုနည်းပြီး ပိုပြီးစွမ်းဆောင်နိုင်တယ်လို့ ခံစားခဲ့ရတယ်။",
+        "testimonials.t3.name": "စာရာ ကေ",
+        "testimonials.t3.role": "ဒစ်ဂျစ်တယ်စျေးကွက်ရှာဖွေသူ ဖြစ်ရန် ရည်မှန်းထားသူ",
+        "footer.about": "ဒေတာအခြေပြုအကဲဖြတ်ချက်များနှင့် စိတ်ကြိုက်လမ်းညွှန်မှုများဖြင့် လူတစ်ဦးချင်းစီ၏ အကောင်းဆုံးအလုပ်အကိုင်လမ်းကြောင်းများကို ရှာဖွေရန် ကူညီပေးသည်", "footer.company": "ကုမ္ပဏီ", "footer.aboutUs": "ကျွန်ုပ်တို့အကြောင်း", "footer.careers": "အလုပ်အကိုင်များ", "footer.blog": "ဘလော့ဂ်", "footer.press": "သတင်းမီဒီယာ", "footer.resources": "အရင်းအမြစ်များ", "footer.careerGuides": "အလုပ်အကိုင်လမ်းညွှန်များ", "footer.skillAssessments": "ကျွမ်းကျင်မှုအကဲဖြတ်ချက်များ", "footer.faq": "မေးခွန်းများ", "footer.support": "အကူအညီ", "footer.newsletter": "နောက်ဆုံးရသတင်းများရယူရန်", "footer.newsletterSubtitle": "အလုပ်အကိုင်အကြံပြုချက်များနှင့် နောက်ဆုံးရသတင်းများအတွက် ကျွန်ုပ်တို့၏သတင်းလွှာကို စာရင်းသွင်းပါ", "footer.emailPlaceholder": "သင့်အီးမေးလ်လိပ်စာ", "footer.subscribe": "စာရင်းသွင်းရန်", "footer.rights": "အခွင့်အရေးအားလုံးရယူထားသည်",
+        "quizHub.title": "စမ်းသပ်မှုကို ရွေးချယ်ပါ",
+        "quizHub.heading": "သင့်ရည်မှန်းချက်နှင့် ကိုက်ညီသော လမ်းကြောင်းကို စတင်ပါ",
+        "quizHub.subtitle": "စတင်လိုသော စမ်းသပ်မှုကို ရွေးပါ။ တစ်ခုထက်ပိုလည်း ဖြေဆိုနိုင်ပြီး ရလဒ်များ ပိုပြီးတိကျလာပါမည်။",
+        "quizHub.aptitude.title": "Aptitude စမ်းသပ်မှု",
+        "quizHub.aptitude.desc": "အကျိုးဆောင်ခြင်း၊ ပုံစံအလံသိခြင်းနှင့် ပြဿနာဖြေရှင်းနိုင်မှုကို တိုင်းတာပါ။",
+        "quizHub.educational.title": "Educational စမ်းသပ်မှု",
+        "quizHub.educational.desc": "သင်ယူမှုစိတ်ကြိုက်ပုံနှင့် ကိုက်ညီသော ဘာသာရပ်များကို ရှာဖွေပါ။",
+        "quizHub.combined.title": "Combined စမ်းသပ်မှု",
+        "quizHub.combined.desc": "Aptitude + စိတ်ဝင်စားမှုများကို ပေါင်းစည်းထားသည့် ရိုးရှင်းလျင်မြန်သော စုစည်းပြိုင်ဆိုင်ချက်။",
+        "quizHub.cse.title": "Educational စမ်းသပ်မှု (CSE)",
+        "quizHub.cse.desc": "နည်းပညာကို စိတ်ဝင်စားသူများအတွက် CS/Engineering လမ်းကြောင်းကို ရှာဖွေပါ။",
+        "quizHub.start": "စတင်ရန်",
+        "quizHub.helpTitle": "မည်သို့စတင်ရမည်မသေချာဘူးလား?",
+        "quizHub.helpSub": "အရင်ဆုံး Combined စမ်းသပ်မှုကို ဖြေဆိုပြီး နောက်တစ်ဆင့် Aptitude သို့မဟုတ် Educational ဖြင့် ဆက်လက်လေ့လာပါ။",
+        "quizHub.takeCombined": "ပထမဦးဆုံး Combined ဖြေကြည့်ပါ",
+        "finalCta.title": "သင်၏ စံပြအသက်မွေးဝမ်းကျောင်းကို ရှာဖွေရန် အဆင်သင့်ဖြစ်ပြီလား?",
+        "finalCta.subtitle": "ကျွန်ုပ်တို့၏ သိပ္ပံနည်းကျ-ဒီဇိုင်းထုတ်ထားသော အကဲဖြတ်မှုကို ဖြေဆိုပြီး ၁၀ မိနစ်အတွင်း သင့်အတွက် သီးသန့် အသက်မွေးဝမ်းကျောင်းဆိုင်ရာ အကြံပြုချက်များကို ရယူလိုက်ပါ။",
+        "finalCta.button": "အခမဲ့ အကဲဖြတ်မှုကို စတင်ပါ",
+        // About Page Translations - Myanmar
+        "about.hero.story": "ကျွန်ုပ်တို့၏ဇာတ်ကြောင်း",
+        "about.hero.title": "Career Ladder အကြောင်း",
+        "about.hero.subtitle": "နည်းပညာအသစ်များနှင့် ပုဂ္ဂိုလ်ရေးဆိုင်ရာ လမ်းညွှန်မှုများဖြင့် လူငယ်များအား ၎င်းတို့၏ အသက်မွေးဝမ်းကြောင်းအလားအလာများကို ရှာဖွေတွေ့ရှိရန် စွမ်းဆောင်ပေးနေပါသည်။",
+        "about.mission.title": "ကျွန်ုပ်တို့၏ ရည်ရွယ်ချက်",
+        "about.mission.text": "CareerLadder တွင် လူတိုင်းသည် ၎င်းတို့ စိတ်ဝင်စားသော အသက်မွေးဝမ်းကြောင်းကို ရှာဖွေတွေ့ရှိထိုက်သည်ဟု ကျွန်ုပ်တို့ယုံကြည်ပါသည်။ ကျွန်ုပ်တို့၏ ရည်ရွယ်ချက်မှာ အသက်မွေးဝမ်းကြောင်းဆိုင်ရာ ရှုပ်ထွေးမှုများကို ဖယ်ရှားပြီး လူငယ်များအား ၎င်းတို့၏ စွမ်းရည်များ၊ စိတ်ဝင်စားမှုများနှင့် ရည်မှန်းချက်များနှင့် ကိုက်ညီသော အဓိပ္ပာယ်ရှိသည့် အသက်မွေးဝမ်းကြောင်းလမ်းကြောင်းများကို ရှာဖွေတွေ့ရှိရန် ကူညီပေးရန်ဖြစ်သည်။",
+        "about.mission.clearDirection": "ရှင်းလင်းသော ဦးတည်ချက်",
+        "about.mission.clearDirectionDesc": "ဒေတာအခြေပြု ထိုးထွင်းသိမြင်မှုများဖြင့် အသက်မွေးဝမ်းကြောင်းရွေးချယ်မှုများတွင် ရှင်းလင်းမှုပေးခြင်း",
+        "about.mission.personalGrowth": "ကိုယ်ရေးကိုယ်တာ တိုးတက်မှု",
+        "about.mission.personalGrowthDesc": "ကိုယ်ရေးကိုယ်တာနှင့် ကျွမ်းကျင်မှုဆိုင်ရာ ဖွံ့ဖြိုးတိုးတက်မှု ခရီးကြောင်းများကို ပံ့ပိုးကူညီခြင်း",
+        "about.vision.title": "ကျွန်ုပ်တို့၏ မြင်ကွင်း",
+        "about.vision.text": "လူတိုင်းသည် ၎င်းတို့အား ကျေနပ်မှုနှင့် ရည်ရွယ်ချက်ရှိစေသော အသက်မွေးဝမ်းကြောင်းကို လိုက်စားနိုင်သည့် ကမ္ဘာတစ်ခုကို ကျွန်ုပ်တို့မြင်ယောင်ကြည့်ပါသည်။ အဆင့်မြင့်နည်းပညာများနှင့် စိတ်ပညာဆိုင်ရာ ထိုးထွင်းသိမြင်မှုများကို အသုံးချခြင်းဖြင့်၊ အသက်မွေးဝမ်းကြောင်းဆိုင်ရာ ဆုံးဖြတ်ချက်များသည် အချက်အလက်အခြေပြု၊ ယုံကြည်မှုရှိပြီး ပုဂ္ဂိုလ်ရေးဆိုင်ရာ တန်ဖိုးများနှင့် ကိုက်ညီသော အနာဂတ်တစ်ခုကို ကျွန်ုပ်တို့ဖန်တီးနေပါသည်။",
+        "about.vision.coreValues": "အဓိက တန်ဖိုးများ",
+        "about.vision.value1": "အသက်မွေးဝမ်းကြောင်းလမ်းညွှန်မှုတွင် ဆန်းသစ်တီထွင်မှု",
+        "about.vision.value2": "အသုံးပြုသူတိုင်းအတွက် ပုဂ္ဂိုလ်ရေးဆန်သော ချဉ်းကပ်မှု",
+        "about.vision.value3": "ဒေတာအခြေပြု ဆုံးဖြတ်ချက်ချမှတ်ခြင်း",
+        "about.vision.value4": "ဆက်လက်သင်ယူခြင်းနှင့် တိုးတက်မှု",
+        "about.vision.value5": "ကမ္ဘာတစ်ဝှမ်းရှိ လူငယ်များအား စွမ်းဆောင်ရည်မြှင့်တင်ခြင်း",
+        "about.stats.users": "ကူညီခံရသော အသုံးပြုသူများ",
+        "about.stats.success": "အောင်မြင်မှုနှုန်း",
+        "about.stats.countries": "နိုင်ငံများ",
+        "about.stats.founded": "တည်ထောင်ခဲ့သည်",
+        "about.team.title": "ကျွန်ုပ်တို့၏ အဖွဲ့နှင့် တွေ့ဆုံပါ",
+        "about.team.subtitle": "သင့်အသက်မွေးဝမ်းကြောင်းအောင်မြင်မှုအတွက် စွမ်းစွမ်းတမံဆောင်ရွက်နေသော ပရော်ဖက်ရှင်နယ်များ",
+        "about.team.siThuTun.position": "AI နှင့် စက်သင်ယူမှု ကျွမ်းကျင်သူ",
+        "about.team.siThuTun.desc": "ပုဂ္ဂိုလ်ရေးဆိုင်ရာ အသက်မွေးဝမ်းကြောင်းအကြံပြုချက်များကို စွမ်းဆောင်ပေးသော ကျွန်ုပ်တို့၏ AI အယ်လ်ဂိုရီသမ်များကို ဦးဆောင်သည်။ Google AI သုတေသီဟောင်းတစ်ဦးဖြစ်ပြီး စက်သင်ယူမှုအပလီကေးရှင်းများတွင် ၈ နှစ်ကျော် အတွေ့အကြုံရှိသည်။",
+        "about.team.myatThiri.position": "ဒေတာ ခွဲခြမ်းစိတ်ဖြာသူ",
+        "about.team.myatThiri.desc": "ရှုပ်ထွေးသော အသက်မွေးဝမ်းကြောင်းဆိုင်ရာ ဒေတာများကို လက်တွေကျသော ထိုးထွင်းသိမြင်မှုများအဖြစ် ပြောင်းလဲပေးသည်။ စိတ်ပညာအခြေခံဖြင့် စာရင်းအင်းဆိုင်ရာ ခွဲခြမ်းစိတ်ဖြာမှုနှင့် ဒေတာမြင်ကွင်းပုံဖော်ခြင်းတွင် ကျွမ်းကျင်သူ။",
+        "about.team.linLaePhyu.position": "Full Stack ဆော့ဖ်ဝဲဖွံ့ဖြိုးရေးသမား",
+        "about.team.linLaePhyu.desc": "ကျွန်ုပ်တို့၏ ပလက်ဖောင်းတစ်လျှောက် ချောမွေ့သော အသုံးပြုသူအတွေ့အကြုံများကို တည်ဆောက်ပေးသည်။ React, Node.js နှင့် ရှုပ်ထွေးသောစနစ်များအတွက် အလွယ်တကူနားလည်နိုင်သော အင်တာဖေ့စ်များ ဖန်တီးရာတွင် အထူးပြုသည်။",
+        "about.team.khinMyatThu.position": "Full Stack ဆော့ဖ်ဝဲဖွံ့ဖြိုးရေးသမား",
+        "about.team.khinMyatThu.desc": "ခိုင်မာသော backend စနစ်များနှင့် ဆွဲဆောင်မှုရှိသော frontend အင်တာဖေ့စ်များကို ဖန်တီးပေးသည်။ စွမ်းဆောင်ရည် အကောင်းဆုံးဖြစ်အောင်ပြုလုပ်ခြင်းနှင့် ချဲ့ထွင်နိုင်သော ဗိသုကာပုံစံများကို အာရုံစိုက်သည်။",
+        "about.team.soePyae.position": "Backend ဆော့ဖ်ဝဲဖွံ့ဖြိုးရေးသမား",
+        "about.team.soePyae.desc": "ကျွန်ုပ်တို့၏ ဆာဗာများနှင့် ဒေတာဘေ့စ်စနစ်များ၏ ဗိသုကာပုံစံကို ဒီဇိုင်းဆွဲပေးသည်။ Python, Django နှင့် လုံခြုံပြီး စွမ်းဆောင်ရည်မြင့် API များ ဖန်တီးရာတွင် ကျွမ်းကျင်သူ။",
+        "about.cta.title": "သင့်အသက်မွေးဝမ်းကြောင်းလမ်းကြောင်းကို ရှာဖွေရန် အဆင်သင့်ဖြစ်ပြီလား?",
+        "about.cta.subtitle": "ကျွန်ုပ်တို့၏ အကဲဖြတ်ချက်ကို ဖြေဆိုပြီး ပုဂ္ဂိုလ်ရေးဆိုင်ရာ အသက်မွေးဝမ်းကြောင်းအကြံပြုချက်များကို ရယူပါ",
+        "about.cta.button": "အသက်မွေးဝမ်းကြောင်း အကဲဖြတ်ချက် စတင်ရန်",
+
+        //career-list.html - Myanmar
+       // Career Explorer translations  
+        "careers.explorer": "အလုပ်အကိုင်ရှာဖွေရေးကိရိယာ",
+        "careers.explorerSubtitle": "ရာနှင့်ချီသော အလုပ်အကိုင်လမ်းကြောင်းများကို ရှာဖွေပြီး သင့်တော်သော အလုပ်အကိုင်ကို ရှာဖွေလိုက်ပါ",
+        "careers.searchPlaceholder": "အလုပ်အကိုင်များ ရှာဖွေရန်...",
+        "careers.searchButton": "ရှာဖွေရန်",
+        "careers.all": "အားလုံး", 
+        "careers.allCategories": "အမျိုးအစားအားလုံး",
+        "careers.noResultsTitle": "အလုပ်အကိုင်များ မတွေ့ရှိပါ",
+        "careers.noResultsDesc": "စစ်ထုတ်မှုများ သို့မဟုတ် ရှာဖွေရေးစကားလုံးများကို ပြန်လည်ပြင်ဆင်ကြည့်ပါ",
+        "careers.salaryRange": "{{min}} - {{max}} ကျပ်",
+        "pagination.previous": "ရှေ့သို့",
+        "pagination.next": "နောက်သို့",
+        "reviews.title": "အသုံးပြုသူများ၏ မှတ်ချက်များ",
+        "reviews.subtitle": "တကယ့်အကြံပြုချက်များ။ တကယ့် အတွေ့အကြုံများ။",
+        "reviews.overview": "အကြိုက်ဆုံး မှတ်ချက်များ",
+        "reviews.filter": "အဆင့်အလိုက် စစ်ထုတ်ပါ",
+        "reviews.filter_tip": "နှိပ်၍ မှတ်ချက်များစစ်ထုတ်ပါ",
+        "reviews.write_review": "မှတ်ချက်ရေးပါ ✍️",
+        "reviews.placeholder": "သင့်အတွေ့အကြုံကိုမျှဝေပါ...",
+        "reviews.your_rating": "သင့်အဆင့်:",
+        "reviews.login_link": "အကောင့်ဝင်ရန်",
+        "reviews.submit": "တင်ရန်",
+        "reviews.see_more": "နောက်ထပ်ကြည့်ရန်",
+        "reviews.show_all": "အားလုံးပြပါ",
+        "reviews.no_results": "ဒီအဆင့်အတွက် မှတ်ချက် မတွေ့ပါ 😕",
+        "reviews.role": "အက်ပ်အသုံးပြုသူ",
+        "reviews.none": "မှတ်ချက် မရှိသေးပါ၊ ပထမဆုံးဖြစ်ပါစေ!"
+      },
+    };
+
+    // Theme Management
+    const themeToggle = document.getElementById('themeToggle');
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'light') document.body.classList.add('light-theme');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const newTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+      });
+    }
+
+    // In base.html - Update the language management section
+const languageBtn = document.getElementById('languageBtn');
+const languageDropdown = document.getElementById('languageDropdown');
+
+// Get language from server-side variable or localStorage
+const serverLang = "{{ current_language|default:'en' }}";
+const savedLang = localStorage.getItem('language') || serverLang || 'en';
+const currentLanguageElement = document.getElementById('currentLanguage');
+
+// Initialize language display
+if (currentLanguageElement) {
+    currentLanguageElement.textContent = savedLang.toUpperCase();
+    // Also update the active state in dropdown
+    document.querySelectorAll('.language-option').forEach(opt => {
+        opt.classList.remove('active');
+        if (opt.getAttribute('data-lang') === savedLang) {
+            opt.classList.add('active');
+        }
+    });
+}
+
+// Update content with the correct language
+updateContent(savedLang);
+
+// Language dropdown functionality
+if (languageBtn) {
+    languageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        languageDropdown.classList.toggle('show');
+    });
+}
+
+document.addEventListener('click', (e) => {
+    if (!languageBtn?.contains(e.target) && !languageDropdown?.contains(e.target)) {
+        languageDropdown?.classList.remove('show');
+    }
+});
+
+// Update language option click handlers
+document.querySelectorAll('.language-option').forEach(opt => {
+    opt.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute('data-lang');
+        
+        // Update active state
+        document.querySelectorAll('.language-option').forEach(o => o.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Update current language display
+        if (currentLanguageElement) {
+            currentLanguageElement.textContent = lang.toUpperCase();
+        }
+        
+        // Update content and storage
+        updateContent(lang);
+        localStorage.setItem('language', lang);
+        
+        // Close dropdown
+        languageDropdown?.classList.remove('show');
+        
+        // If you want to refresh the page with the new language, uncomment below:
+        // window.location.href = window.location.pathname + '?lang=' + lang;
+    });
+});
+
+// Enhanced updateContent function to handle header elements
+function updateContent(lang) {
+    console.log('Updating content for language:', lang);
+    
+    // Update all elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang]?.[key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+    
+    // Update placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang]?.[key]) {
+            el.setAttribute('placeholder', translations[lang][key]);
+        }
+    });
+    
+    // Update navigation links if they have data-i18n
+    document.querySelectorAll('.nav-link[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang]?.[key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+    
+    // Update current language display in header
+    if (currentLanguageElement) {
+        currentLanguageElement.textContent = lang.toUpperCase();
+    }
+}
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (!navbar) return;
+      if (window.scrollY > 50) navbar.classList.add('scrolled');
+      else navbar.classList.remove('scrolled');
+    });
+
+    // Animation on scroll
+    document.addEventListener('DOMContentLoaded', function () {
+      const fadeElements = document.querySelectorAll('.fade-in-up');
+      const fadeInOnScroll = function () {
+        fadeElements.forEach(el => {
+          const top = el.getBoundingClientRect().top;
+          if (top < window.innerHeight - 150) {
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0)";
+          }
+        });
+      };
+      fadeElements.forEach(el => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(30px)";
+        el.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+      });
+      fadeInOnScroll();
+      window.addEventListener('scroll', fadeInOnScroll);
+
+      /* ---- Back to top button logic ---- */
+      const toTopBtn = document.getElementById('toTopBtn');
+      if (toTopBtn) {
+        const toggleBtn = () => {
+          if (window.scrollY > 400) {
+            toTopBtn.classList.add('show');
+          } else {
+            toTopBtn.classList.remove('show');
+          }
+        };
+        window.addEventListener('scroll', toggleBtn, { passive: true });
+        toTopBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        toggleBtn();
+      }
+    });
+  </script>
+  
+
+
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,573 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Career Ladder | {{ career.get_title|default:"Career Details" }}{% endblock %}
+
+{% block extra_head %}
+<meta name="description" content="{{ career.get_meta_description|default:'' }}">
+<!-- Burmese Font Support -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  .career-layout-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  
+  .career-main-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .career-sidebar {
+    width: 400px;
+    flex-shrink: 0;
+  }
+  
+  .feature-card {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+  
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--card-bg);
+    white-space: nowrap;
+  }
+  
+  .salary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  
+  .salary-table td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .salary-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Burmese Font Styles */
+  .burmese-text {
+    font-family: 'Noto Sans Myanmar', 'Myanmar3', 'Padauk', 'Tharlon', 'Masterpiece Uni Sans', sans-serif;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Hide all content until language is decided */
+  body:not(.language-ready) .translation-content {
+    opacity: 0;
+  }
+  
+  body.language-ready .translation-content {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+  
+  @media (max-width: 992px) {
+    .career-layout-container {
+      flex-direction: column;
+    }
+    
+    .career-sidebar {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Set initial language from server -->
+<script>
+// Set language immediately before any content renders
+document.addEventListener('DOMContentLoaded', function() {
+    const serverLang = '{{ current_language }}' || localStorage.getItem('language') || 'en';
+    document.body.setAttribute('data-initial-lang', serverLang);
+    localStorage.setItem('language', serverLang);
+    document.body.classList.add('language-ready');
+});
+</script>
+
+<section class="hero-section translation-content" style="padding: 8rem 0 4rem; background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);">
+  <div class="container">
+    <div class="hero-content">
+      <nav aria-label="breadcrumb" style="margin-bottom: 2rem;">
+        <ol class="breadcrumb" style="background: transparent; padding: 0; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <li style="display: flex; align-items: center; gap: 0.5rem;">
+            <a href="{% url 'home' %}" style="color: var(--text-secondary); text-decoration: none;">
+              {% if current_language == 'my' %}မူလစာမျက်နှာ{% else %}Home{% endif %}
+            </a>
+            <i class="bi bi-chevron-right" style="color: var(--text-secondary); font-size: 0.8rem;"></i>
+          </li>
+          <li style="display: flex; align-items: center; gap: 0.5rem;">
+            <a href="{% url 'career_list' %}" style="color: var(--text-secondary); text-decoration: none;">
+              {% if current_language == 'my' %}အလုပ်အကိုင်များ{% else %}Careers{% endif %}
+            </a>
+            <i class="bi bi-chevron-right" style="color: var(--text-secondary); font-size: 0.8rem;"></i>
+          </li>
+          <li style="color: var(--accent-teal); font-weight: 500;" class="burmese-text">
+            {% if current_language == 'my' and career.get_title_my %}
+              {{ career.get_title_my }}
+            {% else %}
+              {{ career.get_title }}
+            {% endif %}
+          </li>
+        </ol>
+      </nav>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Career Title -->
+        <h1 style="font-size: 3rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+          {% if current_language == 'my' and career.get_title_my %}
+            {{ career.get_title_my }}
+          {% else %}
+            {{ career.get_title }}
+          {% endif %}
+        </h1>
+
+        <!-- Category -->
+        <p style="font-size: 1.25rem; color: var(--text-secondary); margin: 0;">
+          {% if career.category %}
+            {% if current_language == 'my' and career.category.get_name_my %}
+              {{ career.category.get_name_my }}
+            {% else %}
+              {{ career.category.get_name }}
+            {% endif %}
+          {% else %}
+            {% if current_language == 'my' %}အထွေထွေ{% else %}General{% endif %}
+          {% endif %}
+        </p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+          {% if career.salary_range_min and career.salary_range_max %}
+          <div class="hero-badge">
+            <i class="bi bi-currency-dollar"></i>
+            <span>
+              {% if current_language == 'my' %}
+                {{ career.salary_range_min|floatformat:0 }} - {{ career.salary_range_max|floatformat:0 }} ကျပ်/ နှစ်
+              {% else %}
+               {{ career.salary_range_min|floatformat:0 }} MMK - {{ career.salary_range_max|floatformat:0 }} MMK /year
+              {% endif %}
+            </span>
+          </div>
+          {% endif %}
+          
+          <div class="hero-badge">
+            <i class="bi bi-graph-up"></i>
+            <span>
+              {% if career.job_outlook_en %}
+                {% if current_language == 'my' %}
+                  {{ career.get_job_outlook_my }} ဝန်ထမ်းလိုအပ်ချက်
+                {% else %}
+                  {{ career.get_job_outlook }} Demand
+                {% endif %}
+              {% else %}
+                {% if current_language == 'my' %}ပျမ်းမျှ ဝန်ထမ်းလိုအပ်ချက်{% else %}Average Demand{% endif %}
+              {% endif %}
+            </span>
+          </div>
+          
+          {% if career.experience_level %}
+          <div class="hero-badge">
+            <i class="bi bi-person-badge"></i>
+            <span>
+              {% if current_language == 'my' %}
+                {{ career.experience_level_my|default:career.experience_level }} အဆင့်
+              {% else %}
+                {{ career.experience_level|title }} Level
+              {% endif %}
+            </span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="career-content-section translation-content" style="padding: 3rem 0; background: var(--primary-bg);">
+  <div class="container">
+    <div class="career-layout-container">
+      <!-- Main Content Column -->
+      <div class="career-main-content">
+        <!-- Career Overview -->
+        {% if career.description_en or career.description_my %}
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="bi bi-file-text" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h3 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}အလုပ်အကိုင်အခြေအနေ{% else %}Career Overview{% endif %}
+            </h3>
+          </div>
+          <div style="line-height: 1.7; color: var(--text-secondary); font-size: 1.1rem;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+            {% if current_language == 'my' and career.description_my %}
+              {{ career.description_my|linebreaks }}
+            {% elif career.description_en %}
+              {{ career.description_en|linebreaks }}
+            {% else %}
+              {% if current_language == 'my' %}ဖော်ပြချက်မရှိပါ{% else %}No description available{% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Key Responsibilities -->
+        {% if career.responsibilities_en or career.responsibilities_my %}
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="bi bi-list-task" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h3 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}အဓိကတာဝန်များ{% else %}Key Responsibilities{% endif %}
+            </h3>
+          </div>
+          <div style="line-height: 1.7; color: var(--text-secondary); font-size: 1.1rem;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+            {% if current_language == 'my' and career.responsibilities_my %}
+              {{ career.responsibilities_my|linebreaks }}
+            {% elif career.responsibilities_en %}
+              {{ career.responsibilities_en|linebreaks }}
+            {% else %}
+              {% if current_language == 'my' %}ဖော်ပြချက်မရှိပါ{% else %}No description available{% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Skills Required -->
+        {% if career.skills_required_en or career.skills_required_my %}
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="bi bi-tools" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h3 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}လိုအပ်သော ကျွမ်းကျင်မှုများ{% else %}Skills Required{% endif %}
+            </h3>
+          </div>
+          <div style="line-height: 1.7; color: var(--text-secondary); font-size: 1.1rem;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+            {% if current_language == 'my' and career.skills_required_my %}
+              {{ career.skills_required_my|linebreaks }}
+            {% elif career.skills_required_en %}
+              {{ career.skills_required_en|linebreaks }}
+            {% else %}
+              {% if current_language == 'my' %}ဖော်ပြချက်မရှိပါ{% else %}No description available{% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Education Requirements -->
+        {% if career.education_requirements_en or career.education_requirements_my %}
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="bi bi-mortarboard" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h3 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}ပညာရေးလိုအပ်ချက်များ{% else %}Education Requirements{% endif %}
+            </h3>
+          </div>
+          <div style="line-height: 1.7; color: var(--text-secondary); font-size: 1.1rem;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+            {% if current_language == 'my' and career.education_requirements_my %}
+              {{ career.education_requirements_my|linebreaks }}
+            {% elif career.education_requirements_en %}
+              {{ career.education_requirements_en|linebreaks }}
+            {% else %}
+              {% if current_language == 'my' %}ဖော်ပြချက်မရှိပါ{% else %}No description available{% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Work Environment -->
+        {% if career.work_environment_en or career.work_environment_my %}
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="bi bi-building" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h3 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}အလုပ်လုပ်ကိုင်ရာဝန်းကျင်{% else %}Work Environment{% endif %}
+            </h3>
+          </div>
+          <div style="line-height: 1.7; color: var(--text-secondary); font-size: 1.1rem;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+            {% if current_language == 'my' and career.work_environment_my %}
+              {{ career.work_environment_my|linebreaks }}
+            {% elif career.work_environment_en %}
+              {{ career.work_environment_en|linebreaks }}
+            {% else %}
+              {% if current_language == 'my' %}ဖော်ပြချက်မရှိပါ{% else %}No description available{% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Sidebar Column -->
+      <div class="career-sidebar">
+        <!-- Salary Information -->
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <i class="bi bi-currency-dollar" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h4 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}လစာငွေအချက်အလက်{% else %}Salary Information{% endif %}
+            </h4>
+          </div>
+          
+          {% if career.salary_range_min and career.salary_range_max %}
+            {% with min_salary=career.salary_range_min max_salary=career.salary_range_max %}
+              {% widthratio min_salary|add:max_salary 2 1 as calculated_average %}
+              
+              <div style="text-align: center; margin: 2rem 0;">
+                <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-teal); margin-bottom: 0.5rem;">
+                  {% if current_language == 'my' %}
+                    {{ calculated_average|floatformat:0 }}
+                  {% else %}
+                    MMK{{ calculated_average|floatformat:0 }}
+                  {% endif %}
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                  {% if current_language == 'my' %}ပျမ်းမျှ နှစ်စဉ်လစာ{% else %}Average Annual Salary{% endif %}
+                </div>
+              </div>
+              
+              <table class="salary-table">
+                <tr>
+                  <td style="color: var(--text-secondary);">
+                    {% if current_language == 'my' %}စတင်အဆင့်:{% else %}Entry Level:{% endif %}
+                  </td>
+                  <td style="text-align: right; color: var(--accent-teal); font-weight: 600;">
+                    {% if current_language == 'my' %}
+                      {{ career.salary_range_min|floatformat:0 }}
+                    {% else %}
+                      {{ career.salary_range_min|floatformat:0 }} MMK
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-secondary);">
+                    {% if current_language == 'my' %}အတွေ့အကြုံရှိအဆင့်:{% else %}Experienced:{% endif %}
+                  </td>
+                  <td style="text-align: right; color: var(--accent-teal); font-weight: 600;">
+                    {% if current_language == 'my' %}
+                      {{ career.salary_range_max|floatformat:0 }}
+                    {% else %}
+                      {{ career.salary_range_max|floatformat:0 }} MMK
+                    {% endif %}
+                  </td>
+                </tr>
+              </table>
+            {% endwith %}
+          {% else %}
+            <div style="text-align: center; padding: 2rem 1rem;">
+              <i class="bi bi-question-circle" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem; display: block;"></i>
+              <div style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                {% if current_language == 'my' %}မရနိုင်သေး{% else %}Not Available{% endif %}
+              </div>
+              <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                {% if current_language == 'my' %}လစာအချက်အလက်များ မကြာမီရရှိပါမည်{% else %}Salary information coming soon{% endif %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Job Outlook -->
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <i class="bi bi-graph-up" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h4 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}အလုပ်အကိုင်အလားအလာ{% else %}Job Outlook{% endif %}
+            </h4>
+          </div>
+          
+          <div style="text-align: center; margin: 2rem 0;">
+            {% if career.job_outlook_en %}
+              {% if career.job_outlook_en == 'very_high' %}
+                <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin-bottom: 0.5rem;">
+                  {% if current_language == 'my' %}အလွန်မြင့်မား{% else %}Very High{% endif %}
+                </div>
+              {% elif career.job_outlook_en == 'high' %}
+                <div style="font-size: 2rem; font-weight: 700; color: #3b82f6; margin-bottom: 0.5rem;">
+                  {% if current_language == 'my' %}မြင့်မား{% else %}High{% endif %}
+                </div>
+              {% elif career.job_outlook_en == 'average' %}
+                <div style="font-size: 2rem; font-weight: 700; color: #f59e0b; margin-bottom: 0.5rem;">
+                  {% if current_language == 'my' %}ပျမ်းမျှ{% else %}Average{% endif %}
+                </div>
+              {% elif career.job_outlook_en == 'low' %}
+                <div style="font-size: 2rem; font-weight: 700; color: #ef4444; margin-bottom: 0.5rem;">
+                  {% if current_language == 'my' %}နိမ့်သော{% else %}Low{% endif %}
+                </div>
+              {% else %}
+                <div style="font-size: 2rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                  {% if current_language == 'my' %}မသိရ{% else %}Unknown{% endif %}
+                </div>
+              {% endif %}
+            {% else %}
+              <div style="font-size: 2rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                {% if current_language == 'my' %}မသတ်မှတ်ရသေး{% else %}Not Set{% endif %}
+              </div>
+            {% endif %}
+            <div style="color: var(--text-secondary); font-size: 0.9rem;">
+              {% if current_language == 'my' %}စျေးကွက်ဝယ်လိုအား{% else %}Market Demand{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Majors -->
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <i class="bi bi-book" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h4 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}ဆက်စပ်သော တက္ကသိုလ်ဘာသာရပ်များ{% else %}Related University Majors{% endif %}
+            </h4>
+          </div>
+          
+          {% if related_majors %}
+            {% for major in related_majors %}
+            <div style="background: var(--card-bg); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+              <h6 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 1rem;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+                {% if current_language == 'my' and major.name_my %}
+                  {{ major.name_my }}
+                {% else %}
+                  {{ major.name_en }}
+                {% endif %}
+              </h6>
+              
+              <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+                {{ major.get_university_name }}
+              </p>
+              
+              <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+                {% if current_language == 'my' and major.description_my %}
+                  {{ major.description_my|truncatewords:12 }}
+                {% elif major.description_en %}
+                  {{ major.description_en|truncatewords:12 }}
+                {% else %}
+                  {% if current_language == 'my' %}ဖော်ပြချက်မရှိပါ{% else %}No description available{% endif %}
+                {% endif %}
+              </p>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <small style="color: var(--accent-teal); font-weight: 500;">
+                  {{ major.duration }} • {{ major.get_degree_type_display }}
+                </small>
+                {% if major.public_university and major.public_university.website %}
+                  <a href="{{ major.public_university.website }}" 
+                     target="_blank"
+                     style="background: var(--accent-teal); color: white; padding: 0.25rem 0.75rem; border-radius: 6px; text-decoration: none; font-size: 0.8rem;">
+                    {% if current_language == 'my' %}တက္ကသိုလ်ကြည့်ရန်{% else %}View University{% endif %}
+                  </a>
+                {% elif major.private_college and major.private_college.website %}
+                  <a href="{{ major.private_college.website }}" 
+                     target="_blank"
+                     style="background: var(--accent-teal); color: white; padding: 0.25rem 0.75rem; border-radius: 6px; text-decoration: none; font-size: 0.8rem;">
+                    {% if current_language == 'my' %}တက္ကသိုလ်ကြည့်ရန်{% else %}View University{% endif %}
+                  </a>
+                {% else %}
+                  <span style="background: var(--border-color); color: var(--text-secondary); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.8rem; opacity: 0.6;">
+                    {% if current_language == 'my' %}လင့်ခ်မရှိ{% else %}No Link{% endif %}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+          <div style="text-align: center; padding: 2rem 1rem;">
+            <i class="bi bi-book" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem; display: block;"></i>
+            <p style="color: var(--text-secondary); font-style: italic; margin: 0 0 0.5rem 0;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+              {% if current_language == 'my' %}ဆက်စပ်သော ဘာသာရပ်များ မတွေ့ရှိရသေးပါ။{% else %}No related majors found yet.{% endif %}
+            </p>
+            <small style="color: var(--text-secondary);">
+              {% if current_language == 'my' %}ကိုက်ညီမှုတိုးတက်စေရန် စာလုံးပိုမိုထည့်သွင်းပါ။{% else %}Add more keywords to improve matching.{% endif %}
+            </small>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Related Careers -->
+        {% if related_careers %}
+        <div class="feature-card" style="opacity: 0; transform: translateY(20px);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <i class="bi bi-briefcase" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+            <h4 style="margin: 0; color: var(--text-primary);">
+              {% if current_language == 'my' %}ဆက်စပ်သောအလုပ်အကိုင်များ{% else %}Related Careers{% endif %}
+            </h4>
+          </div>
+          
+          {% for related in related_careers %}
+          <a href="{% url 'career_detail' related.slug %}" 
+             style="display: block; background: var(--card-bg); border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; border: 1px solid var(--border-color); text-decoration: none; color: var(--text-primary); transition: all 0.3s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;" class="{% if current_language == 'my' %}burmese-text{% endif %}">
+                  {% if current_language == 'my' and related.title_my %}
+                    {{ related.title_my }}
+                  {% else %}
+                    {{ related.title_en }}
+                  {% endif %}
+                </div>
+                <small style="color: var(--text-secondary); font-size: 0.8rem;">
+                  {% if related.category %}
+                    {% if current_language == 'my' and related.category.name_my %}
+                      {{ related.category.name_my }}
+                    {% else %}
+                      {{ related.category.name_en }}
+                    {% endif %}
+                  {% else %}
+                    {% if current_language == 'my' %}အထွေထွေ{% else %}General{% endif %}
+                  {% endif %}
+                </small>
+              </div>
+              <i class="bi bi-arrow-right-short" style="font-size: 1.2rem; color: var(--accent-teal);"></i>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const cards = document.querySelectorAll('.feature-card');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, index * 100);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(card => {
+    observer.observe(card);
+  });
+
+  // Force header language update
+  const currentLang = '{{ current_language }}' || localStorage.getItem('language') || 'en';
+  const currentLanguageElement = document.getElementById('currentLanguage');
+  if (currentLanguageElement) {
+    currentLanguageElement.textContent = currentLang.toUpperCase();
+  }
+});
+</script>
+{% endblock %}

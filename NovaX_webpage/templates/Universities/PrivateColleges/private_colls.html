@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်များ - NovaX{% else %}Private Colleges - NovaX{% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container text-center">
+    <div class="hero-content">
+      <div class="hero-badge fade-in-up">
+        <i class="bi bi-building"></i> 
+        {% if current_language == 'my' %}ပုဂ္ဂလိက ကွန်ယက်{% else %}Private College Network{% endif %}
+      </div>
+      <h1 class="fade-in-up">
+        {% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်များ{% else %}Private Colleges{% endif %}
+      </h1>
+      <p class="subtext mx-auto fade-in-up delay-1">
+        {% if current_language == 'my' %}
+        မြန်မာနိုင်ငံရှိ ထိပ်တန်းပုဂ္ဂလိကကောလိပ်များတွင် ပညာရပ်များကို စူးစမ်းလေ့လာပါ။
+        {% else %}
+        Explore programs at Myanmar's leading private colleges.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Colleges Section -->
+<section class="section">
+  <div class="container">
+    <a href="/" class="btn btn-secondary-custom mb-4">
+      <i class="bi bi-arrow-left"></i> 
+      {% if current_language == 'my' %}တက္ကသိုလ် လမ်းကြောင်းသို့ ပြန်သွားရန်{% else %}Back to University Path{% endif %}
+    </a>
+
+    {% for colge in colleges %}
+    <div class="feature-card mb-4 text-start">
+      <div class="row align-items-center g-0">
+        <div class="col-md-8 p-4">
+          <h4 class="mb-2" style="color: var(--text-primary);">
+            {{ colge.display_name }} ({{ colge.display_abbreviation }})
+          </h4>
+          <p class="meta mb-2" style="color: var(--text-secondary);">
+            <i class="bi bi-geo-alt"></i> {{ colge.display_location }} &nbsp;&nbsp;
+            <i class="bi bi-calendar"></i> 
+            {% if current_language == 'my' %}တည်ထောင်သည့် ခုနှစ်{% else %}Est.{% endif %} {{ colge.established }}
+          </p>
+          
+          <!-- Popular Programs -->
+          {% if colge.popular_programs %}
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-star-fill text-warning"></i>
+              {% if current_language == 'my' %}အထင်ကရသင်တန်းများ:{% else %}Popular Programs:{% endif %}
+            </small>
+            <div>
+              {% for program in colge.popular_programs|slice:":3" %}
+              <span class="badge bg-light text-dark me-1 mb-1">{{ program }}</span>
+              {% endfor %}
+              {% if colge.popular_programs|length > 3 %}
+              <span class="badge bg-light text-dark">+{{ colge.popular_programs|length|add:"-3" }} more</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+          
+          <p class="desc mb-4" style="color: var(--text-secondary);">
+            {{ colge.display_description }}
+          </p>
+          
+          <!-- Rankings -->
+          {% if colge.national_ranking or colge.international_ranking %}
+          <div class="mb-3">
+            {% if colge.national_ranking %}
+            <span class="badge bg-success me-2">
+              <i class="bi bi-trophy"></i>
+              {% if current_language == 'my' %}နိုင်ငံတွင်း #{{ colge.national_ranking }}{% else %}National #{{ colge.national_ranking }}{% endif %}
+            </span>
+            {% endif %}
+            {% if colge.international_ranking %}
+            <span class="badge bg-info">
+              <i class="bi bi-globe"></i>
+              {% if current_language == 'my' %}ကမ္ဘာ့ #{{ colge.international_ranking }}{% else %}Global #{{ colge.international_ranking }}{% endif %}
+            </span>
+            {% endif %}
+          </div>
+          {% endif %}
+          
+          {% comment %} <!-- Degree Types Offered -->
+          {% if colge.degree_types_offered %}
+          <div class="mb-3">
+            <small class="text-muted">
+              <i class="bi bi-award text-primary"></i>
+              {% if current_language == 'my' %}ဒီဂရီအမျိုးအစားများ:{% else %}Degree Types:{% endif %}
+            </small>
+            <div>
+              {% for degree_type in colge.degree_types_offered|slice:":4" %}
+              <span class="badge bg-primary bg-opacity-10 text-primary me-1 mb-1">{{ degree_type }}</span>
+              {% endfor %}
+              {% if colge.degree_types_offered|length > 4 %}
+              <span class="badge bg-primary bg-opacity-10 text-primary">+{{ colge.degree_types_offered|length|add:"-4" }} more</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %} {% endcomment %}
+          
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'private_colls_detail' colge.id %}" class="btn btn-primary-custom">
+              {% if current_language == 'my' %}အသေးစိတ်ကြည့်ရန်{% else %}View Details{% endif %} <i class="bi bi-arrow-right-short"></i>
+            </a>
+            {% if colge.website %}
+            <a href="{{ colge.website }}" target="_blank" class="btn btn-secondary-custom">
+              {% if current_language == 'my' %}ဝဘ်ဆိုဒ်သို့{% else %}Visit Website{% endif %} <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+            {% endif %}
+            {% if colge.campus_map_url %}
+            <a href="{{ colge.campus_map_url }}" target="_blank" class="btn btn-outline-secondary">
+              <i class="bi bi-map"></i> {% if current_language == 'my' %}တည်နေရာ မြေပုံ{% else %}Campus Map{% endif %}
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-4 text-center" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color:#fff; border-top-right-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius);">
+          <div class="p-5">
+            <h2 style="font-size:3rem; font-weight:700;">{{ colge.display_abbreviation }}</h2>
+            <small style="opacity:0.9;">
+              {% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်{% else %}Private College{% endif %}
+            </small>
+            
+            <!-- Quick Stats -->
+            <div class="mt-4">
+              {% if colge.faculties_departments %}
+              <div class="mb-2">
+                <h5>{{ colge.faculties_departments|length }}</h5>
+                <small>{% if current_language == 'my' %}ဌာနများ{% else %}Faculties{% endif %}</small>
+              </div>
+              {% endif %}
+              
+              {% if colge.popular_programs %}
+              <div class="mb-2">
+                <h5>{{ colge.popular_programs|length }}</h5>
+                <small>{% if current_language == 'my' %}သင်တန်းများ{% else %}Programs{% endif %}</small>
+              </div>
+              {% endif %}
+              
+              <!-- Student Organizations Count -->
+              {% if colge.student_organizations %}
+              <div class="mb-2">
+                <h5>{{ colge.student_organizations|length }}</h5>
+                <small>{% if current_language == 'my' %}ကျောင်းသားအဖွဲ့များ{% else %}Student Clubs{% endif %}</small>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p style="color: var(--text-secondary);">
+        {% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်များ မတွေ့ရှိပါ{% else %}No private colleges found.{% endif %}
+      </p>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+/* Enhanced Card Styles */
+.feature-card {
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.btn-primary-custom {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    border: none;
+    color: white;
+    font-weight: 500;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+.btn-secondary-custom {
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    background: var(--bg-card);
+}
+
+.btn-secondary-custom:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+/* Dark mode adjustments */
+[data-bs-theme="dark"] .badge.bg-light {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-bs-theme="dark"] .badge.bg-primary.bg-opacity-10 {
+    background-color: rgba(13, 110, 253, 0.2) !important;
+    color: var(--accent-blue) !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth hover effects
+    const cards = document.querySelectorAll('.feature-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transition = 'all 0.3s ease';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transition = 'all 0.3s ease';
+        });
+    });
+});
+</script>
+{% endblock %}
+
+
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်များ - ဗိသုကာ - NovaX{% else %}Private Colleges - Architecture - NovaX{% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container text-center">
+    <div class="hero-content">
+      <div class="hero-badge fade-in-up">
+        <i class="bi bi-building"></i> 
+        {% if current_language == 'my' %}ပုဂ္ဂလိက ကွန်ယက်{% else %}University{% endif %}
+      </div>
+      <h1 class="fade-in-up">
+        {% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်များ{% else %}Private Colleges{% endif %}
+      </h1>
+      <p class="subtext mx-auto fade-in-up delay-1">
+        {% if current_language == 'my' %}
+        မြန်မာနိုင်ငံရှိ ထိပ်တန်းပုဂ္ဂလိကကောလိပ်များတွင် ဗိသုကာပညာရပ်များကို စူးစမ်းလေ့လာပါ။
+        {% else %}
+        Explore architecture programs at Myanmar's leading private colleges.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Colleges Section -->
+<section class="section">
+  <div class="container">
+    <a href="/" class="btn btn-secondary-custom mb-4">
+      <i class="bi bi-arrow-left"></i> 
+      {% if current_language == 'my' %}တက္ကသိုလ် လမ်းကြောင်းသို့ ပြန်သွားရန်{% else %}Back to University{% endif %}
+    </a>
+
+    {% for colge in colleges %}
+    <div class="feature-card mb-4 text-start">
+      <div class="row align-items-center g-0">
+        <div class="col-md-8 p-4">
+          <h4 class="mb-2" style="color: var(--text-primary);">
+            {{ colge.display_name }} ({{ colge.display_abbreviation }})
+          </h4>
+          <p class="meta mb-2" style="color: var(--text-secondary);">
+            <i class="bi bi-geo-alt"></i> {{ colge.display_location }} &nbsp;&nbsp;
+            <i class="bi bi-calendar"></i> 
+            {% if current_language == 'my' %}တည်ထောင်သည့် ခုနှစ်{% else %}Est.{% endif %} {{ colge.established }}
+          </p>
+          <p class="desc mb-4" style="color: var(--text-secondary);">
+            {{ colge.display_description }}
+          </p>
+          <a href="{% url 'private_colls_detail' colge.id %}" class="btn btn-primary-custom me-2">
+            {% if current_language == 'my' %}အသေးစိတ်ကြည့်ရန်{% else %}View Details{% endif %} <i class="bi bi-arrow-right-short"></i>
+          </a>
+          {% if colge.website %}
+          <a href="{{ colge.website }}" target="_blank" class="btn btn-secondary-custom">
+            {% if current_language == 'my' %}ဝဘ်ဆိုဒ်သို့{% else %}Visit Website{% endif %} <i class="bi bi-box-arrow-up-right"></i>
+          </a>
+          {% endif %}
+        </div>
+        <div class="col-md-4 text-center" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color:#fff; border-top-right-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius);">
+          <div class="p-5">
+            <h2 style="font-size:3rem; font-weight:700;">{{ colge.display_abbreviation }}</h2>
+            <small style="opacity:0.9;">
+              {% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်{% else %}Private College{% endif %}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p style="color: var(--text-secondary);">
+        {% if current_language == 'my' %}ပုဂ္ဂလိက ကောလိပ်များ မတွေ့ရှိပါ{% else %}No Private Colleges found.{% endif %}
+      </p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %} {% endcomment %}

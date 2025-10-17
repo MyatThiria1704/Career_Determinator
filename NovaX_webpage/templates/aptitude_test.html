@@ -1,0 +1,962 @@
+{% comment %} linear answer section
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Aptitude & Personality Test (Fixed)</title>
+<style>
+  :root{
+    --dark-green:#1E2E25; --forest:#2F4E3C; --light-green:#A6CE39;
+    --offwhite:#F8F9F5; --light-tint:#EEF5E9; --text-dark:#333333; --text-mid:#666666;
+    --bright:#9AD44D; --yellowish:#C8E36B;
+  }
+  html,body{height:100%;margin:0;background:var(--offwhite);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text-dark)}
+  .wrap{max-width:760px;margin:48px auto;padding:24px}
+  .card{background:var(--light-tint);border-radius:14px;padding:26px;box-shadow:0 8px 30px rgba(30,46,37,0.06);border:1px solid rgba(0,0,0,0.03)}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  h1{margin:0;font-size:20px;color:var(--dark-green)}
+  p.lead{margin:0;color:var(--text-mid);font-size:14px}
+
+  .question{display:none;animation:fade .28s ease}
+  .question.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .q-title{font-weight:700;color:var(--forest);margin:0 0 12px 0}
+  .q-desc{color:var(--text-mid);font-size:14px;margin-bottom:18px}
+
+  .slider-row{display:flex;align-items:center;gap:14px}
+  .slider{flex:1}
+  input[type="range"]{
+    -webkit-appearance:none;width:100%;
+    height:12px;border-radius:8px;background:linear-gradient(90deg,var(--light-green),var(--bright));outline:none;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--dark-green);border:4px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.12);}
+  .scale-labels{display:flex;justify-content:space-between;margin-top:6px;color:var(--text-mid);font-size:13px}
+
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+  .progress{font-size:13px;color:var(--text-mid)}
+  .btn{background:var(--forest);color:var(--offwhite);border:0;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:700}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .small-note{font-size:13px;color:var(--text-mid);margin-top:10px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="card">
+      <header>
+        <div>
+          <h1>Aptitude & Personality</h1>
+          <p class="lead">Rate yourself 1–10. Honest answers = better results. ✨</p>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;color:var(--text-mid)">Step <span id="stepNum">1</span> / 15</div>
+        </div>
+      </header>
+
+      <form id="testForm" onsubmit="return false;">
+        <!-- Personality Traits (5) -->
+        <div class="question active" data-q="1" data-key="O_score">
+          <div class="q-title">1. How organized and detail-oriented are you? (O_score)</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="O_score"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="O_score_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="2" data-key="C_score">
+          <div class="q-title">2. How creative and open to new experiences are you? (C_score)</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="C_score"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="C_score_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="3" data-key="E_score">
+          <div class="q-title">3. How energetic and outgoing are you in social settings? (E_score)</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="E_score"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="E_score_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="4" data-key="A_score">
+          <div class="q-title">4. How cooperative and empathetic are you with others? (A_score)</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="A_score"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="A_score_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="5" data-key="N_score">
+          <div class="q-title">5. How emotionally stable do you feel under pressure? (N_score)</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="N_score"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="N_score_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <!-- Aptitudes (5) -->
+        <div class="question" data-q="6" data-key="Numerical_Aptitude">
+          <div class="q-title">6. How strong are your numerical and mathematical skills?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Numerical_Aptitude"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Numerical_Aptitude_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="7" data-key="Spatial_Aptitude">
+          <div class="q-title">7. How strong is your spatial imagination (visualizing 3D objects)?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Spatial_Aptitude"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Spatial_Aptitude_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="8" data-key="Perceptual_Aptitude">
+          <div class="q-title">8. How good are you at spotting small differences or patterns quickly?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Perceptual_Aptitude"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Perceptual_Aptitude_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="9" data-key="Abstract_Reasoning">
+          <div class="q-title">9. How strong are you at logical reasoning and problem solving?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Abstract_Reasoning"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Abstract_Reasoning_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <div class="question" data-q="10" data-key="Verbal_Reasoning">
+          <div class="q-title">10. How strong is your verbal ability (reading, writing, communication)?</div>
+          <div class="q-desc">1 = very low, 10 = very high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Verbal_Reasoning"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Verbal_Reasoning_val">5</div>
+          </div>
+          <div class="scale-labels"><span>1</span><span>10</span></div>
+        </div>
+
+        <!-- Extra sliders 11-15 -->
+        <div class="question" data-q="11" data-key="Prefers_HandsOn">
+          <div class="q-title">11. Do you prefer hands-on/project learning or lecture/theory?</div>
+          <div class="q-desc">1 = lecture, 10 = strongly hands-on</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Prefers_HandsOn"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Prefers_HandsOn_val">5</div>
+          </div>
+          <div class="scale-labels"><span>Lecture</span><span>Hands-on</span></div>
+        </div>
+
+        <div class="question" data-q="12" data-key="Risk_Taking">
+          <div class="q-title">12. How willing are you to take risks/try startups?</div>
+          <div class="q-desc">1 low – 10 high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Risk_Taking"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Risk_Taking_val">5</div>
+          </div>
+          <div class="scale-labels"><span>Low</span><span>High</span></div>
+        </div>
+
+        <div class="question" data-q="13" data-key="Teamwork">
+          <div class="q-title">13. How much do you like working in teams?</div>
+          <div class="q-desc">1 = solo, 10 = team</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Teamwork"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Teamwork_val">5</div>
+          </div>
+          <div class="scale-labels"><span>Solo</span><span>Team</span></div>
+        </div>
+
+        <div class="question" data-q="14" data-key="Attention">
+          <div class="q-title">14. How good is your attention to tiny details?</div>
+          <div class="q-desc">1 low – 10 high</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Attention"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Attention_val">5</div>
+          </div>
+          <div class="scale-labels"><span>Low</span><span>High</span></div>
+        </div>
+
+        <div class="question" data-q="15" data-key="Motivation">
+          <div class="q-title">15. How motivated are you to pursue formal study vs on-job learning?</div>
+          <div class="q-desc">1 = prefer job, 10 = prefer study</div>
+          <div class="slider-row">
+            <div class="slider"><input type="range" min="1" max="10" value="5" id="Motivation"></div>
+            <div style="width:46px;text-align:center;font-weight:700;color:var(--forest)" id="Motivation_val">5</div>
+          </div>
+          <div class="scale-labels"><span>Work</span><span>Study</span></div>
+        </div>
+
+        <div class="footer">
+          <div class="progress">Question <span id="current">1</span> / 15</div>
+          <button id="nextBtn" class="btn" type="button">Next ➜</button>
+        </div>
+
+        <div class="small-note">All answers are anonymous and used to suggest career matches.</div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  const questions = Array.from(document.querySelectorAll('.question'));
+  const nextBtn = document.getElementById('nextBtn');
+  const stepNum = document.getElementById('stepNum');
+  const currentEl = document.getElementById('current');
+
+  const answers = {}; // store numeric answers keyed by data-key
+
+  // initialize sliders: find them inside each question and set listeners
+  questions.forEach(q => {
+    const key = q.dataset.key;
+    if (!key) return;
+    const input = q.querySelector('input[type="range"]');
+    const valEl = q.querySelector(`#${key}_val`);
+    if (input) {
+      // set initial display & answers
+      if (valEl) valEl.textContent = input.value;
+      answers[key] = Number(input.value);
+      input.addEventListener('input', (e) => {
+        if (valEl) valEl.textContent = e.target.value;
+        answers[key] = Number(e.target.value);
+      });
+    }
+  });
+
+  let idx = 0;
+  function showIndex(i){
+    questions.forEach((q,j) => q.classList.toggle('active', j===i));
+    stepNum.textContent = i+1;
+    currentEl.textContent = i+1;
+    nextBtn.textContent = (i === questions.length - 1) ? 'Submit' : 'Next ➜';
+  }
+  showIndex(0);
+
+  nextBtn.addEventListener('click', async () => {
+    const q = questions[idx];
+    const key = q.dataset.key;
+    // validate that current question has a numeric answer
+    if (key && (typeof answers[key] === 'undefined' || answers[key] === null)) {
+      alert('Please select a value for this question.');
+      return;
+    }
+
+    if (idx < questions.length - 1) {
+      idx++;
+      showIndex(idx);
+      return;
+    }
+
+    // final submit: compute percentages then POST and redirect to results page
+    const percentages = computeScores(answers);
+
+    try {
+      await fetch('/api/save-survey/', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ category: 'aptitude_test', responses: answers })
+      });
+    } catch (err) {
+      console.warn('Failed to save to backend:', err);
+    }
+
+    sessionStorage.setItem('aptitude_percentages', JSON.stringify(percentages));
+    // go to results page (ensure route exists)
+    window.location.href = '/aptitude_result/';
+  });
+
+  // scoring (same model as before)
+  function computeScores(ans){
+    const norm = {};
+    Object.keys(ans).forEach(k => norm[k] = (ans[k] - 1) / 9 );
+    const careers = {
+      Medical: { O_score:0.2, C_score:0.05, E_score:0.05, A_score:0.25, N_score:0.15, Numerical_Aptitude:0.15, Spatial_Aptitude:0.02, Perceptual_Aptitude:0.05, Abstract_Reasoning:0.05, Verbal_Reasoning:0.05 },
+      Civil: { O_score:0.15, C_score:0.05, E_score:0.03, A_score:0.05, N_score:0.05, Numerical_Aptitude:0.25, Spatial_Aptitude:0.2, Perceptual_Aptitude:0.1, Abstract_Reasoning:0.1, Verbal_Reasoning:0.07 },
+      Archi: { O_score:0.12, C_score:0.18, E_score:0.03, A_score:0.04, N_score:0.03, Numerical_Aptitude:0.12, Spatial_Aptitude:0.28, Perceptual_Aptitude:0.13, Abstract_Reasoning:0.07, Verbal_Reasoning:0.08 },
+      CSE: { O_score:0.12, C_score:0.08, E_score:0.05, A_score:0.03, N_score:0.05, Numerical_Aptitude:0.25, Spatial_Aptitude:0.05, Perceptual_Aptitude:0.08, Abstract_Reasoning:0.28, Verbal_Reasoning:0.06 },
+      ECE: { O_score:0.12, C_score:0.07, E_score:0.05, A_score:0.03, N_score:0.05, Numerical_Aptitude:0.22, Spatial_Aptitude:0.08, Perceptual_Aptitude:0.12, Abstract_Reasoning:0.24, Verbal_Reasoning:0.07 },
+      Law: { O_score:0.08, C_score:0.05, E_score:0.05, A_score:0.05, N_score:0.12, Numerical_Aptitude:0.02, Spatial_Aptitude:0.01, Perceptual_Aptitude:0.05, Abstract_Reasoning:0.15, Verbal_Reasoning:0.42 },
+      Business: { O_score:0.12, C_score:0.06, E_score:0.18, A_score:0.06, N_score:0.04, Numerical_Aptitude:0.18, Spatial_Aptitude:0.03, Perceptual_Aptitude:0.05, Abstract_Reasoning:0.14, Verbal_Reasoning:0.09 }
+    };
+
+    const raw = {};
+    for (const career in careers){
+      let s = 0;
+      const weights = careers[career];
+      for (const key in weights){
+        const w = weights[key] || 0;
+        const v = (norm[key] === undefined) ? 0.5 : norm[key];
+        s += w * v;
+      }
+      raw[career] = s;
+    }
+    const sum = Object.values(raw).reduce((a,b)=>a+b,0) || 1;
+    const percentages = {};
+    Object.keys(raw).forEach(c => { percentages[c] = Math.round((raw[c]/sum)*100); });
+
+    // adjust small rounding diffs
+    let total = Object.values(percentages).reduce((a,b)=>a+b,0);
+    if (total !== 100){
+      let diff = 100 - total;
+      const keys = Object.keys(percentages);
+      let i = 0;
+      while (diff !== 0){
+        const k = keys[i % keys.length];
+        percentages[k] = Math.max(0, percentages[k] + (diff>0?1:-1));
+        diff = 100 - Object.values(percentages).reduce((a,b)=>a+b,0);
+        i++;
+        if (i>1000) break;
+      }
+    }
+    return percentages;
+  }
+</script>
+</body>
+</html> {% endcomment %}
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Aptitude & Personality Test</title>
+<style>
+  :root{
+    --dark-green:#1E2E25; --forest:#2F4E3C; --light-green:#A6CE39;
+    --offwhite:#F8F9F5; --light-tint:#EEF5E9; --text-dark:#333333; --text-mid:#666666;
+    --bright:#9AD44D; --yellowish:#C8E36B;
+  }
+  html,body{height:100%;margin:0;background:var(--offwhite);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text-dark)}
+  .wrap{max-width:760px;margin:48px auto;padding:24px}
+  .card{background:var(--light-tint);border-radius:14px;padding:26px;box-shadow:0 8px 30px rgba(30,46,37,0.06);border:1px solid rgba(0,0,0,0.03)}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  h1{margin:0;font-size:20px;color:var(--dark-green)}
+  p.lead{margin:0;color:var(--text-mid);font-size:14px}
+
+  .question{display:none;animation:fade .28s ease}
+  .question.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .q-title{font-weight:700;color:var(--forest);margin:0 0 12px 0;font-size:16px}
+  .q-desc{color:var(--text-mid);font-size:14px;margin-bottom:24px}
+
+  .choices{display:flex;flex-direction:column;gap:12px}
+  .choice-item{
+    background:#fff;border:2px solid #e5e7eb;border-radius:10px;padding:16px 20px;
+    cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;gap:12px;
+  }
+  .choice-item:hover{border-color:var(--light-green);background:#fafafa}
+  .choice-item.selected{border-color:var(--bright);background:var(--yellowish);background:rgba(166,206,57,0.15)}
+  .choice-item input[type="radio"]{
+    appearance:none;width:20px;height:20px;border:2px solid var(--text-mid);
+    border-radius:50%;cursor:pointer;position:relative;flex-shrink:0;
+  }
+  .choice-item input[type="radio"]:checked{border-color:var(--forest);background:var(--bright)}
+  .choice-item input[type="radio"]:checked::after{
+    content:'';position:absolute;width:8px;height:8px;background:var(--forest);
+    border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);
+  }
+  .choice-label{color:var(--text-dark);font-size:15px;flex:1}
+
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:12px}
+  .progress{font-size:13px;color:var(--text-mid)}
+  .btn{background:var(--forest);color:var(--offwhite);border:0;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:700;transition:all 0.2s}
+  .btn:hover{background:var(--dark-green)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-back{background:#e5e7eb;color:var(--text-dark)}
+  .btn-back:hover{background:#d1d5db}
+  .btn-container{display:flex;gap:8px}
+  .small-note{font-size:13px;color:var(--text-mid);margin-top:10px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="card">
+      <header>
+        <div>
+          <h1>Aptitude & Personality</h1>
+          <p class="lead">Choose the option that best describes you. Honest answers = better results.</p>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;color:var(--text-mid)">Step <span id="stepNum">1</span> / 15</div>
+        </div>
+      </header>
+
+      <form id="testForm" onsubmit="return false;">
+        <!-- Personality Traits (5) -->
+        <div class="question active" data-q="1" data-key="O_score">
+          <div class="q-title">1. How organized and detail-oriented are you?</div>
+          <div class="q-desc">Think about how you manage tasks, schedules, and keep things in order.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="O_score" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="O_score" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="O_score" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="O_score" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="O_score" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="2" data-key="C_score">
+          <div class="q-title">2. How creative and open to new experiences are you?</div>
+          <div class="q-desc">Consider your willingness to try new things and think outside the box.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="C_score" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="C_score" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="C_score" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="C_score" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="C_score" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="3" data-key="E_score">
+          <div class="q-title">3. How energetic and outgoing are you in social settings?</div>
+          <div class="q-desc">Reflect on your comfort level when meeting new people and socializing.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="E_score" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="E_score" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="E_score" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="E_score" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="E_score" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="4" data-key="A_score">
+          <div class="q-title">4. How cooperative and empathetic are you with others?</div>
+          <div class="q-desc">Think about your ability to understand and work well with people.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="A_score" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="A_score" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="A_score" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="A_score" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="A_score" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="5" data-key="N_score">
+          <div class="q-title">5. How emotionally stable do you feel under pressure?</div>
+          <div class="q-desc">Consider how well you handle stress and challenging situations.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="N_score" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="N_score" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="N_score" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="N_score" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="N_score" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Aptitudes (5) -->
+        <div class="question" data-q="6" data-key="Numerical_Aptitude">
+          <div class="q-title">6. How strong are your numerical and mathematical skills?</div>
+          <div class="q-desc">Think about your comfort with numbers, calculations, and math problems.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Numerical_Aptitude" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Numerical_Aptitude" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Numerical_Aptitude" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Numerical_Aptitude" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Numerical_Aptitude" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="7" data-key="Spatial_Aptitude">
+          <div class="q-title">7. How strong is your spatial imagination (visualizing 3D objects)?</div>
+          <div class="q-desc">Consider your ability to mentally rotate objects and understand spatial relationships.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Spatial_Aptitude" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Spatial_Aptitude" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Spatial_Aptitude" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Spatial_Aptitude" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Spatial_Aptitude" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="8" data-key="Perceptual_Aptitude">
+          <div class="q-title">8. How good are you at spotting small differences or patterns quickly?</div>
+          <div class="q-desc">Think about your attention to detail and pattern recognition abilities.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Perceptual_Aptitude" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Perceptual_Aptitude" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Perceptual_Aptitude" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Perceptual_Aptitude" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Perceptual_Aptitude" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="9" data-key="Abstract_Reasoning">
+          <div class="q-title">9. How strong are you at logical reasoning and problem solving?</div>
+          <div class="q-desc">Consider your ability to think critically and solve complex problems.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Abstract_Reasoning" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Abstract_Reasoning" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Abstract_Reasoning" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Abstract_Reasoning" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Abstract_Reasoning" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="10" data-key="Verbal_Reasoning">
+          <div class="q-title">10. How strong is your verbal ability (reading, writing, communication)?</div>
+          <div class="q-desc">Think about your skills in expressing ideas and understanding written content.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Verbal_Reasoning" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Verbal_Reasoning" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Verbal_Reasoning" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Verbal_Reasoning" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Verbal_Reasoning" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Extra questions 11-15 -->
+        <div class="question" data-q="11" data-key="Prefers_HandsOn">
+          <div class="q-title">11. Do you prefer hands-on/project learning or lecture/theory?</div>
+          <div class="q-desc">Consider which learning style helps you understand concepts better.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Prefers_HandsOn" value="2">
+              <span class="choice-label">Strongly prefer lectures</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Prefers_HandsOn" value="4">
+              <span class="choice-label">Prefer lectures</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Prefers_HandsOn" value="6">
+              <span class="choice-label">Both equally</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Prefers_HandsOn" value="8">
+              <span class="choice-label">Prefer hands-on</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Prefers_HandsOn" value="10">
+              <span class="choice-label">Strongly prefer hands-on</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="12" data-key="Risk_Taking">
+          <div class="q-title">12. How willing are you to take risks/try startups?</div>
+          <div class="q-desc">Think about your comfort with uncertainty and entrepreneurial ventures.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Risk_Taking" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Risk_Taking" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Risk_Taking" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Risk_Taking" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Risk_Taking" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="13" data-key="Teamwork">
+          <div class="q-title">13. How much do you like working in teams?</div>
+          <div class="q-desc">Consider whether you work better independently or with others.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Teamwork" value="2">
+              <span class="choice-label">Strongly prefer solo</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Teamwork" value="4">
+              <span class="choice-label">Prefer solo</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Teamwork" value="6">
+              <span class="choice-label">Both equally</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Teamwork" value="8">
+              <span class="choice-label">Prefer teams</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Teamwork" value="10">
+              <span class="choice-label">Strongly prefer teams</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="14" data-key="Attention">
+          <div class="q-title">14. How good is your attention to tiny details?</div>
+          <div class="q-desc">Think about your ability to notice small errors or inconsistencies.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Attention" value="2">
+              <span class="choice-label">Not at all</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Attention" value="4">
+              <span class="choice-label">A little</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Attention" value="6">
+              <span class="choice-label">Sometimes</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Attention" value="8">
+              <span class="choice-label">Mostly</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Attention" value="10">
+              <span class="choice-label">Completely</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="question" data-q="15" data-key="Motivation">
+          <div class="q-title">15. How motivated are you to pursue formal study vs on-job learning?</div>
+          <div class="q-desc">Consider your preference for academic education versus practical experience.</div>
+          <div class="choices">
+            <label class="choice-item">
+              <input type="radio" name="Motivation" value="2">
+              <span class="choice-label">Strongly prefer work</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Motivation" value="4">
+              <span class="choice-label">Prefer work</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Motivation" value="6">
+              <span class="choice-label">Both equally</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Motivation" value="8">
+              <span class="choice-label">Prefer study</span>
+            </label>
+            <label class="choice-item">
+              <input type="radio" name="Motivation" value="10">
+              <span class="choice-label">Strongly prefer study</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="progress">Question <span id="current">1</span> / 15</div>
+          <div class="btn-container">
+            <button id="backBtn" class="btn btn-back" type="button" style="display:none">← Back</button>
+            <button id="nextBtn" class="btn" type="button">Next →</button>
+          </div>
+        </div>
+
+        <div class="small-note">All answers are anonymous and used to suggest career matches.</div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  const questions = Array.from(document.querySelectorAll('.question'));
+  const nextBtn = document.getElementById('nextBtn');
+  const backBtn = document.getElementById('backBtn');
+  const stepNum = document.getElementById('stepNum');
+  const currentEl = document.getElementById('current');
+
+  const answers = {};
+
+  // Setup radio button listeners
+  questions.forEach(q => {
+    const key = q.dataset.key;
+    if (!key) return;
+
+    const radios = q.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        answers[key] = Number(e.target.value);
+        // Update visual selection
+        q.querySelectorAll('.choice-item').forEach(item => item.classList.remove('selected'));
+        e.target.closest('.choice-item').classList.add('selected');
+      });
+    });
+  });
+
+  let idx = 0;
+  function showIndex(i){
+    questions.forEach((q,j) => q.classList.toggle('active', j===i));
+    stepNum.textContent = i+1;
+    currentEl.textContent = i+1;
+    nextBtn.textContent = (i === questions.length - 1) ? 'Submit' : 'Next →';
+    backBtn.style.display = i === 0 ? 'none' : 'block';
+
+    // Restore selected choice visual
+    const currentQ = questions[i];
+    const key = currentQ.dataset.key;
+    if (answers[key]) {
+      const selectedRadio = currentQ.querySelector(`input[value="${answers[key]}"]`);
+      if (selectedRadio) {
+        selectedRadio.checked = true;
+        currentQ.querySelectorAll('.choice-item').forEach(item => item.classList.remove('selected'));
+        selectedRadio.closest('.choice-item').classList.add('selected');
+      }
+    }
+  }
+  showIndex(0);
+
+  backBtn.addEventListener('click', () => {
+    if (idx > 0) {
+      idx--;
+      showIndex(idx);
+    }
+  });
+
+  nextBtn.addEventListener('click', async () => {
+    const q = questions[idx];
+    const key = q.dataset.key;
+
+    if (key && (typeof answers[key] === 'undefined' || answers[key] === null)) {
+      alert('Please select an answer before continuing.');
+      return;
+    }
+
+    if (idx < questions.length - 1) {
+      idx++;
+      showIndex(idx);
+      return;
+    }
+
+    // Final submit
+    const percentages = computeScores(answers);
+
+    try {
+      await fetch('/api/save-survey/', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ category: 'aptitude_test', responses: answers })
+      });
+    } catch (err) {
+      console.warn('Failed to save to backend:', err);
+    }
+
+    sessionStorage.setItem('aptitude_percentages', JSON.stringify(percentages));
+     window.location.href = '/aptitude_result/';
+  });
+
+  function computeScores(ans){
+    const norm = {};
+    Object.keys(ans).forEach(k => norm[k] = (ans[k] - 1) / 9 );
+    const careers = {
+      Medical: { O_score:0.2, C_score:0.05, E_score:0.05, A_score:0.25, N_score:0.15, Numerical_Aptitude:0.15, Spatial_Aptitude:0.02, Perceptual_Aptitude:0.05, Abstract_Reasoning:0.05, Verbal_Reasoning:0.05 },
+      Civil: { O_score:0.15, C_score:0.05, E_score:0.03, A_score:0.05, N_score:0.05, Numerical_Aptitude:0.25, Spatial_Aptitude:0.2, Perceptual_Aptitude:0.1, Abstract_Reasoning:0.1, Verbal_Reasoning:0.07 },
+      Architecture: { O_score:0.12, C_score:0.18, E_score:0.03, A_score:0.04, N_score:0.03, Numerical_Aptitude:0.12, Spatial_Aptitude:0.28, Perceptual_Aptitude:0.13, Abstract_Reasoning:0.07, Verbal_Reasoning:0.08 },
+      CSE: { O_score:0.12, C_score:0.08, E_score:0.05, A_score:0.03, N_score:0.05, Numerical_Aptitude:0.25, Spatial_Aptitude:0.05, Perceptual_Aptitude:0.08, Abstract_Reasoning:0.28, Verbal_Reasoning:0.06 },
+      ECE: { O_score:0.12, C_score:0.07, E_score:0.05, A_score:0.03, N_score:0.05, Numerical_Aptitude:0.22, Spatial_Aptitude:0.08, Perceptual_Aptitude:0.12, Abstract_Reasoning:0.24, Verbal_Reasoning:0.07 },
+      Law: { O_score:0.08, C_score:0.05, E_score:0.05, A_score:0.05, N_score:0.12, Numerical_Aptitude:0.02, Spatial_Aptitude:0.01, Perceptual_Aptitude:0.05, Abstract_Reasoning:0.15, Verbal_Reasoning:0.42 },
+      Business: { O_score:0.12, C_score:0.06, E_score:0.18, A_score:0.06, N_score:0.04, Numerical_Aptitude:0.18, Spatial_Aptitude:0.03, Perceptual_Aptitude:0.05, Abstract_Reasoning:0.14, Verbal_Reasoning:0.09 }
+    };
+
+    const raw = {};
+    for (const career in careers){
+      let s = 0;
+      const weights = careers[career];
+      for (const key in weights){
+        const w = weights[key] || 0;
+        const v = (norm[key] === undefined) ? 0.5 : norm[key];
+        s += w * v;
+      }
+      raw[career] = s;
+    }
+    const sum = Object.values(raw).reduce((a,b)=>a+b,0) || 1;
+    const percentages = {};
+    Object.keys(raw).forEach(c => { percentages[c] = Math.round((raw[c]/sum)*100); });
+
+    let total = Object.values(percentages).reduce((a,b)=>a+b,0);
+    if (total !== 100){
+      let diff = 100 - total;
+      const keys = Object.keys(percentages);
+      let i = 0;
+      while (diff !== 0){
+        const k = keys[i % keys.length];
+        percentages[k] = Math.max(0, percentages[k] + (diff>0?1:-1));
+        diff = 100 - Object.values(percentages).reduce((a,b)=>a+b,0);
+        i++;
+        if (i>1000) break;
+      }
+    }
+    return percentages;
+  }
+</script>
+</body>
+</html>

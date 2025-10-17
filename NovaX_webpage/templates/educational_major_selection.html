@@ -1,0 +1,268 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Your Major - Career Guidance</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8F9F5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    width: 90%;
+    max-width: 800px;
+    margin: 100px auto;
+    text-align: center;
+  }
+  h2 {
+    color: #1E2E25;
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+  }
+  .majors {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  .major-box {
+    background-color: #EEF5E9;
+    border: 2px solid #A6CE39;
+    border-radius: 20px;
+    width: 220px;
+    padding: 40px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+  }
+  .major-box:hover {
+    background-color: #C8E36B;
+    transform: translateY(-5px);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌿 Choose Your Major to Begin</h2>
+    <div class="majors">
+      <div class="major-box" onclick="alert('Medical test coming soon!')">Medical</div>
+      <div class="major-box" onclick="window.location.href='{% url 'educational_test_CSE_Q' %}'">CSE</div>
+      <div class="major-box" onclick="alert('ECE test coming soon!')">ECE</div>
+    </div>
+  </div>
+</body>
+</html> {% endcomment %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Your Major - Career Guidance</title>
+<style>
+  :root{
+    --dark-green:#1E2E25; --forest:#2F4E3C; --light-green:#A6CE39;
+    --offwhite:#F8F9F5; --light-tint:#EEF5E9; --text-dark:#333333; --text-mid:#666666;
+    --bright:#9AD44D; --yellowish:#C8E36B;
+  }
+  body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background: linear-gradient(135deg, var(--offwhite) 0%, #e8f5e0 100%);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    width: 90%;
+    max-width: 900px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  h1 {
+    color: var(--dark-green);
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  p.subtitle {
+    color: var(--text-mid);
+    font-size: 1rem;
+    margin-bottom: 48px;
+  }
+  .majors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .major-box {
+    background: var(--light-tint);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 48px 24px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .major-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--light-green), var(--bright));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .major-box:hover::before {
+    transform: scaleX(1);
+  }
+  .major-box:hover {
+    border-color: var(--light-green);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+  }
+  .major-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .major-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 8px;
+  }
+  .major-desc {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.4;
+  }
+  .coming-soon {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .coming-soon:hover {
+    transform: none;
+    border-color: transparent;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--yellowish);
+    color: var(--forest);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.8rem;
+    }
+    .majors {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Choose Your Major</h1>
+    <p class="subtitle">Select your field of study to discover personalized career paths</p>
+    <div class="majors">
+      <div class="major-box coming-soon" onclick="alert('Medical test coming soon!')">
+        <span class="major-icon">🩺</span>
+        <div class="major-name">Medical</div>
+        <div class="major-desc">Healthcare & Medicine</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box" onclick="window.location.href='/educational_major_selection/educational_test_CSE/'">
+        <span class="major-icon">💻</span>
+        <div class="major-name">CSE</div>
+        <div class="major-desc">Computer Science & Engineering</div>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="major-box coming-soon" onclick="alert('ECE test coming soon!')">
+        <span class="major-icon">⚡</span>
+        <div class="major-name">ECE</div>
+        <div class="major-desc">Electronics & Communication</div>
+        <span class="badge">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

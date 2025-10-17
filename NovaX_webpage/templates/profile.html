@@ -1,0 +1,718 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | Career Ladder{% endblock %}
+
+{% block extra_head %}
+<style>
+  .alert-lite {
+    border: 1px solid var(--border-color);
+    background: color-mix(in srgb, var(--card-bg) 92%, #fffa 8%);
+    color: var(--text-primary);
+    border-radius: 12px;
+    padding: .75rem 1rem;
+  }
+
+  .alert-lite.success {
+    border-color: #22c55e3d;
+    background: color-mix(in srgb, #22c55e 12%, var(--card-bg) 88%);
+  }
+
+  .alert-lite.error {
+    border-color: #ef44443d;
+    background: color-mix(in srgb, #ef4444 12%, var(--card-bg) 88%);
+  }
+
+  .alert-lite.info {
+    border-color: #3b82f63d;
+    background: color-mix(in srgb, #3b82f6 12%, var(--card-bg) 88%);
+  }
+
+  /* Field error highlighting without widget_tweaks */
+  .has-error .form-control,
+  .has-error .form-select {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, .15);
+  }
+
+  .invalid-feedback {
+    display: block;
+    color: #ef4444;
+    font-size: .85rem;
+    margin-top: .25rem;
+  }
+
+  /* Gender dropdown styling */
+  .gender-dropdown {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+  }
+
+  .gender-dropdown:focus {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--accent-teal) !important;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-teal) 20%, transparent) !important;
+    outline: none;
+  }
+
+  .gender-dropdown:hover {
+    border-color: var(--accent-teal) !important;
+  }
+
+  .gender-dropdown::placeholder {
+    color: var(--text-secondary) !important;
+    opacity: 0.7;
+  }
+
+  /* Datalist dropdown options styling */
+  #gender-options {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* For Webkit browsers */
+  .gender-dropdown::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+  }
+
+  [data-theme="dark"] .gender-dropdown::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+  }
+
+  /* Ensure proper contrast in both modes */
+  @media (prefers-color-scheme: dark) {
+    .gender-dropdown {
+      background-color: var(--card-bg) !important;
+      color: var(--text-primary) !important;
+    }
+  }
+
+  /* Fallback for older browsers */
+  .gender-dropdown {
+    background: var(--card-bg);
+    color: var(--text-primary);
+  }
+
+  .cute-btn {
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cute-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .cute-btn:active {
+    transform: translateY(0);
+  }
+
+  /* Upload button styles */
+  .btn-primary.cute-btn {
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+    border: none;
+  }
+
+  .btn-primary.cute-btn:hover {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+  }
+
+  /* Remove button styles */
+  .btn-soft-danger.cute-btn {
+    background: transparent;
+    border: 2px solid #fecaca;
+    color: #dc2626;
+  }
+
+  .btn-soft-danger.cute-btn:hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #dc2626;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+  }
+
+  /* Icon animations */
+  .cute-btn i {
+    transition: transform 0.3s ease;
+  }
+
+  .cute-btn:hover i {
+    transform: scale(1.1);
+  }
+
+  /* ===== Premium card & layout ===== */
+  .profile-shell {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .elevated-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    box-shadow: 0 25px 60px -20px rgba(0, 0, 0, .45);
+    max-width: 1000px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .elevated-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary, #6d5efc), var(--accent, #7b61ff));
+    opacity: .9
+  }
+
+  /* ===== Tabs ===== */
+  .nav-tabs {
+    border-bottom: 1px solid var(--border-color)
+  }
+
+  .nav-tabs .nav-link {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    color: var(--text-secondary);
+    font-weight: 700;
+    letter-spacing: .2px
+  }
+
+  .nav-tabs .nav-link.active {
+    color: var(--text-primary);
+    border-color: var(--primary, #6d5efc);
+    background: transparent
+  }
+
+  /* ===== Section paddings ===== */
+  .section-pad {
+    padding: 1.5rem 1.25rem 2rem
+  }
+
+  @media (min-width:768px) {
+    .section-pad {
+      padding: 2rem 2rem 2.25rem
+    }
+  }
+
+  /* ===== Typography & helpers ===== */
+  .muted {
+    color: var(--text-secondary) !important
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 1rem 0 1.5rem
+  }
+
+  /* ===== Inputs (dark-mode friendly) ===== */
+  .form-label {
+    color: var(--text-primary);
+    font-weight: 700
+  }
+
+  .form-control,
+  .form-select,
+  input[type="date"].form-control {
+    background: color-mix(in srgb, var(--card-bg) 96%, #000 4%);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: .75rem .95rem
+  }
+
+  .form-control::placeholder {
+    color: var(--text-secondary);
+    opacity: .95
+  }
+
+  .form-control:disabled {
+    background: color-mix(in srgb, var(--card-bg) 90%, #fff 10%);
+    color: var(--text-secondary)
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: var(--primary, #6d5efc);
+    box-shadow: 0 0 0 3px rgba(109, 94, 252, .18)
+  }
+
+  /* Custom select caret (so it’s visible in dark mode) */
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23aab4c4' viewBox='0 0 16 16'%3E%3Cpath d='M3.204 5h9.592L8 10.481z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .85rem center;
+    background-size: 16px 16px;
+    padding-right: 2.5rem;
+  }
+
+  /* ===== Buttons ===== */
+  .btn-primary-custom {
+    background: linear-gradient(135deg, var(--primary, #6d5efc), var(--accent, #7b61ff));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: .9rem 1.1rem;
+    font-weight: 700
+  }
+
+  .btn-primary-custom:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(109, 94, 252, .32)
+  }
+
+  .btn-secondary-custom {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px
+  }
+
+  .btn-secondary-custom:hover {
+    background: color-mix(in srgb, var(--card-bg) 85%, #fff 15%)
+  }
+
+  /* Danger outline for X buttons in marks */
+  #marksRepeater .btn.btn-outline-danger {
+    border-radius: 12px;
+    min-width: 42px;
+    border-width: 1.5px
+  }
+
+  /* ===== Avatar area ===== */
+  .avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px
+  }
+
+  .avatar-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 92%, #fff 8%), color-mix(in srgb, var(--card-bg) 96%, #000 4%));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .35)
+  }
+
+  .avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+  }
+
+  .avatar-fab {
+    position: absolute;
+    right: -6px;
+    bottom: -6px;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-teal);
+    color: #fff;
+    border: 3px solid var(--card-bg);
+    cursor: pointer;
+    transition: transform .15s ease
+  }
+
+  .avatar-fab:hover {
+    transform: scale(1.06);
+    background: var(--accent-blue)
+  }
+
+  .photo-actions {
+    max-width: 300px;
+    width: 100%
+  }
+
+  .btn-soft-danger {
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    border-radius: 12px
+  }
+
+  .btn-soft-danger:hover {
+    background: #dc3545;
+    color: #fff
+  }
+
+  /* Hide Django’s default “Currently / Clear / Change” block */
+  .visually-hidden {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="profile-shell" style="margin-top: 100px;">
+  <div class="elevated-card">
+    <div class="p-0">
+      <ul class="nav nav-tabs px-3 pt-3" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-profile" type="button" role="tab">
+            <i class="bi bi-person-fill me-1"></i> Profile
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-history" type="button" role="tab">
+            <i class="bi bi-clock-history me-1"></i> Quiz History
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content section-pad">
+        <!-- PROFILE TAB -->
+        <div class="tab-pane fade show active" id="tab-profile" role="tabpanel">
+          {% if messages %}
+          <div class="mb-3">
+            {% for m in messages %}
+            <div
+              class="alert-lite {% if 'success' in m.tags %}success{% elif 'error' in m.tags %}error{% else %}info{% endif %}">
+              {{ m }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <form method="post" enctype="multipart/form-data" class="row g-3">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
+            {{ form.subject_marks_json }}
+
+            <!-- Avatar & actions -->
+            <div class="col-12 mb-2">
+              <div class="avatar-wrap mx-auto" style="width:fit-content">
+                <div class="position-relative">
+                  <div class="avatar-circle">
+                    {% if profile.photo %}
+                    <img src="{{ profile.photo.url }}" alt="{{ user.username }}">
+                    {% else %}
+                    <i class="bi bi-person" style="font-size:3rem;color:var(--text-secondary)"></i>
+                    {% endif %}
+                  </div>
+                  <label for="id_photo" class="avatar-fab"><i class="bi bi-camera-fill"></i></label>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-center mt-3">
+                  <label for="id_photo" class="btn btn-primary btn-sm cute-btn">
+                    <i class="bi bi-plus-circle me-2"></i>Add
+                  </label>
+
+                  {% if profile.photo %}
+                  <button type="button" class="btn btn-soft-danger btn-sm cute-btn" id="btnRemovePhoto">
+                    <i class="bi bi-dash-circle me-2"></i>Remove
+                  </button>
+                  {% endif %}
+                </div>
+
+                {% if profile.photo %}
+                <div class="text-center mt-1"><small class="muted">Current photo will be removed when you save</small>
+                </div>
+                {% endif %}
+              </div>
+
+              {# keep Django inputs but hide; ensure the file input keeps its id #}
+              <div class="visually-hidden">{{ form.photo }}</div>
+              <div id="selected-file-preview" class="text-center" style="display:none;">
+                <small class="text-success"><i class="bi bi-check-circle me-1"></i>New photo selected</small>
+              </div>
+            </div>
+
+
+            <!-- Fields -->
+            <div class="col-md-6">
+              <label class="form-label">Full name</label>
+              {{ form.full_name }}
+            </div>
+            <div class="col-md-3">
+              <div class="mb-3">
+                <label for="{{ form.gender.id_for_label }}" class="form-label"
+                  style="color: var(--text-primary);">Gender</label>
+                {{ form.gender }}
+              </div>
+            </div>
+              <div class="col-md-3">
+                <label class="form-label">Age</label>
+                {{ form.age }}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input class="form-control" value="{{ user.email }}" disabled>
+                <div class="form-text">Uses your account email.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                {{ form.phone }}
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="col-md-6">
+                <label class="form-label">Type of exam taken</label>
+                {{ form.exam_type }}
+              </div>
+              <div class="col-md-3 exam-extra">
+                <label class="form-label">Passed date</label>
+                {{ form.passed_date }}
+              </div>
+              <div class="col-md-3 exam-extra">
+                <label class="form-label">School</label>
+                {{ form.passed_school }}
+              </div>
+
+              <!-- Marks (keep your IDs/logic) -->
+              <div class="col-12 exam-extra">
+                <label class="form-label">Marks</label>
+                <div id="marksRepeater" class="mb-2"></div>
+                <button class="btn btn-sm btn-secondary-custom" type="button" id="btnAddRow">
+                  <i class="bi bi-plus-circle me-1"></i> Add subject
+                </button>
+                <div class="form-text mt-2">Add rows and enter Subject / Mark (e.g., <em>Myanmar / 80</em> or <em>Math /
+                    A</em>). We’ll save it for your exam type.</div>
+              </div>
+
+              <div class="col-12 d-flex gap-2">
+                <button class="btn btn-primary-custom"><i class="bi bi-check2-circle me-1"></i> Save profile</button>
+                {% if request.GET.next %}
+                <a href="{{ request.GET.next }}" class="btn btn-secondary-custom">Skip for now</a>
+                {% endif %}
+              </div>
+          </form>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <!-- <div class="tab-pane fade" id="tab-history" role="tabpanel">
+          {% if user.quiz_attempts.all %}
+          <div class="list-group">
+            {% for a in user.quiz_attempts.all %}
+            <div class="list-group-item d-flex justify-content-between align-items-center"
+              style="background:var(--card-bg);border-color:var(--border-color);">
+              <div>
+                <div class="fw-semibold text-capitalize">{{ a.get_quiz_type_display }}</div>
+                <div class="small muted">{{ a.created_at|date:"M d, Y - H:i" }}</div>
+              </div>
+              <div class="text-end">
+                {% if a.score %}<div class="badge bg-success-subtle text-success">Score: {{ a.score|floatformat:1 }}
+                </div>{% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="muted">No quizzes yet. Start one from the home page or the quiz hub!</p>
+          <a class="btn btn-primary-custom mt-2" href="{% url 'quiz_hub' %}">
+            <i class="bi bi-patch-question-fill me-1"></i> Go to Quiz Hub
+          </a>
+          {% endif %}
+        </div> -->
+        <!-- In your existing profile.html, update the history tab -->
+<div class="tab-pane fade" id="tab-history" role="tabpanel">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="mb-0">Your Assessment History</h5>
+        <a href="{% url 'quiz_history' %}" class="btn btn-outline-primary btn-sm">
+            View Full History
+        </a>
+    </div>
+
+    {% if user.quiz_attempts.all %}
+    <div class="list-group">
+        {% for attempt in user.quiz_attempts.all|slice:":5" %}
+        <div class="list-group-item d-flex justify-content-between align-items-center"
+             style="background:var(--card-bg);border-color:var(--border-color);">
+            <div class="flex-grow-1">
+                <!-- <div class="fw-semibold text-capitalize">{{ attempt.get_quiz_type_display }}</div> -->
+                <div class="small muted">{{ attempt.created_at|date:"M d, Y - H:i" }}</div>
+                
+                {% if attempt.predictions %}
+                <div class="mt-2">
+                    <small class="text-success">
+                        <i class="bi bi-graph-up me-1"></i>
+                        Top match: {{ attempt.predictions.0.career }} ({{ attempt.predictions.0.probability }}%)
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+            <div class="text-end">
+                {% if attempt.score %}
+                <div class="badge bg-success-subtle text-success mb-2">Score: {{ attempt.score|floatformat:1 }}</div>
+                {% endif %}
+                <a href="{% url 'quiz_attempt_detail' attempt.id %}" class="btn btn-outline-primary btn-sm">
+                    Details
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if user.quiz_attempts.count > 5 %}
+    <div class="text-center mt-3">
+        <a href="{% url 'quiz_history' %}" class="btn btn-primary btn-sm">
+            View All {{ user.quiz_attempts.count }} Attempts
+        </a>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-inbox display-4 text-muted mb-3"></i>
+        <p class="muted">No quiz attempts yet.</p>
+        <a class="btn btn-primary mt-2" href="{% url 'career_counseling' %}">
+            <i class="bi bi-robot me-1"></i> Start AI Career Counseling
+        </a>
+    </div>
+    {% endif %}
+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# pass saved marks safely #}
+{% with marks=profile.subject_marks|default:'{}' %}
+{{ marks|json_script:"existing-marks" }}
+{% endwith %}
+
+<script>
+  /* ---------- Your existing marks logic (unchanged) ---------- */
+  const examSelect = document.querySelector('select[name="exam_type"]');
+  const extras = document.querySelectorAll('.exam-extra');
+  const repeater = document.getElementById('marksRepeater');
+  const addBtn = document.getElementById('btnAddRow');
+  const hiddenMarks = document.querySelector('input[name="subject_marks_json"]');
+
+  const SUGGEST = {
+    matriculation: ["Myanmar", "English", "Maths", "Physics", "Chemistry", "Biology"],
+    igcse: ["Math", "English", "Biology", "Chemistry", "Physics", "ICT"],
+    ged: ["Math", "RLA", "Science", "Social Studies"]
+  };
+
+  function row(subject = "", mark = "") {
+    const div = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-2';
+    div.innerHTML = `
+      <input class="form-control" placeholder="Subject" value="${subject}">
+      <input class="form-control" placeholder="Mark/Grade" value="${mark}">
+      <button type="button" class="btn btn-outline-danger"><i class="bi bi-x"></i></button>
+    `;
+    div.querySelector('button').onclick = () => { div.remove(); serialize(); };
+    div.querySelectorAll('input').forEach(i => i.addEventListener('input', serialize));
+    return div;
+  }
+
+  function serialize() {
+    const data = {};
+    repeater.querySelectorAll('.d-flex').forEach(div => {
+      const [s, m] = div.querySelectorAll('input');
+      const key = (s.value || "").trim();
+      if (key) data[key] = (m.value || "").trim();
+    });
+    hiddenMarks.value = JSON.stringify(data);
+  }
+
+  function primeSuggestions() {
+    repeater.innerHTML = "";
+    const key = examSelect?.value || "none";
+
+    const EXISTING = JSON.parse(document.getElementById('existing-marks')?.textContent || '{}');
+    const saved = (EXISTING && EXISTING[key]) ? EXISTING[key] : null;
+
+    if (saved && Object.keys(saved).length) {
+      Object.entries(saved).forEach(([subject, mark]) => {
+        repeater.appendChild(row(subject, mark || ""));
+      });
+    } else {
+      if (key && key !== 'none') {
+        (SUGGEST[key] || []).forEach(s => repeater.appendChild(row(s, "")));
+      } else {
+        repeater.appendChild(row());
+      }
+    }
+    serialize();
+  }
+
+  function toggleExamExtras() {
+    const show = examSelect?.value && examSelect.value !== 'none';
+    extras.forEach(el => el.style.display = show ? '' : 'none');
+  }
+
+  addBtn?.addEventListener('click', () => { repeater.appendChild(row()); serialize(); });
+  examSelect?.addEventListener('change', () => { toggleExamExtras(); primeSuggestions(); });
+
+  toggleExamExtras();
+  primeSuggestions();
+
+  /* ---------- Photo UX (bind to Django hidden inputs) ---------- */
+  const photoInput = document.getElementById('id_photo');
+  const clearInput = document.getElementById('photo-clear_id');  // Django adds this when photo exists
+  const btnRemove = document.getElementById('btnRemovePhoto');
+  const selectedPreview = document.getElementById('selected-file-preview');
+
+  if (photoInput) {
+    photoInput.addEventListener('change', function () {
+      if (this.files && this.files[0]) {
+        selectedPreview.style.display = 'block';
+        if (clearInput) clearInput.checked = false; // uploading cancels removal
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const circle = document.querySelector('.avatar-circle');
+          circle.innerHTML = `<img src="${e.target.result}" alt="preview">`;
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+  }
+
+  if (btnRemove && clearInput) {
+    btnRemove.addEventListener('click', (e) => {
+      e.preventDefault();
+      clearInput.checked = !clearInput.checked;
+      if (clearInput.checked) {
+        btnRemove.classList.remove('btn-soft-danger');
+        btnRemove.classList.add('btn-danger');
+        btnRemove.innerHTML = '<i class="bi bi-check me-2"></i>Photo Will Be Removed';
+        const circle = document.querySelector('.avatar-circle');
+        circle.innerHTML = `<i class="bi bi-person" style="font-size:3rem;color:var(--text-secondary)"></i>`;
+        if (photoInput) photoInput.value = "";
+        if (selectedPreview) selectedPreview.style.display = 'none';
+      } else {
+        btnRemove.classList.add('btn-soft-danger');
+        btnRemove.classList.remove('btn-danger');
+        btnRemove.innerHTML = '<i class="bi bi-trash me-2"></i>Remove Photo';
+      }
+    });
+  }
+</script>
+{% endblock %}

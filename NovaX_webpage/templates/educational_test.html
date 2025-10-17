@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Guidance - Educational test</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8F9F5;
+    color: #333333;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    width: 90%;
+    max-width: 600px;
+    margin: 80px auto;
+    background-color: #EEF5E9;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  h2 { color: #1E2E25; }
+  .question { display: none; animation: fade 0.4s ease-in-out; }
+  .question.active { display: block; }
+  @keyframes fade { from {opacity: 0;} to {opacity: 1;} }
+
+  .options button {
+    background-color: #A6CE39;
+    border: 2px solid transparent;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    color: #1E2E25;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .options button:hover {
+    background-color: #9AD44D;
+  }
+  .options button.selected {
+    border: 2px solid #2F4E3C;
+    background-color: #C8E36B;
+  }
+
+  .next-btn {
+    background-color: #2F4E3C;
+    color: #F8F9F5;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+  }
+  .next-btn:hover {
+    background-color: #A6CE39;
+    color: #1E2E25;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Plan Your Future After Uni 🎓</h2>
+
+    <div id="questions">
+        
+      <div class="question active" data-q="1">
+        <p>1. What is your major?</p>
+        <div class="options">
+            <button>Computer Science</button><button>Business</button><button>Engineering</button><button>Other</button>
+        </div>
+      </div>
+      <div class="question" data-q="2">
+        <p>2. Why did you choose your major?</p>
+        <div class="options"><button>Interest</button><button>Family</button><button>Job Demand</button><button>Not sure</button></div>
+      </div>
+      <div class="question">
+        <p>3. What type of job are you considering after graduation?</p>
+        <div class="options"><button>Tech</button><button>Startup</button><button>Corporate</button><button>Public Sector</button></div>
+      </div>
+      <div class="question">
+        <p>4. Have you done any internships?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>Planning to</button></div>
+      </div>
+      <div class="question">
+        <p>5. Do you have a LinkedIn profile?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>Not yet</button></div>
+      </div>
+      <div class="question">
+        <p>6. Have you attended any career fairs or workshops?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>Planning to</button></div>
+      </div>
+      <div class="question">
+        <p>7. What skills do you think employers want in your field?</p>
+        <div class="options"><button>Technical</button><button>Soft skills</button><button>Both</button></div>
+      </div>
+      <div class="question">
+        <p>8. Do you have a portfolio or resume ready?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>In progress</button></div>
+      </div>
+      <div class="question">
+        <p>9. Do you want to pursue higher education?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>Maybe later</button></div>
+      </div>
+      <div class="question">
+        <p>10. What do you value most in a job?</p>
+        <div class="options"><button>Salary</button><button>Work-life balance</button><button>Passion</button><button>Impact</button></div>
+      </div>
+      <div class="question">
+        <p>11. How prepared do you feel for the job market?</p>
+        <div class="options"><button>Very prepared</button><button>Somewhat</button><button>Not yet</button></div>
+      </div>
+      <div class="question">
+        <p>12. Have you started networking with professionals?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>Not sure how</button></div>
+      </div>
+      <div class="question">
+        <p>13. Would you like guidance for post-graduation plans?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>Maybe</button></div>
+      </div>
+      <div class="question">
+        <p>14. Do you plan to work abroad?</p>
+        <div class="options"><button>Yes</button><button>No</button><button>Not sure</button></div>
+      </div>
+      <div class="question">
+        <p>15. What are your next steps after graduation?</p>
+        <div class="options"><button>Job hunting</button><button>Higher studies</button><button>Entrepreneurship</button><button>Still deciding</button></div>
+      </div>
+    </div>
+
+    <button class="next-btn" id="nextBtn">Next ➜</button>
+  </div>
+
+  <script>
+    const questions = document.querySelectorAll('.question');
+    const nextBtn = document.getElementById('nextBtn');
+    let index = 0;
+    const responses = {};
+
+    document.querySelectorAll('.options button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.parentNode;
+        parent.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        const qText = parent.parentNode.querySelector('p').textContent;
+        responses[qText] = btn.textContent;
+      });
+    });
+
+    nextBtn.addEventListener('click', async () => {
+      if (!questions[index].querySelector('.selected')) {
+        alert('Please select an answer before proceeding!');
+        return;
+      }
+      questions[index].classList.remove('active');
+      index++;
+      if (index < questions.length) {
+        questions[index].classList.add('active');
+      } else {
+        // Submit to Django
+        const res = await fetch('/api/save-survey/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: 'Educational test Q', responses })
+        });
+        const data = await res.json();
+        document.querySelector('.container').innerHTML = 
+          `<h2>🎉 Great! You’ve completed the survey!</h2>
+           <p>${data.message || 'Your answers are safely saved.'}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Institution Details - NovaX</title>
+<style>
+  :root{
+    --emerald:#10b981;
+    --teal:#14b8a6;
+    --blue:#3b82f6;
+    --indigo:#6366f1;
+    --text-dark:#1e293b;
+    --text-mid:#64748b;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+  .loading{
+    text-align: center;
+    padding: 100px 20px;
+  }
+  .spinner{
+    width: 64px;
+    height: 64px;
+    border: 4px solid var(--emerald);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin{
+    to{ transform: rotate(360deg); }
+  }
+  .header-section{
+    color: white;
+    padding: 48px 20px;
+  }
+  .header-section.emerald{
+    background: linear-gradient(135deg, var(--emerald) 0%, var(--teal) 100%);
+  }
+  .header-section.blue{
+    background: linear-gradient(135deg, var(--blue) 0%, var(--indigo) 100%);
+  }
+  .header-container{
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .back-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+  .back-btn:hover{
+    color: white;
+  }
+  .header-content{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .header-content h1{
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+  }
+  .meta-info{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .meta-item{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-website{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .btn-website:hover{
+    background: rgba(255,255,255,0.3);
+  }
+  .main-content{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 20px;
+  }
+  .section-card{
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .section-title{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.75rem;
+    color: #1e293b;
+    margin-bottom: 24px;
+  }
+  .section-title svg.emerald{
+    color: var(--emerald);
+  }
+  .section-title svg.blue{
+    color: var(--blue);
+  }
+  .about-text{
+    color: #475569;
+    line-height: 1.8;
+    font-size: 1.125rem;
+  }
+  .programs-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .program-card{
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .program-card.emerald:hover{
+    border-color: var(--emerald);
+  }
+  .program-card.blue:hover{
+    border-color: var(--blue);
+  }
+  .program-card h3{
+    color: #1e293b;
+    font-size: 1.125rem;
+    margin-bottom: 12px;
+  }
+  .program-info{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--text-mid);
+  }
+  .program-info div{
+    display: flex;
+    gap: 4px;
+  }
+  .program-info strong{
+    font-weight: 600;
+  }
+  .facilities-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .facility-item{
+    display: flex;
+    gap: 16px;
+  }
+  .facility-dot{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+  .facility-dot.emerald{
+    background: var(--emerald);
+  }
+  .facility-dot.blue{
+    background: var(--blue);
+  }
+  .facility-content h3{
+    color: #1e293b;
+    font-size: 1.125rem;
+    margin-bottom: 8px;
+  }
+  .facility-content p{
+    color: #475569;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  @media (max-width: 768px) {
+    .header-content h1{
+      font-size: 2rem;
+    }
+    .programs-grid{
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p style="color:#64748b">Loading institution details...</p>
+  </div>
+
+  <div id="content" style="display:none">
+    <div id="header" class="header-section"></div>
+    <div class="main-content">
+      <div class="section-card">
+        <h2 id="about-title" class="section-title"></h2>
+        <p id="about-text" class="about-text"></p>
+      </div>
+
+      <div id="programs-section" class="section-card" style="display:none">
+        <h2 id="programs-title" class="section-title"></h2>
+        <div id="programs-grid" class="programs-grid"></div>
+      </div>
+
+      <div id="facilities-section" class="section-card" style="display:none">
+        <h2 id="facilities-title" class="section-title"></h2>
+        <div id="facilities-grid" class="facilities-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
+
+    const { createClient } = supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const institutionId = urlParams.get('id');
+
+    if (!institutionId) {
+      document.getElementById('loading').innerHTML = '<p style="color:#ef4444">No institution ID provided</p>';
+    } else {
+      loadInstitutionData();
+    }
+
+    async function loadInstitutionData() {
+      try {
+        const [institutionRes, programsRes, facilitiesRes] = await Promise.all([
+          supabaseClient.from('institutions').select('*').eq('id', institutionId).maybeSingle(),
+          supabaseClient.from('institution_programs').select('*').eq('institution_id', institutionId),
+          supabaseClient.from('institution_facilities').select('*').eq('institution_id', institutionId)
+        ]);
+
+        if (institutionRes.error) throw institutionRes.error;
+        if (!institutionRes.data) {
+          document.getElementById('loading').innerHTML = '<p style="color:#ef4444">Institution not found</p>';
+          return;
+        }
+
+        displayInstitution(institutionRes.data, programsRes.data || [], facilitiesRes.data || []);
+      } catch (error) {
+        console.error('Error loading institution:', error);
+        document.getElementById('loading').innerHTML = '<p style="color:#ef4444">Error loading institution data</p>';
+      }
+    }
+
+    function displayInstitution(institution, programs, facilities) {
+      const isPublic = institution.type === 'public_university';
+      const accentColor = isPublic ? 'emerald' : 'blue';
+      const backUrl = isPublic ? '/public_universities/' : '/private_colleges/';
+      const backText = isPublic ? 'Universities' : 'Colleges';
+
+      document.getElementById('header').className = `header-section ${accentColor}`;
+      document.getElementById('header').innerHTML = `
+        <div class="header-container">
+          <a href="${backUrl}" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to ${backText}
+          </a>
+          <div class="header-content">
+            <div>
+              <h1>${institution.name}</h1>
+              <div class="meta-info">
+                ${institution.location ? `
+                  <div class="meta-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>${institution.location}</span>
+                  </div>
+                ` : ''}
+                ${institution.established_year ? `
+                  <div class="meta-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Established ${institution.established_year}</span>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+            ${institution.website_url ? `
+              <div>
+                <a href="${institution.website_url}" target="_blank" rel="noopener noreferrer" class="btn-website">
+                  Visit Official Website
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                </a>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('about-title').innerHTML = `
+        <svg class="${accentColor}" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        About
+      `;
+      document.getElementById('about-text').textContent = institution.description;
+
+      if (programs.length > 0) {
+        document.getElementById('programs-section').style.display = 'block';
+        document.getElementById('programs-title').innerHTML = `
+          <svg class="${accentColor}" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+          Academic Programs
+        `;
+
+        const programsGrid = document.getElementById('programs-grid');
+        programs.forEach(program => {
+          const card = document.createElement('div');
+          card.className = `program-card ${accentColor}`;
+          card.innerHTML = `
+            <h3>${program.program_name}</h3>
+            <div class="program-info">
+              <div><strong>Degree:</strong> ${program.degree_type}</div>
+              ${program.duration ? `<div><strong>Duration:</strong> ${program.duration}</div>` : ''}
+            </div>
+          `;
+          programsGrid.appendChild(card);
+        });
+      }
+
+      if (facilities.length > 0) {
+        document.getElementById('facilities-section').style.display = 'block';
+        document.getElementById('facilities-title').innerHTML = `
+          <svg class="${accentColor}" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          Facilities
+        `;
+
+        const facilitiesGrid = document.getElementById('facilities-grid');
+        facilities.forEach(facility => {
+          const item = document.createElement('div');
+          item.className = 'facility-item';
+          item.innerHTML = `
+            <div class="facility-dot ${accentColor}"></div>
+            <div class="facility-content">
+              <h3>${facility.facility_name}</h3>
+              ${facility.description ? `<p>${facility.description}</p>` : ''}
+            </div>
+          `;
+          facilitiesGrid.appendChild(item);
+        });
+      }
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Logout - NovaX{% endblock %}
+
+{% block extra_head %}
+<style>
+  .logout-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    min-height: calc(100vh - 80px);
+  }
+
+  .logout-card {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .logout-header {
+    background: linear-gradient(to right, var(--accent-purple), var(--accent-blue));
+    height: 120px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logout-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+  }
+
+  .logout-body {
+    padding: 2rem;
+  }
+
+  .logout-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .logout-message {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .btn-logout {
+    background: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-right: 1rem;
+  }
+
+  .btn-logout:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+  }
+
+  .btn-cancel {
+    background: var(--secondary-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-cancel:hover {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="logout-section">
+  <div class="logout-card">
+    <div class="logout-header">
+      <div class="logout-icon">
+        <i class="bi bi-box-arrow-right"></i>
+      </div>
+    </div>
+
+    <div class="logout-body">
+      <h2 class="logout-title">Logout</h2>
+      <p class="logout-message">
+        Are you sure you want to logout? You'll need to sign in again to access your profile and continue your career journey.
+      </p>
+      
+      <div>
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout">
+            <i class="bi bi-box-arrow-right me-2"></i>Yes, Logout
+          </button>
+        </form>
+        
+        <a href="{% url 'profile' %}" class="btn-cancel">
+          <i class="bi bi-arrow-left me-2"></i>Cancel
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
